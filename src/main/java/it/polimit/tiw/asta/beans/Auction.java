@@ -9,131 +9,89 @@ import java.util.ArrayList;
 
 public class Auction {
 	
+
+
 	private int aucID;
 	private int ownerID;
 	private float aucPrice;
 	private float minUP;
 	private Date expiryDateTime;
 	private boolean isClosed;
-	private List<Item> aucItems;
-	private float maxOffer;
-	private Duration remaingTimes;
-	private User bidder;
 	
 	public Auction() {
 		super();
 	}
 	
-	public Auction(int ownerID, float aucPrice, float minUP, Date expiryDateTime) {
+
+		public Auction(int aucID, int ownerID, float aucPrice, float minUP, Date expiryDateTime, boolean isClosed) {
 		super();
+		this.aucID = aucID;
 		this.ownerID = ownerID;
 		this.aucPrice = aucPrice;
 		this.minUP = minUP;
 		this.expiryDateTime = expiryDateTime;
-		this.isClosed = false;
-		this.aucItems = new ArrayList<>();
-		this.maxOffer = 0;
-		this.remaingTimes = null;
-		this.bidder = null;
-	}
-	
-	
-
-	public User getBidder() {
-		return bidder;
-	}
-
-	public void setBidder(User bidder) {
-		this.bidder = bidder;
-	}
-
-	public float getMaxOffer() {
-		return maxOffer;
-	}
-
-	public void setMaxOffer(float maxOffer) {
-		System.out.println("Auction " + this.aucID +" is setting MaxPrice: " + maxOffer);
-		this.maxOffer = maxOffer;
-	}
-
-	public Duration getRemaingTimes() {
-		return remaingTimes;
-	}
-
-	public void setRemaingTimes(Duration remaingTimes) {
-		this.remaingTimes = remaingTimes;
-	}
-
-	public List<Item> getAucItems() {
-		return aucItems;
-	}
-
-	public void setAucItems(List<Item> aucItems) {
-		for (Item it:aucItems) {
-			System.out.println("Set " + it.getItemName() + " in auction " + getAucID());
-		}
-
-		this.aucItems = aucItems;
-	}
-
-	public int getAucID() {
-		return aucID;
-	}
-
-	public void setAucID(int aucID) {
-		this.aucID = aucID;
-	}
-
-	public int getOwnerID() {
-		return ownerID;
-	}
-
-	public void setOwnerID(int ownerID) {
-		this.ownerID = ownerID;
-	}
-
-	public float getAucPrice() {
-		return aucPrice;
-	}
-
-	public void setAucPrice(float aucPrice) {
-		System.out.println("Auction " + this.aucID +" is setting StartingPrice: " + aucPrice);
-		this.aucPrice = aucPrice;
-	}
-
-	public float getMinUP() {
-		return minUP;
-	}
-
-	public void setMinUP(float minUP) {
-		this.minUP = minUP;
-	}
-
-
-	public boolean isClosed() {
-		return isClosed;
-	}
-
-	public void setClosed(boolean isClosed) {
 		this.isClosed = isClosed;
 	}
 
 
+		public int getAucID() {
+			return aucID;
+		}
 
 
-	public Date getExpiryDateTime() {
-		return expiryDateTime;
-	}
+		public void setAucID(int aucID) {
+			this.aucID = aucID;
+		}
 
 
+		public int getOwnerID() {
+			return ownerID;
+		}
 
 
-	public void setExpiryDateTime(Date expiryDateTime) {
-		this.expiryDateTime = expiryDateTime;
-	}
+		public void setOwnerID(int ownerID) {
+			this.ownerID = ownerID;
+		}
 
 
-	
+		public float getAucPrice() {
+			return aucPrice;
+		}
+
+
+		public void setAucPrice(float aucPrice) {
+			this.aucPrice = aucPrice;
+		}
+
+
+		public float getMinUP() {
+			return minUP;
+		}
+
+
+		public void setMinUP(float minUP) {
+			this.minUP = minUP;
+		}
+
+
+		public Date getExpiryDateTime() {
+			return expiryDateTime;
+		}
+
+
+		public void setExpiryDateTime(Date expiryDateTime) {
+			this.expiryDateTime = expiryDateTime;
+		}
+
+
+		public boolean isClosed() {
+			return isClosed;
+		}
+
+
+		public void setClosed(boolean isClosed) {
+			this.isClosed = isClosed;
+		}
 
 	
 	

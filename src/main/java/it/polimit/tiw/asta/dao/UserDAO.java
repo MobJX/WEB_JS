@@ -41,4 +41,31 @@ public class UserDAO {
 			}
 		}
 	}
+	
+	//for testing
+	//TODO:delete this 
+	
+	public User findByUserName(String username) throws SQLException {
+		String query = "select * from User where username=? ";
+		try (PreparedStatement pstatement = con.prepareStatement(query);) {
+			pstatement.setString(1, username);
+			try (ResultSet result = pstatement.executeQuery();) {
+				if (!result.isBeforeFirst()) {
+					
+					return null;// no results, credential check failed
+				} 
+					
+				else {
+					result.next();
+					User user = new User();
+					user.setId(result.getInt("userID"));
+					user.setUsername(result.getString("username"));
+					user.setAddress(result.getString("address"));
+					return user;
+				}
+			}
+		}
+	}
+	
+	
 }

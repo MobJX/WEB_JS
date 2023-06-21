@@ -3,6 +3,7 @@ package it.polimit.tiw.asta.controllers;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -22,9 +23,9 @@ import it.polimit.tiw.asta.utils.ConnectionHandler;
 
 
 
-@WebServlet("/FindItemWithKeyword")
-public class FindItemWithKeyword extends HttpServlet{
-	public FindItemWithKeyword() {
+@WebServlet("/GetKeyAuctionList")
+public class GetKeyAuctionList extends HttpServlet{
+	public GetKeyAuctionList() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -56,8 +57,9 @@ public class FindItemWithKeyword extends HttpServlet{
 		ItemDAO itemDAO = new ItemDAO(connection);
 		AuctionDAO auctionDAO = new AuctionDAO(connection);
 		//List<Item> items =  null;
-		List<Integer> itemsID = null;
-		List<Auction> auctions = null;
+		List<Integer> itemsID = new ArrayList<Integer>();
+		List<Auction> auctions = new ArrayList<Auction>();
+		
 		
 		try {
 			//items = itemDAO.findItemWithKeyWord(keyword);
@@ -73,12 +75,27 @@ public class FindItemWithKeyword extends HttpServlet{
 			return;
 		}
 		
+		
+		
 		try {
 			auctions = auctionDAO.findAllAuctionWithItemID(itemsID);
 			if(auctions == null) {
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				response.getWriter().println("Resource not found");
 				return;
+			}else {
+				System.out.println("this is auctions sieze: " + auctions.size());
+				System.out.println(auctions.get(0).getAucID());
+				System.out.println("executing finding keyword");
+				
+				
+				// Redirect to the Home page and add auctions to the parameters
+				String json = new Gson().toJson(auctions);
+				System.out.println(json);
+				response.setContentType("application/json");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write(json);
+				
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -86,15 +103,14 @@ public class FindItemWithKeyword extends HttpServlet{
 		}
 		
 		
-		// Redirect to the Home page and add auctions to the parameters
-		String json = new Gson().toJson(auctions);
-		response.setContentType("application/json");
-		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(json);
+		
 		
 	}
 
-	
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doGet(request, response);
+	}
 	
 	public void destroy() {
 		try {

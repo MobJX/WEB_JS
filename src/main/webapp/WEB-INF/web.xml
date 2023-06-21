@@ -38,11 +38,6 @@
  
   <filter-mapping> 
     <filter-name>LoginChecker</filter-name> 
-    <url-pattern>/CloseMission</url-pattern> 
-    <url-pattern>/CreateExpensesReport</url-pattern> 
-    <url-pattern>/CreateMission</url-pattern> 
-    <url-pattern>/GetMissionDetailsData</url-pattern> 
-    <url-pattern>/GetMissionsData</url-pattern> 
     <url-pattern>/Logout</url-pattern> 
     <url-pattern>/homePage.html</url-pattern> 
  </filter-mapping> 
