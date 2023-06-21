@@ -42,6 +42,7 @@ public class CheckLogin extends HttpServlet {
 		String pwd = null;
 		usrn = StringEscapeUtils.escapeJava(request.getParameter("username"));
 		pwd = StringEscapeUtils.escapeJava(request.getParameter("pwd"));
+		
 		if (usrn == null || pwd == null || usrn.isEmpty() || pwd.isEmpty() ) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().println("Credentials must be not null");
@@ -52,6 +53,7 @@ public class CheckLogin extends HttpServlet {
 		User user = null;
 		try {
 			user = userDao.checkCredentials(usrn, pwd);
+			
 		} catch (SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.getWriter().println("Internal server error, retry later");
@@ -61,8 +63,9 @@ public class CheckLogin extends HttpServlet {
 		// If the user exists, add info to the session and go to home page, otherwise
 		// return an error status code and message
 		if (user == null) {
+			
 			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-			response.getWriter().println("Incorrect credentials");
+			response.getWriter().println("Incorrect credentials user not exists");
 		} else {
 			request.getSession().setAttribute("user", user);
 			response.setStatus(HttpServletResponse.SC_OK);

@@ -4,7 +4,7 @@
 
 (function() { // avoid variables ending up in the global scope
 
-  document.getElementById("loginbutton").addEventListener('click', (e) => {
+  document.getElementById("login").addEventListener('click', (e) => {
     var form = e.target.closest("form");
     if (form.checkValidity()) {
       makeCall("POST", 'CheckLogin', e.target.closest("form"),
@@ -14,7 +14,7 @@
             switch (x.status) {
               case 200:
             	sessionStorage.setItem('username', message);
-                window.location.href = "HomeCS.html";
+                window.location.href = "homePage.html";
                 break;
               case 400: // bad request
                 document.getElementById("errormessage").textContent = message;
