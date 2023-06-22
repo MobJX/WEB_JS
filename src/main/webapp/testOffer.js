@@ -3,9 +3,10 @@
      let offerList = null;
      let wonAuctionList = null;
      let itemList = null;
-    let searchKeywordButton = document.getElementById('id_keywordButton');
+
     let searchKeywordForm = document.getElementById('id_getKeyAuctionForm')
     let keywordInput = document.getElementById('id_keyword');
+    let giveOfferForm = document.getElementById('id_giveOfferForm');
     let alertContainer = document.getElementById('id_alert');
 
    
@@ -43,6 +44,15 @@
         }
         keyAucList.show(keyword);
     },false);
+
+    giveOfferForm.addEventListener("submit",function (e) {
+      let form = e.target.closet("form");
+      if (form.checkValidity()) {
+          let input = form.querySelector("input[type='hidden']");
+      }
+    } ,false);
+
+
 
     //KeyAuctionList VIEW COMPONENT
     function KeyAuctionList(container,listcontainer) {
