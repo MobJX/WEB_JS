@@ -3,6 +3,7 @@
      let offerList = null;
      let wonAuctionList = null;
      let itemList = null;
+     let currentAuction = null;
 
     let searchKeywordForm = document.getElementById('id_getKeyAuctionForm')
     let keywordInput = document.getElementById('id_keyword');
@@ -49,7 +50,19 @@
     giveOfferForm.addEventListener("submit",function (e) {
       let form = e.target.closet("form");
       if (form.checkValidity()) {
-          let input = form.querySelector("input[type='hidden']");
+          let input = form.querySelector("input[type='number']").value;
+          e.preventDefault();
+          makeCall("GET","GiveOffer?offer="+input,null,function (req) {
+              if (req.readyState === 4) {
+                  if (req.status === 200) {
+                      let newOffer = JSON.parse(req.responseText);
+                      offerList.show();
+                  } else {
+                      alertContainer.textContent = req.responseText;
+                  }
+              }
+          } ,false);
+
       }
     } ,false);
 
@@ -130,6 +143,7 @@
                     wonAuctionList.show();
                     alertContainer.textContent = "";
                     let auctionID = e.target.getAttribute("keyAucID");
+                    currentAuction = auctionID;
                     let urlToCall = "GetOfferData?aucID=" + auctionID;
                     //after clicking on the details shows the details of items and wonAuction of user
                     
