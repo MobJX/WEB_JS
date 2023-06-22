@@ -1,49 +1,123 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="ISO-8859-1">
-  <title>Home</title>
-  
+<meta charset="ISO-8859-1">
+<title>Home</title>
 
-  <script src="test2.js" charset="utf-8" defer></script>
-  <script src="utils.js" charset="utf-8" defer></script>
+<script src="testOffer.js" charset="utf-8" defer></script>
+
+<script src="utils.js" charset="utf-8" defer></script>
 </head>
 <body>
-<div align="right">
-  <a href="Logout">Logout</a>
-</div>
+	<div align="right">
+		<a href="Logout">Logout</a>
+	</div>
 
-<h1>Welcome to Aucton Online Home Page</h1>
-<p>Nice to see you again <span id="id_username"></span></p>
-<div id="id_alert" class="alertmessage"></div>
+	<h1>Welcome to Auction Online Home Page</h1>
+	<p>
+		Nice to see you again <span id="id_username"></span>
+	</p>
+	<div id="id_alert" class="alertmessage"></div>
 
-<form id="id_getKeyAuction">
-  <p>Enter the keyword: <input type="text" id = "id_keyword" name="keyword" required>
-    <input type="button" id="id_keywordButton" name="searchButton" value="search"></p>
-</form>
- <p></p>
-<table>
-  <tr>
-    <td><table id="id_keyAuclistContainer" class="boxed">
-      <thead>
-      <tr>
-        <th>Auction ID</th>
-        <th>Owner ID</th>
-        <th>Starting Price</th>
-        <th>Minimum Raise</th>
-        <th>End Time</th>
-        <th>Auction Status</th>
 
-      </tr>
-      </thead>
-      <tbody id="id_keyAuclistContainerBody">
-      </tbody>
-      
-    </table></td>
+	<!-- KeyWordSearch COMPONENT -->
+	<div>
+		<form id="id_getKeyAuctionForm">
+			<p>
+				Enter the keyword: <input type="text" id="id_keyword" name="keyword"
+					required> <input type="submit" id="id_keywordButton"
+					name="searchButton" value="search">
+			</p>
+		</form>
 
-  </tr>
+		<p></p>
 
-</table>
+		<table>
+			<tr>
+				<td><table id="id_keyAuclistContainer" class="hidden">
+						<thead>
+							<tr>
+								<th>Auction ID</th>
+								<th>Owner ID</th>
+								<th>Starting Price</th>
+								<th>Minimum Raise</th>
+								<th>End Time</th>
+								<th>Auction Status</th>
+
+							</tr>
+						</thead>
+						<tbody id="id_keyAuclistContainerBody">
+						</tbody>
+
+					</table></td>
+
+			</tr>
+
+		</table>
+	</div>
+
+
+	<!-- Items Detail COMPONENT -->
+
+
+
+
+
+
+	<!-- Offer Detail COMPONENT -->
+	<div>
+		<form id="id_giveOfferForm">
+			<p>
+				Enter the Offer: <input type="number" id="id_givenOfferButton"
+					name="givenOffer" required> <input type="button"
+					id="id_offerButton" name="offerButton" value="confirm">
+			</p>
+		</form>
+		<table>
+			<tr>
+				<td><table id="id_offerlistContainer" class="hidden">
+						<thead>
+							<tr>
+								<th>Offer ID</th>
+								<th>User ID</th>
+								<th>Auction ID</th>
+								<th>Offer Amount</th>
+								<th>Offer Date</th>
+
+							</tr>
+						</thead>
+						<tbody id="id_offerlistContainerBody">
+
+						</tbody>
+
+					</table></td>
+
+			</tr>
+
+		</table>
+
+	</div>
+
+
+
+	<!-- WonAuction Detail COMPONENT -->
+
+	<div>
+		<table id="id_wonAuctionContainer">
+			<thead>
+				<tr>
+					<th>Auction ID</th>
+					<th>Starting Price</th>
+					<th>Final Price</th>
+					<th>End Time</th>
+
+				</tr>
+			</thead>
+			<tbody id="id_wonAuctionContainerBody">
+
+			</tbody>
+		</table>
+	</div>
 
 
 

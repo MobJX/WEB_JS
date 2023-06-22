@@ -11,7 +11,8 @@
         keyAucList.reset();
     },false);
 
-    searchKeywordButton.addEventListener("click",function () {
+    searchKeywordButton.addEventListener("click",function (e) {
+		e.preventDefault();
         let keyword = keywordInput.value;
         if (keyword === "") {
             alert("Insert a keyword!");
@@ -19,6 +20,8 @@
         }
        keyAucList.show(keyword);
     },false);
+    
+    
 
     //KeyAuctionList VIEW COMPONENT
     function KeyAuctionList(container,listcontainer) {
@@ -118,5 +121,7 @@
             this.listcontainer.style.visibility = "hidden";
         }
     }
+    
+    
 
 }
