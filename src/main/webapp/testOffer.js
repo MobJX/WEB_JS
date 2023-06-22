@@ -9,6 +9,7 @@
     let giveOfferForm = document.getElementById('id_giveOfferForm');
     let alertContainer = document.getElementById('id_alert');
 
+
    
    
 
