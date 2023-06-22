@@ -2,6 +2,7 @@
     let keyAucList = null;
      let offerList = null;
      let wonAuctionList = null;
+     let itemList = null;
     let searchKeywordButton = document.getElementById('id_keywordButton');
     let searchKeywordForm = document.getElementById('id_getKeyAuctionForm')
     let keywordInput = document.getElementById('id_keyword');
@@ -23,6 +24,10 @@
             document.getElementById("id_wonAuctionContainer"),
             document.getElementById("id_wonAuctionContainerBody")
         );
+        itemList = new ItemDetailList(
+			document.getElementById("id_itemlistContainer"),
+			document.getElementById("id_itemlistContainerBody")
+		)
         
 		
        // keyAucList.reset();
@@ -115,6 +120,9 @@
                     alertContainer.textContent = "";
                     let auctionID = e.target.getAttribute("keyAucID");
                     let urlToCall = "GetOfferData?aucID=" + auctionID;
+                    //after clicking on the details shows the details of items and wonAuction of user
+                    
+                    itemList.show(auctionID);
                     makeCall("GET", urlToCall, null, function (req) {
                         if (req.readyState === 4) {
                             if (req.status === 200) {
@@ -124,12 +132,14 @@
                                     return;
                                 }
                                 offerList.update(offerToShow);
-                                offerContainer.classList.remove("hidden");
+                               // offerContainer.classList.remove("hidden");
                             } else {
                                 alertContainer.textContent = req.responseText;
                             }
                         }
                     });
+                   
+                    
 
                 },false);
 				
@@ -147,7 +157,8 @@
         }
 
     }
-
+    
+//OffernList VIEW COMPONENT
     function OfferList(container,listcontainer){
 		
         this.listcontainer = container;
@@ -264,6 +275,65 @@
                     endDateCell.textContent = wonAuction.expiryDateTime;
 
                 });
+        }
+    }
+    
+    
+    //Item Details Of Auction VIEW COMPONENT
+    function ItemDetailList(container, listcontainer) {
+        this.listcontainer = container;
+        this.listcontainerbody = listcontainer;
+
+        this.show = function (aucID) {
+            let self = this;
+            let urlToCall = "GetItemData?aucID=" + aucID;
+            makeCall("GET", urlToCall, null, function (req) {
+                if (req.readyState === XMLHttpRequest.DONE) {
+                    let message = req.responseText;
+                    if (req.status === 200) {
+                        let itemToShow = JSON.parse(req.responseText);
+                        if (itemToShow.length === 0) {
+                            self.listcontainerbody.innerHTML = "No items found.";
+                            return;
+                        }
+                        self.update(itemToShow);
+                    }
+                }
+
+            });
+            this.update = function (arrayItems) {
+                let row;
+                let itemIDCell;
+                let itemNameCell;
+                let itemDescriptionCell;
+                let itemPriceCell;
+                let itemImageCell;
+
+                this.listcontainerbody.innerHTML = "";
+                arrayItems.forEach(function (item) {
+                    row = self.listcontainerbody.insertRow();
+                    itemIDCell = row.insertCell();
+                    itemNameCell = row.insertCell();
+                    itemDescriptionCell = row.insertCell();
+                    itemPriceCell = row.insertCell();
+                    itemImageCell = row.insertCell();
+                    itemIDCell.textContent = item.itemID;
+                    itemNameCell.textContent = item.itemName;
+                    itemDescriptionCell.textContent = item.description;
+                    itemPriceCell.textContent = item.itemPrice;
+                
+					// create<img>TAG，and setting src URL
+					let img = document.createElement("img");
+					img.src = item.imagePath;
+					img.style.maxWidth = "200px";
+					img.style.maxHeight = "180px";
+					itemImageCell.appendChild(img);
+
+				});
+
+			}
+
+
         }
     }
     

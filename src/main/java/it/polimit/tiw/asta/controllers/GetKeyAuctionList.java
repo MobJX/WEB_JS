@@ -91,7 +91,7 @@ public class GetKeyAuctionList extends HttpServlet{
 				
 				// Redirect to the Home page and add auctions to the parameters
 				String json = new Gson().toJson(auctions);
-				System.out.println(json);
+				
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
 				response.getWriter().write(json);

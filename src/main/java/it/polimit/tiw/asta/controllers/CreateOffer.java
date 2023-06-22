@@ -3,6 +3,7 @@ package it.polimit.tiw.asta.controllers;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -72,7 +73,7 @@ public class CreateOffer extends HttpServlet{
 	        }
 	        
 	        
-	        List<Offer> offers;
+	        List<Offer> offers = new ArrayList<Offer>();
 			try {
 				offers = offerDAO.findAllOfferOfAuctionByAucId(auctionId);
 			} catch (SQLException e) {
