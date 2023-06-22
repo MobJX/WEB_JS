@@ -8,6 +8,7 @@
     let keywordInput = document.getElementById('id_keyword');
     let alertContainer = document.getElementById('id_alert');
 
+
    
    
 
