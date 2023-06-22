@@ -32,32 +32,39 @@
 <p><b>Create a new Item</b></p>
 <p>Please enter the following information</p>
 <div>
-	<form id="id_createItemForm">
-        <p>Item: <input type = "text" name = "itemName" id = "id_itemName"></p>
-        <p>Price: <input type = "text" name = "itemPrice" id = "id_itemPrice"></p>
-        <p>Description: <input type = "text" name = "itemDescription" id = "id_itemDescription"></p>
-        <p>Image path: <input type = "text" name = "itemImage" id = "id_itemImage"></p>
-        <input type = "submit" value = "confirm">
-    </form><br><br>
+    <form id="id_createItemForm">
+        <p>Item: <input type="text" name="itemName" id="id_itemName"></p>
+        <p>Price: <input type="text" name="itemPrice" id="id_itemPrice"></p>
+        <p>Description: <input type="text" name="itemDescription" id="id_itemDescription"></p>
+        <p>Image path: <input type="text" name="itemImage" id="id_itemImage"></p>
+        <input type="submit" value="confirm">
+    </form>
+    <br><br>
 </div>
 
 <p><b>Create a new Auction</b></p>
 <p>List of available items:</p>
 <p><i>Please select the item you wish to auction</i></p>
-<form action = "id_createAuctionForm" method = "GET">
-    <table id="id_create" border='1'>
-        <thead>
-        <tr>
-            <th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Image</th>
-        </tr>
-        </thead>
-        <tbody>
+<div>
+    <form action="id_createAuctionForm" method="GET">
+        <table id="id_createAuctionContainer" border='1'>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Image</th>
+            </tr>
+            </thead>
+            <tbody>
 
-        </tbody>
-    </table>
-    <input type = "submit" value = "confirm">
-</form><br><br>
-
+            </tbody>
+        </table>
+        <input type="submit" value="confirm">
+    </form>
+    <br><br>
+</div>
 
 
 <p><b>Search Item:</b></p>
@@ -107,7 +114,7 @@
 <div>
     <form id="id_giveOfferForm">
         <p>
-            Enter the Offer: <input type="hidden" id="id_givenOfferButton"
+            Enter the Offer: <input type="number" id="id_givenOfferButton"
                                     name="givenOffer" required> <input type="button"
                                                                        id="id_offerButton" name="offerButton"
                                                                        value="confirm">
