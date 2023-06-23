@@ -19,27 +19,18 @@
 </p>
 <div id="id_alert" class="alertmessage"></div>
 
-<!--
-<nav class="nav">
-    <div class="center clearfix">
-        <ul class="navBar">
-            <li class="sellPage"><a href="#">SELL</a></li>
-            <li class="buyPage"><a href="#">BUY</a></li>
-        </ul>
-    </div>
-</nav>
--->
-
 <div id="id_sellBlock">
     <p><b>Create a new Item</b></p>
     <p>Please enter the following information</p>
     <div>
-        <form id="id_createItemForm">
-            <p>Item: <input type="text" name="itemName" id="id_itemName"></p>
-            <p>Price: <input type="text" name="itemPrice" id="id_itemPrice"></p>
-            <p>Description: <input type="text" name="itemDescription" id="id_itemDescription"></p>
-            <p>Image path: <input type="text" name="itemImage" id="id_itemImage"></p>
-            <input type="submit" value="confirm">
+        <form id="id_createItemForm" action="#">
+            <fieldset>
+                <p>Item: <input type="text" name="itemName" id="id_itemName" required></p>
+                <p>Price: <input type="text" name="itemPrice" id="id_itemPrice" required></p>
+                <p>Description: <input type="text" name="itemDescription" id="id_itemDescription" required></p>
+                <p>Image path: <input type="text" name="itemImage" id="id_itemImage" required></p>
+                <input type="submit" id="id_newItemButton" name="newItemButton" value="confirm">
+            </fieldset>
         </form>
         <br><br>
     </div>
@@ -48,8 +39,8 @@
     <p>List of available items:</p>
     <p><i>Please select the item you wish to auction</i></p>
     <div>
-        <form action="id_createAuctionForm" method="GET">
-            <table id="id_createAuctionContainer" border='1'>
+        <form id="id_createAuctionForm">
+            <table id="id_availableItemListContainer" border='1'>
                 <thead>
                 <tr>
                     <th>ID</th>
@@ -59,11 +50,10 @@
                     <th>Image</th>
                 </tr>
                 </thead>
-                <tbody>
-
+                <tbody id="id_availableItemListBody">
                 </tbody>
             </table>
-            <input type="submit" value="confirm">
+            <input type="submit" id="id_newAuctionButton" name="newAuctionButton" value="confirm">
         </form>
         <br><br>
     </div>
@@ -79,8 +69,7 @@
                 <th>Time Remaining</th>
             </tr>
             </thead>
-            <tbody>
-
+            <tbody id="id_myOpenAuctionsBody">
             </tbody>
         </table>
     </div>
@@ -99,8 +88,7 @@
                 <th>Final Price</th>
             </tr>
             </thead>
-            <tbody>
-
+            <tbody id="id_myClosedAuctionsBody">
             </tbody>
         </table>
         <br><br>
