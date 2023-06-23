@@ -15,10 +15,10 @@ import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
-
+import it.polimit.tiw.asta.beans.Auction;
 import it.polimit.tiw.asta.beans.Offer;
 import it.polimit.tiw.asta.beans.User;
-
+import it.polimit.tiw.asta.dao.AuctionDAO;
 import it.polimit.tiw.asta.dao.OfferDAO;
 import it.polimit.tiw.asta.utils.ConnectionHandler;
 
@@ -33,13 +33,21 @@ public class CreateOffer extends HttpServlet{
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
 		boolean isBadRequest = false;
 		 int auctionId;
 		 float userBid;
+		 float currentMaxBid = 0;
+		 double minUp;
+		 Auction auction = null;
+		 AuctionDAO auctionDao = new AuctionDAO(connection);
+		 System.out.println("hello this is servlet 1 ");
 		 try {
 			auctionId = Integer.parseInt(request.getParameter("auctionID"));
 			userBid = Float.parseFloat(request.getParameter("offer"));
+			System.out.println("hello this is servlet 2 \n"+auctionId+"\nthis is CreateOffer\n"+userBid);
+			
 				} catch (NumberFormatException | NullPointerException e) {
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 					response.getWriter().println("incorrect format of input");
@@ -53,14 +61,35 @@ public class CreateOffer extends HttpServlet{
 				return;
 			}
 		 
+		// 获取Auction和当前最高出价
+			//getting the max offer of the auction
+	      
+	        try {
+	            auction = auctionDao.findAuction(auctionId);
+	            currentMaxBid = auctionDao.getCurrentMaxBid(auctionId);
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        
+	        //获取minUP
+	        //getting minUP
+	        //检查是否符合！
+	        //checking the validation of offer 
+	        minUp = auction.getMinUP();
+	        if(userBid<=currentMaxBid+minUp) {
+			 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			 response.getWriter().println("Incorrec param values");		
+			 return;
+			 }
+		 
+		 
+		 
+		 
 		 
 
 			// Create Offer in DB
-			HttpSession session = request.getSession();
-			User user = (User) session.getAttribute("user");
 			OfferDAO offerDAO = new OfferDAO(connection);
 			Offer newOffer = new Offer();
-			
 	        newOffer.setAucID(auctionId);
 	        newOffer.setUserID(user.getId());
 	        newOffer.setOfferPrice(userBid);
@@ -74,6 +103,7 @@ public class CreateOffer extends HttpServlet{
 	        
 	        
 	        List<Offer> offers = new ArrayList<Offer>();
+	        
 			try {
 				offers = offerDAO.findAllOfferOfAuctionByAucId(auctionId);
 			} catch (SQLException e) {

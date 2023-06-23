@@ -97,7 +97,7 @@ public class GetItemData extends HttpServlet {
 		// Redirect to the Home page and add items to the parameters
 
 		String json = new Gson().toJson(itemsOfAuction);
-		System.out.println(json);
+		// Only used for debugging System.out.println(json);
 		
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
