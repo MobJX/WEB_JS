@@ -7,12 +7,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import it.polimit.tiw.asta.beans.Auction;
 import it.polimit.tiw.asta.beans.User;
 
 
 
 public class UserDAO {
 	private Connection con;
+	private static final String SELECT_USER_BY_AUCID ="SELECT* FROM Offer NATURAL JOIN User where aucID = ?";
 
 	public UserDAO(Connection connection) {
 		this.con = connection;
@@ -67,5 +69,28 @@ public class UserDAO {
 		}
 	}
 	
+	/**
+	 * find all the offers of specific auction
+	 * @param Auction
+	 * @return User
+	 * @throws SQLException 
+	 */
+	public User findUserOfAuction(Auction auction) throws SQLException{
+		User user = null;
+		try(PreparedStatement pstatement = con.prepareStatement(SELECT_USER_BY_AUCID);){
+			pstatement.setInt(1, auction.getAucID());
+			try(ResultSet result = pstatement.executeQuery();){
+				if(result.next()) {
+					user = new User();
+					user.setId(result.getInt("userID"));
+					user.setUsername(result.getString("username"));
+					user.setAddress(result.getString("address"));
+	
+	
+				}
+			}
+		}
+		return user;
+	}
 	
 }

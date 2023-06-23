@@ -1,9 +1,15 @@
 let availableItemList = null;
+let openAuctionList = null;
+let closedAuctionList = null;
+
 let itemNameInput = document.getElementById("id_itemName");
 let itemPriceInput = document.getElementById("id_itemPrice");
 let itemDescriptionInput = document.getElementById("id_itemDescription");
 let itemImageInput = document.getElementById("id_itemImage");
+
 let createItemForm = document.getElementById("id_createItemForm");
+let createAuctionForm = document.getElementById("id_createAuctionForm");
+
 let createItemButton = document.getElementById("id_newItemButton");
 
 window.addEventListener("load", function () {
@@ -11,6 +17,15 @@ window.addEventListener("load", function () {
         document.getElementById("id_availableItemListContainer"),
         document.getElementById("id_availableItemListBody")
     );
+    openAuctionList = new OpenAuctionList(
+        document.getElementById("id_myOpenAuctionsContainer"),
+        document.getElementById("id_myOpenAuctionsBody")
+    );
+    closedAuctionList = new ClosedAuctionList(
+        document.getElementById("id_myClosedAuctionsContainer"),
+        document.getElementById("id_myClosedAuctionsBody")
+    );
+
 }, false);
 
 createItemForm.addEventListener("submit", function (e) {
@@ -83,7 +98,7 @@ function AvailableItemList(container, listcontainer) {
         availableItemList.reset();
     }
 
-    this.show = function (itemID) {
+    this.show = function () {
         let self = this;
         makeCall("GET", "GetAvailableItem", null, function (req) {
             if (req.readyState == 4) {
@@ -101,7 +116,7 @@ function AvailableItemList(container, listcontainer) {
                     alertContainer.textContent = req.responseText;
                 }
             }
-        });
+        }, false);
     };
     this.update = function (arrayItems) {
         let row, itemIdCell, itemNameCell, itemPriceCell, itemDescriptionCell, itemImageCell;
@@ -128,4 +143,36 @@ function AvailableItemList(container, listcontainer) {
             self.listcontainerbody.appendChild(row);
         });
     };
+}
+
+function OpenAuctionList(container, listcontainer){
+    this.listcontainer = container;
+    this.listcontainerbody = listcontainer;
+
+    this.reset = function() {
+        this.listcontainer.style.visibility = "hidden";
+    }
+
+    this.show = function (){
+        var self = this;
+        makeCall("GET", "GetOpenAuction", null, function (req){
+            if (req.readyState == 4) {
+                if (req.status == 200) {
+                    let openAuctionToShow = JSON.parse(req.responseText);
+                    if (openAuctionToShow == 0) {
+                        self.alert.textContent = "No Auction yet!";
+                        return;
+                    }
+                    self.update(openAuctionToShow);
+                } else if (req.status == 403) {
+                    window.location.href = req.getResponseHeader("Location");
+                    window.sessionStorage.removeItem('username');
+                } else {
+                    alertContainer.textContent = req.responseText;
+                }
+            }
+        }, false);
+    };
+
+    this.update = function (arrayOpenAuctions)
 }
