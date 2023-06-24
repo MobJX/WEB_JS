@@ -41,7 +41,8 @@ public class CreateNewAuction extends HttpServlet{
 	}
 
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		
@@ -115,11 +116,6 @@ public class CreateNewAuction extends HttpServlet{
 				response.setCharacterEncoding("UTF-8");
 				response.getWriter().write(json);
 
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
 	}
 
 	public void destroy() {

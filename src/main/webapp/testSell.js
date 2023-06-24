@@ -1,7 +1,8 @@
 {
     //page components
-    let availableItemList, openAuctionList, closedAuctionList,
+    let createNewItem, openAuctionList, closedAuctionList, autionDetails,
         createNewAuction, pageOrchestrator = new PageOrchestrator();
+    //var itemButton = document.getElementById("id_newItemButton");
 
     window.addEventListener("load", () => {
         if (sessionStorage.getItem("username") == null) {
@@ -19,84 +20,79 @@
         }
     }
 
-    function AvailableItemList(_alert, _id_availableItemListContainer, _id_availableItemListBody) {
-        this.alert = _alert;
-        this.availableItemList = _id_availableItemListContainer;
-        this.availableIemListBody = _id_availableItemListBody;
-        this.current_availableItemList;
+    function CreateNewItem(newItem, alert) {
+        this.newItem = newItem;
+        this.alert = alert;
 
-        this.reset = function () {
-            this.availableItemList.style.visibility = "hidden";
+        this.registerEvents = function (orchestrator) {
+            this.newItem.querySelector("input[type='submit'][name='newItemButton']").addEventListener('click', (e) => {
+                e.preventDefault();
+                var self = this;
+                let form = e.target.closest("form");
+                if (form.checkValidity()) {
+                    makeCall("POST", 'CreateNewItem', e.target.closest("form"),
+                        function (req) {
+                            if (req.readyState == XMLHttpRequest.DONE) {
+                                var message = req.responseText;
+                                if (req.status == 200) {
+                                    orchestrator.refresh(message);
+                                } else if (req.status == 403) {
+                                    window.location.href = req.getResponseHeader("Location");
+                                    window.sessionStorage.removeItem('username');
+                                } else {
+                                    self.alert.textContent = message;
+                                    //self.reset();
+                                }
+                            }
+                        });
+                } else {
+                    form.reportValidity();
+                }
+            });
         }
 
-        this.show = function () {
-            let self = this;
-            makeCall("GET", "GetAvailableItem", null,
-                function (req) {
-                    if (req.readyState == XMLHttpRequest.DONE) {
-                        var message = req.responseText;
-                        if (req.status == 200) {
-                            var availbleItemListToShow = JSON.parse(req.responseText);
-                            availableItemList.current_availableItemList = availbleItemListToShow;
-                            if (availbleItemListToShow.length == 0) {
-                                self.alert.textContent = "No available item list entered yet!";
-                                return;
-                            }
-                            self.update(availbleItemListToShow);
-                        } else if (req.status == 403) {
-                            window.location.href = req.getResponseHeader("Location");
-                            window.sessionStorage.removeItem("username");
-                        } else {
-                            self.alert.textContent = message;
-                        }
-                    }
-                });
+    }
+
+    /*
+    function CreateNewItem() {
+        // 获取表单元素的值
+        var itemName = document.getElementById("id_itemName").value;
+        var itemPrice = document.getElementById("id_itemPrice").value;
+        var itemDescription = document.getElementById("id_itemDescription").value;
+        var itemImage = document.getElementById("id_itemImage").value;
+
+        // 创建一个 FormData 对象，并添加表单数据
+        var formData = new FormData();
+        formData.append("itemName", itemName);
+        formData.append("itemPrice", itemPrice);
+        formData.append("itemDescription", itemDescription);
+        formData.append("itemImage", itemImage);
+
+        // 创建一个 XMLHttpRequest 对象
+        var xhr = new XMLHttpRequest();
+
+        // 设置请求的方法、URL 和异步标志
+        xhr.open("GET", "CreateNewItem", true);
+
+        // 监听 AJAX 请求的状态变化
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    // 请求成功处理逻辑
+                    var response = xhr.responseText;
+                    // 处理返回的响应数据
+                    console.log(response);
+                } else {
+                    // 请求失败处理逻辑
+                    console.error("请求失败: " + xhr.status);
+                }
+            }
         };
 
-        this.update = function (availableItemList) {
-            var row1, row2, row3, itemIDCell, itemNameCell, itemDescriptionCell, itemPriceCell,
-                itemImageCell, itemSelectCell, checkbox, auctionExpiryDateTime, auctionMinUP;
-            this.availableIemListBody.innerHTML = "";   // empty the table body
-            // build updated list
-            let self = this;
-            availableItemList.forEach(function (item) {
-                row1 = document.createElement("tr");
-                itemIDCell = document.createElement("td");
-                itemIDCell.textContent = item.itemID;
-                row1.appendChild(itemIDCell);
-                itemNameCell = document.createElement("td");
-                itemNameCell.textContent = item.itemName;
-                row1.appendChild(itemNameCell);
-                itemDescriptionCell = document.createElement("td");
-                itemDescriptionCell.textContent = item.description;
-                row1.appendChild(itemDescriptionCell);
-                itemPriceCell = document.createElement("td");
-                itemPriceCell.textContent = item.itemPrice;
-                row1.appendChild(itemPriceCell);
-                itemImageCell = document.createElement("td");
-                itemImageCell.textContent = item.imagePath;
-                row1.appendChild(itemImageCell);
-                itemSelectCell = document.createElement("td");
-                checkbox = document.createElement("input");
-                checkbox.type = "checkbox";
-                itemSelectCell.appendChild(checkbox);
-                row1.appendChild(itemSelectCell);
-                row2 = document.createElement("tr");
-                auctionExpiryDateTime = document.createElement("td");
-                auctionExpiryDateTime.textContent = auction.expiryDateTime;
-                row2.appendChild(auctionExpiryDateTime);
-                row3 = document.createElement("tr");
-                auctionMinUP = document.createElement("td");
-                auctionMinUP.textContent = auction.minUP;
-                row3 = document.appendChild(auctionMinUP);
-            });
-            this.availableItemList.style.visibility = "visible";
-        }
+        // 发送 AJAX 请求
+        xhr.send(formData);
     }
-
-    function CreateNewItem(newItem,alert){
-
-    }
+*/
 
     function CreateNewAuction(newAuction, alert) {
         var now = new Date(), formattedDate = now.toISOString().substring(0, 10);
@@ -134,7 +130,7 @@
                 }
                 if (valid) {
                     let self = this;
-                    makeCall("GET", "CreateNewAuction", e.target.closest("form"),
+                    makeCall("POST", "CreateNewAuction", e.target.closest("form"),
                         function (req) {
                             if (req.readyState == XMLHttpRequest.DONE) {
                                 var message = req.responseText;
@@ -170,6 +166,149 @@
         }
     }
 
+
+    function OpenAuctionList(_alert, _id_openAuction, _id_openAuctionBody) {
+        this.alert = _alert;
+        this.openAuction = _id_openAuction;
+        this.openAuctionBody = _id_openAuctionBody;
+        this.current_openAuction;
+
+        this.reset = function () {
+            this.openAuction.style.visibility = "hidden";
+        }
+
+        this.show = function () {
+            let self = this;
+            makeCall("GET", "GetOpenAuction", null,
+                function (req) {
+                    if (req.readyState == XMLHttpRequest.DONE) {
+                        var message = req.responseText;
+                        if (req.status == 200) {
+                            var openAuctionToShow = JSON.parse(req.responseText);
+                            openAuctionList.current_openAuction = openAuctionToShow;
+                            if (openAuctionToShow.length == 0) {
+                                self.alert.textContent = "No Open Auction yet!";
+                                return;
+                            }
+                            self.update(openAuctionToShow);
+                        } else {
+                            self.alert.textContent = message;
+                        }
+                    }
+                });
+        };
+
+        this.update = function (openAuctionList) {
+            let row, rowItem, auctionIDCell, itemsCell, maxOfferCell, timeRemainingCell, linckCell, anchor;
+            this.openAuctionBody.innerHTML = "";
+            let self = this;
+            openAuctionList.forEach(function (auction) {
+                row = document.createElement("tr");
+                auctionIDCell = document.createElement("td");
+                auctionIDCell.textContent = auction.aucID;
+                row.appendChild(auctionIDCell);
+                itemsCell = document.createElement("td");
+                auction.aucItems.forEach(function (item) {
+                    rowItem = document.createElement("tr");
+                    itemsCell.itemID = document.createElement("td");
+                    itemsCell.itemID.textContent = item.itemID;
+                    rowItem.appendChild(itemsCell.itemID);
+                    itemsCell.itemName = document.createElement("td");
+                    itemsCell.itemName.textContent = item.itemName;
+                    rowItem.appendChild(itemsCell.itemName);
+                });
+                row.appendChild(rowItem);
+                maxOfferCell = document.createElement("td");
+                maxOfferCell.textContent = auction.maxOffer;
+                row.appendChild(maxOfferCell);
+
+                function formatDuration(duration) {
+                    const seconds = Math.floor((duration / 1000) % 60);
+                    const minutes = Math.floor((duration / (1000 * 60)) % 60);
+                    const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+                    const days = Math.floor(duration / (1000 * 60 * 60 * 24));
+                    return `${days} Days ${hours}:${minutes}:${seconds}`;
+                }
+
+                timeRemainingCell = document.createElement("td");
+                timeRemainingCell.textContent = formatDuration(auction.remaingTimes);
+                row.appendChild(timeRemainingCell);
+                linckCell = document.createElement("td");
+                anchor = document.createElement("a");
+                linckCell.appendChild(anchor);
+                linkText = document.createTextNode("Details");
+                anchor.appendChild(linkText);
+                anchor.setAttribute('aucID', auction.aucID);
+                anchor.addEventListener("click", (e) => {
+                    autionDetails.show(e.target.getAttribute("aucID"));
+                }, false);
+                anchor.href = "#";
+                row.appendChild(linckCell);
+                self.openAuctionBody.appendChild(row);
+            });
+            this.openAuction.style.visibility = "visible";
+        }
+    }
+
+    function AuctionDetails(_alert, _id_auctionDetailsContainer, _id_auctionDetailsBody) {
+        this.alert = _alert;
+        this.auctionDetailsContainer = _id_auctionDetailsContainer;
+        this.auctionDetailsBody = _id_auctionDetailsBody;
+        this.currentAuctionDetails;
+
+        this.reset = function () {
+            this.auctionDetailsContainer.style.visibility = "hidden";
+        }
+
+        this.show = function (aucID) {
+            var self = this;
+            makeCall("GET", "GetAuctionData?aucID=" + aucID, null,
+                function (req) {
+                    if (req.readyState == XMLHttpRequest.DONE) {
+                        var message = req.responseText;
+                        if (req.status == 200) {
+                            let auctionToShow = JSON.parse(req.responseText);
+                            autionDetails.currentAuctionDetails = auctionToShow;
+                            if (auctionToShow.length == 0) {
+                                self.alert.textContent = "No Auction available!"
+                                return;
+                            }
+                            self.update(auctionToShow);
+                        } else {
+                            self.alert.textContent = message;
+                        }
+                    }
+                });
+        };
+
+        this.update = function (autionDetails){
+            let row, auctionID, ownerID, startPrice, minRaise, exprDTime, closed;
+            this.auctionDetailsBody.innerHTML = "";
+            let self = this;
+            row = document.createElement("tr");
+            auctionIDCell = document.createElement("td");
+            auctionIDCell.textContent = autionDetails.aucID;
+            row.appendChild(auctionIDCell);
+            ownerID = document.createElement("td");
+            ownerID.textContent = autionDetails.ownerID;
+            row.appendChild(ownerID);
+            startPrice = document.createElement("td");
+            startPrice.textContent = autionDetails.aucPrice;
+            row.appendChild(startPrice);
+            minRaise = document.createElement("td");
+            minRaise.textContent = autionDetails.minUP;
+            row.appendChild(minRaise);
+            exprDTime = document.createElement("td");
+            exprDTime.textContent = autionDetails.expiryDateTime;
+            row.appendChild(exprDTime);
+            closed = document.createElement("td");
+            closed.textContent = autionDetails.isClosed;
+            row.appendChild(closed);
+            self.auctionDetailsBody.appendChild(row);
+            this.auctionDetailsContainer.style.visibility = "visible";
+        }
+    }
+
     function PageOrchestrator() {
         var alertContainer = document.getElementById("id_alert");
 
@@ -177,11 +316,34 @@
             personalMessage = new PersonalMessage(sessionStorage.getItem('username'), document.getElementById("id_username"));
             personalMessage.show();
 
+            openAuctionList = new OpenAuctionList(
+                alertContainer,
+                document.getElementById("id_myOpenAuctionsContainer"),
+                document.getElementById("id_myOpenAuctionsBody")
+            );
+
+            autionDetails = new AuctionDetails(
+                alertContainer,
+                document.getElementById("id_auctionDetailsContainer"),
+                document.getElementById("id_auctionDetailsBody")
+            );
+
+            createNewItem = new CreateNewItem(document.getElementById("id_createItemForm"), alertContainer);
+            createNewItem.registerEvents(this);
             createNewAuction = new CreateNewAuction(document.getElementById("id_createAuctionForm"), alertContainer);
             createNewAuction.registerEvents(this);
         };
 
-        this.refresh = function (current)
+        this.refresh = function (currentSellPage) {
+            alertContainer.textContent = "";
+            openAuctionList.show();
+            //    createNewItem.reset;
+            //    createNewAuction.reset;
+        }
     }
+
+    // itemButton.addEventListener("click", (e) =>{
+    //    CreateNewItem();
+    // });
 
 }

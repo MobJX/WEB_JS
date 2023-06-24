@@ -99,11 +99,12 @@ public class ItemDAO {
 	            if (generatedKeys.next()) {
 	                return generatedKeys.getInt(1);
 	            } else {
-	                throw new SQLException("Creating auction failed");
+	                throw new SQLException("Creating item failed");
 	            }
 	        }
 		}
 	}
+	
 	
 	public void insertItemInAuction (Auction auction, Item item) throws SQLException {
 		

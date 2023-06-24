@@ -5,9 +5,6 @@ package it.polimit.tiw.asta.beans;
 import java.util.Date;
 import java.util.List;
 
-import it.polimit.tiw.asta.beans.Item;
-import it.polimit.tiw.asta.beans.User;
-
 import java.time.Duration;
 import java.util.ArrayList;
 
@@ -20,7 +17,7 @@ public class Auction {
 	private boolean isClosed;
 	private List<Item> aucItems;
 	private float maxOffer;
-	//private Duration remaingTimes;
+	private Duration remaingTimes;
 	private User bidder;
 	
 	public Auction() {
@@ -38,7 +35,7 @@ public class Auction {
 		this.isClosed = false;
 		this.aucItems = new ArrayList<>();
 		this.maxOffer = 0;
-		//this.remaingTimes = null;
+		this.remaingTimes = null;
 		this.bidder = null;
 	}
 	
@@ -132,7 +129,6 @@ public class Auction {
 			this.aucItems = aucItems;
 		}
 
-/*
 		public Duration getRemaingTimes() {
 			return remaingTimes;
 		}
@@ -142,20 +138,5 @@ public class Auction {
 			this.remaingTimes = remaingTimes;
 		}
 
-
-		public String getBidder() {
-			return bidder;
-		}
-
-
-		public void setBidder(String bidder) {
-			this.bidder = bidder;
-		}
-
-	
-	*/
-	
-	
-	
 	
 }

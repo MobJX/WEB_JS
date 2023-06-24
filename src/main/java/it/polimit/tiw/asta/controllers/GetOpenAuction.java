@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import it.polimit.tiw.asta.beans.Offer;
 import it.polimit.tiw.asta.dao.AuctionDAO;
@@ -26,6 +27,7 @@ import it.polimit.tiw.asta.beans.Item;
 import it.polimit.tiw.asta.beans.User;
 import it.polimit.tiw.asta.dao.ItemDAO;
 import it.polimit.tiw.asta.utils.ConnectionHandler;
+import it.polimit.tiw.asta.utils.DurationSerializer;
 
 @WebServlet("/GetOpenAuction")
 public class GetOpenAuction extends HttpServlet {
@@ -48,7 +50,7 @@ public class GetOpenAuction extends HttpServlet {
 		ItemDAO itemDAO = new ItemDAO(connection);
 		AuctionDAO auctionDAO = new AuctionDAO(connection);
 		OfferDAO offerDAO = new OfferDAO(connection);
-		
+
 		List<Auction> aucON = new ArrayList<>();
 		List<Item> itemsON = new ArrayList<>();
 		List<Offer> offers = new ArrayList<>();
@@ -56,39 +58,39 @@ public class GetOpenAuction extends HttpServlet {
 		Duration remaingTimes = null;
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime expiry;
-		
+
 		try {
 			// Open Auctions
-						aucON = auctionDAO.findAllAuctionON(user.getId());
-						for	(Auction auc : aucON) {
-							maxOffer = 0;
-							itemsON = itemDAO.findAll_Item_OfAuction(auc.getAucID());
-							offers = offerDAO.findAllOfferOfAuction(auc);
-							for (Offer offer : offers) {
-								if (offer.getOfferPrice()>maxOffer) {
-									maxOffer = offer.getOfferPrice();
-								}
-							}
-							expiry = auc.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-							remaingTimes = Duration.between(now, expiry);
-							//auc.setRemaingTimes(remaingTimes);
-							auc.setMaxOffer(maxOffer);
-							auc.setAucItems(itemsON);
-						}
-		} catch(SQLException e) {
+			aucON = auctionDAO.findAllAuctionON(user.getId());
+			for (Auction auc : aucON) {
+				maxOffer = 0;
+				itemsON = itemDAO.findAll_Item_OfAuction(auc.getAucID());
+				offers = offerDAO.findAllOfferOfAuction(auc);
+				for (Offer offer : offers) {
+					if (offer.getOfferPrice() > maxOffer) {
+						maxOffer = offer.getOfferPrice();
+					}
+				}
+				expiry = auc.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				remaingTimes = Duration.between(now, expiry);
+				auc.setRemaingTimes(remaingTimes);
+				auc.setMaxOffer(maxOffer);
+				auc.setAucItems(itemsON);
+			}
+		} catch (SQLException e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.getWriter().println("Not possible to recover item");
 			return;
 		}
-		
 
 		// Redirect to the Home page and add items to the parameters
-				String json = new Gson().toJson(itemsON);
-				System.out.println(json);
-				response.setContentType("application/json");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(json);
+		Gson gson = new GsonBuilder().registerTypeAdapter(Duration.class, new DurationSerializer()).create();
+		String json = gson.toJson(aucON);
+		System.out.println(json);
+		response.setContentType("application/json");
+		response.setCharacterEncoding("UTF-8");
+		response.getWriter().write(json);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)

@@ -11,7 +11,9 @@
 	    if (formElement == null) {
 	      req.send();
 	    } else {
-	      req.send(new FormData(formElement));
+			let formData=new FormData(formElement);
+			console.log(formData.get("itemName"));
+	      req.send(formData);
 	    }
 	    if (formElement !== null && reset === true) {
 	      formElement.reset();

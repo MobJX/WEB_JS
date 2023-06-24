@@ -3,20 +3,14 @@ package it.polimit.tiw.asta.controllers;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.text.ParseException;
-
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import com.google.gson.Gson;
 
 import it.polimit.tiw.asta.utils.ConnectionHandler;
-import it.polimit.tiw.asta.beans.User;
 import it.polimit.tiw.asta.beans.Item;
 import it.polimit.tiw.asta.dao.ItemDAO;
 
@@ -34,27 +28,40 @@ public class CreateNewItem extends HttpServlet {
 		connection = ConnectionHandler.getConnection(getServletContext());
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("----------Create a new Item SERVLET---------");
 		boolean isBadRequest = false;
 		String itemName = null;
 		String itemPrice = null;
 		String itemDescription = null;
 		String itemImage = null;
+	
 		
 		try {
 			itemName = request.getParameter("itemName");
+			if	(itemName.length()>=44) {
+				response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				response.getWriter().println("Name too long!");
+				return;
+			}
 			itemPrice = request.getParameter("itemPrice");
 			itemDescription = request.getParameter("itemDescription");
 			itemImage = request.getParameter("itemImage");
+			
+			System.out.println(itemName);
+			System.out.println(itemPrice);
+			System.out.println(itemDescription);
+			System.out.println(itemImage);
 			
 			isBadRequest = itemName.isEmpty() || itemPrice.isEmpty() || itemDescription.isEmpty() || itemImage.isEmpty();
 		} catch (NumberFormatException | NullPointerException e) {
 			isBadRequest = true;
 			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Incorrect param values");
 			return;
 		}
+		
 		if (isBadRequest) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().println("Incorrect or missing param values");
@@ -62,7 +69,8 @@ public class CreateNewItem extends HttpServlet {
 		}
 		
 		if (itemPrice == null || !isValidFloat(itemPrice)) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid itemPrice value");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Invalid itemPrice value");
 			return;
 		}
 		
@@ -72,11 +80,11 @@ public class CreateNewItem extends HttpServlet {
 		try {
 			int newItemID = itemDAO.createItem(item);
 			item.setItemID(newItemID);
-			System.out.println("ItemID: " + newItemID);
 			
 		} catch (SQLException e){
 			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error creating item");
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.getWriter().println("Error creating item");
 			return;
 		}
 		
@@ -95,11 +103,6 @@ public class CreateNewItem extends HttpServlet {
 		} catch (NumberFormatException e) {
 			return false;
 		}
-	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		doGet(request, response);
 	}
 
 

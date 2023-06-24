@@ -3,9 +3,9 @@
 <head>
     <meta charset="ISO-8859-1">
     <title>Home</title>
-
+    <script src="testSell.js" charset="utf-8" defer></script>
     <script src="buy.js" charset="utf-8" defer></script>
-    
+
     <script src="utils.js" charset="utf-8" defer></script>
 </head>
 <body>
@@ -23,7 +23,7 @@
     <p><b>Create a new Item</b></p>
     <p>Please enter the following information</p>
     <div>
-        <form id="id_createItemForm" action="#">
+        <form id="id_createItemForm">
             <fieldset>
                 <p>Item: <input type="text" name="itemName" id="id_itemName" required></p>
                 <p>Price: <input type="text" name="itemPrice" id="id_itemPrice" required></p>
@@ -71,6 +71,7 @@
 
     <p><b>My Open Auctions </b></p>
     <div>
+
         <table id="id_myOpenAuctionsContainer" border='1'>
             <thead>
             <tr>
@@ -81,6 +82,46 @@
             </tr>
             </thead>
             <tbody id="id_myOpenAuctionsBody">
+            </tbody>
+        </table>
+        <table id="id_auctionDetailsContainer">
+            <thead>
+            <tr>
+                <th>Auction ID</th>
+                <th>Owner ID</th>
+                <th>Starting Price</th>
+                <th>Minimum Raise</th>
+                <th>Expiry Date Time</th>
+                <th>Closed</th>
+            </tr>
+            </thead>
+            <tbody id="id_auctionDetailsBody">
+            </tbody>
+        </table>
+        <label for="id_itemDetailsContainer"><i>List of Items:</i></label>
+        <table id="id_itemDetailsContainer">
+            <thead>
+            <tr>
+                <th>Item ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Image</th>
+            </tr>
+            </thead>
+            <tbody id="id_itemDetailsBody">
+            </tbody>
+        </table>
+        <label for="id_offersDetailsContainer"><i>List of Offers:</i></label>
+        <table id="id_offersDetailsContainer">
+            <thead>
+            <tr>
+                <th>User Name</th>
+                <th>Offer Amount</th>
+                <th>Offer Date</th>
+            </tr>
+            </thead>
+            <tbody id="id_offersDetailsBody">
             </tbody>
         </table>
     </div>
