@@ -45,8 +45,9 @@ public class CreateOffer extends HttpServlet{
 		 System.out.println("hello this is servlet 1 ");
 		 try {
 			auctionId = Integer.parseInt(request.getParameter("auctionID"));
+			
 			userBid = Float.parseFloat(request.getParameter("offer"));
-			System.out.println("hello this is servlet 2 \n"+auctionId+"\nthis is CreateOffer\n"+userBid);
+			
 			
 				} catch (NumberFormatException | NullPointerException e) {
 					response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -75,16 +76,14 @@ public class CreateOffer extends HttpServlet{
 	        //getting minUP
 	        //检查是否符合！
 	        //checking the validation of offer 
+	        
+	        
 	        minUp = auction.getMinUP();
 	        if(userBid<=currentMaxBid+minUp) {
 			 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			 response.getWriter().println("Incorrec param values");		
+			 response.getWriter().println("What a miser! Give a little more!");		
 			 return;
 			 }
-		 
-		 
-		 
-		 
 		 
 
 			// Create Offer in DB

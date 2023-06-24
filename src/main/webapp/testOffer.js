@@ -5,7 +5,7 @@
 	let itemList = null;
 	let currentAuctionID = null;
 
-	let searchKeywordForm = document.getElementById('id_getKeyAuctionForm')
+	let searchKeywordForm = document.getElementById('id_getKeyAuctionForm');
 	let keywordInput = document.getElementById('id_keyword');
 	let giveOfferForm = document.getElementById('id_giveOfferForm');
 	let alertContainer = document.getElementById('id_alert');
@@ -53,11 +53,10 @@
 		console.log(currentAuctionID);
 		if (form.checkValidity()) {
 			let input = form.querySelector("input[type='number']").value;
-			
+
 			let url = "CreateOffer?auctionID=" + currentAuctionID + "&offer=" + input;
 
-			e.preventDefault();
-			makeCall("GET", "CreateOffer?offer=" + input, null, function(req) {
+			makeCall("GET", url, null, function(req) {
 				if (req.readyState === 4) {
 					if (req.status === 200) {
 						let newOffer = JSON.parse(req.responseText);
@@ -77,6 +76,7 @@
 			form.reportValidity();
 		}
 	}, false);
+
 
 
 
@@ -157,7 +157,7 @@
 					currentAuctionID = e.target.getAttribute("keyAucID");
 					alertContainer.textContent = "";
 					let auctionID = e.target.getAttribute("keyAucID");
-					
+
 					let urlToCall = "GetOfferData?aucID=" + auctionID;
 					//after clicking on the details shows the details of items and wonAuction of user
 
