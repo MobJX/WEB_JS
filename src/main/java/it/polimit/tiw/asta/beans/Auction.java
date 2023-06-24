@@ -28,16 +28,20 @@ public class Auction {
 	}
 	
 
-		public Auction(int aucID, int ownerID, float aucPrice, float minUP, Date expiryDateTime, boolean isClosed) {
+	
+	public Auction(int ownerID, float aucPrice, float minUP, Date expiryDateTime) {
 		super();
-		this.aucID = aucID;
 		this.ownerID = ownerID;
 		this.aucPrice = aucPrice;
 		this.minUP = minUP;
 		this.expiryDateTime = expiryDateTime;
-		this.isClosed = isClosed;
+		this.isClosed = false;
+		this.aucItems = new ArrayList<>();
+		this.maxOffer = 0;
+		//this.remaingTimes = null;
+		this.bidder = null;
 	}
-
+	
 
 		public int getAucID() {
 			return aucID;

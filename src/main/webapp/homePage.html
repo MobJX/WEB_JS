@@ -39,33 +39,32 @@
     <p>List of available items:</p>
     <p><i>Please select the item you wish to auction</i></p>
     <div>
-        <form id="id_createAuctionForm">
-            <table id="id_availableItemListContainer" border='1'>
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Image</th>
-                </tr>
-                <tr>
-                    <td colspan="6">
-                        <label for="expiryDateTime"> Expiry Data and Time:</label>
-                        <input type="datetime-local" id="expiryDateTime" name="expiryDateTime">
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan = "6">
-                        <label for = "minUP">Minimum Raise:</label>
-                        <input type = "number" id = "minUP" name = "minUP">
-                    </td>
-                </tr>
-                </thead>
-                <tbody id="id_availableItemListBody">
-                </tbody>
-            </table>
-            <input type="submit" id="id_newAuctionButton" name="newAuctionButton" value="confirm">
+        <form id="id_createAuctionForm" action="#">
+            <fieldset>
+                <table id="id_availableItemListContainer" border='1'>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Image</th>
+                    </tr>
+                    </thead>
+                    <tbody id="id_availableItemListBody">
+                    </tbody>
+                </table>
+                <input type="button" name="next" value="next" class="next">
+            </fieldset>
+            <fieldset>
+                <label for="id_expiryDateTime"> Expiry Data and Time:</label>
+                <input type="datetime-local" id="id_expiryDateTime" name="expiryDateTime"><br>
+                <label for="id_minUP">Minimum Raise:</label>
+                <input type="number" id="id_minUP" name="minUP"><br>
+                <input type="button" value="prev" name="prev" class="prev">
+                <input type="button" value="cancel" name="cancel" class="cancel">
+                <input type="submit" id="id_newAuctionButton" name="newAuctionButton" value="confirm">
+            </fieldset>
         </form>
         <br><br>
     </div>
@@ -106,6 +105,7 @@
         <br><br>
     </div>
 </div>
+
 
 <div id="id_buyBlock">
     <p><b>Search Item</b></p>
