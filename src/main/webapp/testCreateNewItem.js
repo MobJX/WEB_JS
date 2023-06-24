@@ -174,5 +174,7 @@ function OpenAuctionList(container, listcontainer){
         }, false);
     };
 
-    this.update = function (arrayOpenAuctions)
+    this.update = function (arrayOpenAuctions){
+        
+	}
 }

@@ -4,19 +4,24 @@ package it.polimit.tiw.asta.beans;
 
 import java.util.Date;
 import java.util.List;
+
+import it.polimit.tiw.asta.beans.Item;
+import it.polimit.tiw.asta.beans.User;
+
 import java.time.Duration;
 import java.util.ArrayList;
 
 public class Auction {
-	
-
-
 	private int aucID;
 	private int ownerID;
 	private float aucPrice;
 	private float minUP;
 	private Date expiryDateTime;
 	private boolean isClosed;
+	private List<Item> aucItems;
+	private float maxOffer;
+	//private Duration remaingTimes;
+	private User bidder;
 	
 	public Auction() {
 		super();
@@ -93,8 +98,58 @@ public class Auction {
 			this.isClosed = isClosed;
 		}
 
+
+		public float getMaxOffer() {
+			return maxOffer;
+		}
+
+
+		public void setMaxOffer(float maxOffer) {
+			this.maxOffer = maxOffer;
+		}
+
+
+		public User getBidder() {
+			return bidder;
+		}
+
+
+		public void setBidder(User bidder) {
+			this.bidder = bidder;
+		}
+
+
+		public List<Item> getAucItems() {
+			return aucItems;
+		}
+
+
+		public void setAucItems(List<Item> aucItems) {
+			this.aucItems = aucItems;
+		}
+
+/*
+		public Duration getRemaingTimes() {
+			return remaingTimes;
+		}
+
+
+		public void setRemaingTimes(Duration remaingTimes) {
+			this.remaingTimes = remaingTimes;
+		}
+
+
+		public String getBidder() {
+			return bidder;
+		}
+
+
+		public void setBidder(String bidder) {
+			this.bidder = bidder;
+		}
+
 	
-	
+	*/
 	
 	
 	

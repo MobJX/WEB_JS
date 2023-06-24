@@ -72,8 +72,8 @@ public class GetOpenAuction extends HttpServlet {
 							expiry = auc.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 							remaingTimes = Duration.between(now, expiry);
 							//auc.setRemaingTimes(remaingTimes);
-							//auc.setMaxOffer(maxOffer);
-							//auc.setAucItems(itemsON);
+							auc.setMaxOffer(maxOffer);
+							auc.setAucItems(itemsON);
 						}
 		} catch(SQLException e) {
 			e.printStackTrace();

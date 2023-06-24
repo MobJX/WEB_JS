@@ -5,7 +5,7 @@
     <title>Home</title>
 
     <script src="testOffer.js" charset="utf-8" defer></script>
-
+    <script src="testCreateNewItem.js" charset="utf-8" defer></script>
     <script src="utils.js" charset="utf-8" defer></script>
 </head>
 <body>
@@ -48,6 +48,18 @@
                     <th>Description</th>
                     <th>Price</th>
                     <th>Image</th>
+                </tr>
+                <tr>
+                    <td colspan="6">
+                        <label for="expiryDateTime"> Expiry Data and Time:</label>
+                        <input type="datetime-local" id="expiryDateTime" name="expiryDateTime">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan = "6">
+                        <label for = "minUP">Minimum Raise:</label>
+                        <input type = "number" id = "minUP" name = "minUP">
+                    </td>
                 </tr>
                 </thead>
                 <tbody id="id_availableItemListBody">
