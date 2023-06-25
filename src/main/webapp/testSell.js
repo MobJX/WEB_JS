@@ -233,7 +233,7 @@
                 });
                 row.appendChild(rowItem);
                 maxOfferCell = document.createElement("td");
-                maxOfferCell.textContent = auction.maxOffer;
+                maxOfferCell.textContent = auction.maxOffer + " €";
                 row.appendChild(maxOfferCell);
 
                 function formatDuration(duration) {
@@ -347,11 +347,11 @@
                 row.appendChild(auctionIDCell);
 
                 startPriceCell = document.createElement("td");
-                startPriceCell.textContent = auction.aucPrice;
+                startPriceCell.textContent = auction.aucPrice + " €";
                 row.appendChild(startPriceCell);
 
                 minUpCell = document.createElement("td");
-                minUpCell.textContent = auction.minUP;
+                minUpCell.textContent = auction.minUP + " €";
                 row.appendChild(minUpCell);
 
                 exprDayTimeCell = document.createElement("td");
@@ -375,7 +375,7 @@
                 row.appendChild(rowBidder);
 
                 finalPriceCell = document.createElement("td");
-                finalPriceCell.textContent = auction.maxOffer;
+                finalPriceCell.textContent = auction.maxOffer + " €";
                 row.appendChild(finalPriceCell);
 
                 linckCell = document.createElement("td");
@@ -402,8 +402,6 @@
         this.alert = _alert;
         this.auctionDetailsContainer = _id_auctionDetailsContainer;
         this.auctionDetailsBody = _id_auctionDetailsBody;
-        //this.currentAuctionDetails;
-
         this.reset = function () {
             this.auctionDetailsContainer.style.visibility = "hidden";
         }
@@ -416,7 +414,6 @@
                         var message = req.responseText;
                         if (req.status == 200) {
                             let auctionToShow = JSON.parse(req.responseText);
-                            //auctionDetails.currentAuctionDetails = auctionToShow;
                             if (auctionToShow.length == 0) {
                                 self.alert.textContent = "No Auction available!"
                                 return;
@@ -441,10 +438,10 @@
             ownerID.textContent = autionDetails.ownerID;
             row.appendChild(ownerID);
             startPrice = document.createElement("td");
-            startPrice.textContent = autionDetails.aucPrice;
+            startPrice.textContent = autionDetails.aucPrice + " €";
             row.appendChild(startPrice);
             minRaise = document.createElement("td");
-            minRaise.textContent = autionDetails.minUP;
+            minRaise.textContent = autionDetails.minUP + " €";
             row.appendChild(minRaise);
             exprDTime = document.createElement("td");
             exprDTime.textContent = autionDetails.expiryDateTime;
@@ -461,7 +458,6 @@
         this.alert = _alert;
         this.itemDetailsContainer = _id_itemDetailsContainer;
         this.itemDetailsBody = _id_itemDetailsBody;
-        //this.currentItemDetails;
 
         this.reset = function () {
             this.itemDetailsContainer.style.visibility = "hidden";
@@ -475,7 +471,6 @@
                         var message = req.responseText;
                         if (req.status == 200) {
                             let itemToShow = JSON.parse(req.responseText);
-                            //itemDetails.currentItemDetails = itemToShow;
                             if (itemToShow.length == 0) {
                                 self.alert.textContent = "No Item available!"
                                 return;
@@ -505,7 +500,7 @@
                 itemDescription.textContent = item.description;
                 row.appendChild(itemDescription);
                 itemPrice = document.createElement("td");
-                itemPrice.textContent = item.itemPrice;
+                itemPrice.textContent = item.itemPrice + " €";
                 row.appendChild(itemPrice);
 
                 itemImage = document.createElement("img");
@@ -524,8 +519,6 @@
         this.alert = _alert;
         this.offerDetailsContainer = _id_offerDetailsContainer;
         this.offerDetailsBody = _id_offerDetailsBody;
-        //this.currentOfferDetails;
-
         this.reset = function () {
             this.offerDetailsContainer.style.visibility = "hidden";
         }
@@ -538,7 +531,6 @@
                         var message = req.responseText;
                         if (req.status == 200) {
                             let offerToShow = JSON.parse(req.responseText);
-                            //offerDetails.currentOfferDetails = offerToShow;
                             if (offerToShow.length == 0) {
                                 self.alert.textContent = "No Offer available!"
                                 return;
@@ -562,7 +554,7 @@
                 userName.textContent = offer.userName;
                 row.appendChild(userName);
                 offerAmount = document.createElement("td");
-                offerAmount.textContent = offer.offerPrice;
+                offerAmount.textContent = offer.offerPrice + " €";
                 row.appendChild(offerAmount);
                 offerDate = document.createElement("td");
                 offerDate.textContent = offer.offerDayTime;
