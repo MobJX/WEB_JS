@@ -5,8 +5,8 @@
     <title>Home</title>
     <script src="testSell.js" charset="utf-8" defer></script>
     <script src="buy.js" charset="utf-8" defer></script>
-
     <script src="utils.js" charset="utf-8" defer></script>
+   <link rel="stylesheet" type="text/css" media="all" href="CSS/mystyle.css" />
 </head>
 <body>
 <div align="right">
@@ -216,7 +216,7 @@
         <table>
             <tr>
                 <td>
-                    <table id="id_keyAuclistContainer" class="hidden">
+                    <table id="id_keyAuclistContainer" class="boxed">
                         <thead>
                         <tr>
                             <th>Auction ID</th>
@@ -241,8 +241,9 @@
 
 
     <!-- Items Detail COMPONENT -->
-    <div>
-        <table id="id_itemlistContainer">
+    <div  id="id_itemlistContainer">
+        <p><b>Item Details of Auction </b></p>
+        <table class="boxed">
             <thead>
             <tr>
                 <th>Item ID</th>
@@ -260,8 +261,9 @@
     </div>
 
     <!-- Offer Detail COMPONENT -->
-    <div>
-        <form id="id_giveOfferForm" style="visibility: hidden">
+    <div id="id_giveOfferForm" style="visibility: hidden">
+        <p><b>Make Offer</b></p>
+        <form >
             <p>
                 Enter the Offer: <input type="number" id="id_givenOfferButton"
                                         name="givenOffer" required> <input type="submit"
@@ -272,7 +274,7 @@
         <table>
             <tr>
                 <td>
-                    <table id="id_offerlistContainer" class="hidden">
+                    <table id="id_offerlistContainer" class="boxed">
                         <thead>
                         <tr>
                             <th>Offer ID</th>
@@ -301,7 +303,7 @@
 
     <div id="id_wonAuctionContainer">
         <p><b>Auctions Won By <span id="id_username_won"></span></b></p>
-        <table>
+        <table class="boxed">
             <thead>
             <tr>
                 <th>Auction ID</th>
