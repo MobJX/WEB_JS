@@ -143,6 +143,8 @@
 
         this.reset = function () {
             this.openDetails.style.visibility = "hidden";
+            document.getElementById("id_ONtextListItem").style.visibility = "hidden";
+            document.getElementById("id_ONtextListOffer").style.visibility = "hidden";
         }
 
         this.show = function () {
@@ -295,6 +297,8 @@
 
         this.reset = function () {
             this.closedDetails.style.visibility = "hidden";
+            document.getElementById("id_OFFtextListItem").style.visibility = "hidden";
+            document.getElementById("id_OFFtextListOffer").style.visibility = "hidden";
         }
 
         this.show = function () {
@@ -305,7 +309,6 @@
                         let message = req.responseText;
                         if (req.status === 200) {
                             let closedAuctionToShow = JSON.parse(req.responseText);
-                            closedAuctionList.current_closedAuction = closedAuctionToShow;
                             if (closedAuctionToShow.length === 0) {
                                 self.alert.textContent = "No Closed Auction yet!";
                                 return;
@@ -383,10 +386,12 @@
         }
     }
 
-    function AuctionDetails(_alert, _id_auctionDetailsContainer, _id_auctionDetailsBody) {
+    function AuctionDetails(_alert, _id_auctionDetailsContainer, _id_auctionDetailsBody, _id_textListItem, _id_textListOffer) {
         this.alert = _alert;
         this.auctionDetailsContainer = _id_auctionDetailsContainer;
         this.auctionDetailsBody = _id_auctionDetailsBody;
+        this.textListItem = _id_textListItem;
+        this.textListOffer = _id_textListOffer;
         this.reset = function () {
             this.auctionDetailsContainer.style.visibility = "hidden";
         }
@@ -403,6 +408,8 @@
                                 self.alert.textContent = "No Auction available!"
                                 return;
                             }
+                            self.textListItem.style.visibility = "visible";
+                            self.textListOffer.style.visibility = "visible";
                             self.update(auctionToShow);
                         } else {
                             self.alert.textContent = message;
@@ -655,7 +662,9 @@
             ONautionDetails = new AuctionDetails(
                 alertContainer,
                 document.getElementById("id_ONauctionDetailsContainer"),
-                document.getElementById("id_ONauctionDetailsBody")
+                document.getElementById("id_ONauctionDetailsBody"),
+                document.getElementById("id_ONtextListItem"),
+                document.getElementById("id_ONtextListOffer")
             );
 
             ONitemDetails = new ItemDetails(
@@ -673,7 +682,9 @@
             OFFautionDetails = new AuctionDetails(
                 alertContainer,
                 document.getElementById("id_OFFauctionDetailsContainer"),
-                document.getElementById("id_OFFauctionDetailsBody")
+                document.getElementById("id_OFFauctionDetailsBody"),
+                document.getElementById("id_OFFtextListItem"),
+                document.getElementById("id_OFFtextListOffer")
             );
 
             OFFitemDetails = new ItemDetails(
