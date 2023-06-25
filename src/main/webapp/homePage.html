@@ -18,12 +18,11 @@
     Nice to see you again <span id="id_username"></span>
 </p>
 <div id="id_alert" class="alertmessage"></div>
-
 <div id="id_sellBlock">
     <p><b>Create a new Item</b></p>
     <p>Please enter the following information</p>
     <div>
-        <form id="id_createItemForm">
+        <form id="id_createItemForm" action="#">
             <fieldset>
                 <p>Item: <input type="text" name="itemName" id="id_itemName" required></p>
                 <p>Price: <input type="text" name="itemPrice" id="id_itemPrice" required></p>
@@ -129,6 +128,13 @@
                 </tbody>
             </table>
         </fieldset>
+        <div>
+            <form id="id_closeForm" action="#">
+                <p>Time is up, you can choose to close this Auction</p>
+                <input type="hidden" name="auctionID">
+                <input type="button" name="Close mission" value="Close">
+            </form>
+        </div>
     </div>
 
 
@@ -197,7 +203,6 @@
         <br><br>
     </div>
 </div>
-
 
 <div id="id_buyBlock">
     <p><b>Search Item</b></p>

@@ -89,11 +89,10 @@ public class CreateNewItem extends HttpServlet {
 		}
 		
 		// Convert item to JSON
-		String json = new Gson().toJson(item);
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
-		response.getWriter().write(json);
+		response.getWriter().print(item);
 	}
 
 	private boolean isValidFloat(String value) {

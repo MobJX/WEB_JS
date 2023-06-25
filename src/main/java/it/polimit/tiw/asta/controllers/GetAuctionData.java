@@ -80,7 +80,6 @@ public class GetAuctionData extends HttpServlet{
 			return;
 		}
 
-		// Redirect to the Home page and add auctions to the parameters
 		Gson gson = new GsonBuilder().registerTypeAdapter(Duration.class, new DurationSerializer()).create();
 		String json = gson.toJson(auction);
 

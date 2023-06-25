@@ -21,23 +21,34 @@
         }
     }
 
-    function CreateNewItem(newItem, alert) {
-        this.newItem = newItem;
-        this.alert = alert;
+    function CreateNewItem(_alert, _id_createNewItem) {
+        this.alert = _alert;
+        this.createNewItem = _id_createNewItem;
+        this.createItemButton = document.getElementById("id_newItemButton");
+        this.itemName = document.getElementById("id_itemName");
+        this.itemPrice = document.getElementById("id_itemPrice");
+        this.itemDescription = document.getElementById("id_itemDescription");
+        this.itemImage = document.getElementById("id_itemImage");
+
+        this.reset = function () {
+            this.createNewItem.style.visibility = "hidden";
+            this.this.createItemButton.style.visibility = "hidden";
+        }
 
         this.registerEvents = function (orchestrator) {
-            this.newItem.querySelector("input[type='submit'][name='newItemButton']").addEventListener('click', (e) => {
-                e.preventDefault();
-                var self = this;
-                let form = e.target.closest("form");
+            this.createItemButton.addEventListener('click', (e) => {
+                var form = e.target.closest("form");
                 if (form.checkValidity()) {
+                    e.preventDefault();
+                    let self = this;
+
                     makeCall("POST", 'CreateNewItem', form,
                         function (req) {
-                            if (req.readyState == XMLHttpRequest.DONE) {
+                            if (req.readyState === XMLHttpRequest.DONE) {
                                 var message = req.responseText;
-                                if (req.status == 200) {
+                                if (req.status === 200) {
                                     orchestrator.refresh(message);
-                                } else if (req.status == 403) {
+                                } else if (req.status === 403) {
                                     window.location.href = req.getResponseHeader("Location");
                                     window.sessionStorage.removeItem('username');
                                 } else {
@@ -50,7 +61,8 @@
                     form.reportValidity();
                 }
             });
-        }
+        };
+
 
     }
 
@@ -94,84 +106,85 @@
         xhr.send(formData);
     }
 */
+    //
+    // function CreateNewAuction(newAuction, alert) {
+    //     var now = new Date(), formattedDate = now.toISOString().substring(0, 10);
+    //     this.newAuction = newAuction;
+    //     this.alert = alert;
+    //     this.newAuction.querySelector('input[type="datetime-local"]').setAttribute("min", formattedDate);
+    //     this.registerEvents = function (orchestrator) {
+    //         Array.from(this.newAuction.querySelectorAll("input[type='button'].next, input[type='button'].prev")).forEach(b => {
+    //             b.addEventListener("click", (e) => {
+    //                 var eventFieldset = e.target.closest("fieldset"), valid = true;
+    //                 if (e.target.className == "next") {
+    //                     for (i = 0; i < eventFieldset.elements.length; i++) {
+    //                         if (!eventFieldset.elements[i].checkValidity()) {
+    //                             eventFieldset.elements[i].reportValidity();
+    //                             valid = false;
+    //                             break;
+    //                         }
+    //                     }
+    //                 }
+    //                 if (valid) {
+    //                     this.changeStep(e.target.parentNode, (e.target.className === "next") ?
+    //                         e.target.parentNode.nextElementSibling : e.target.parentNode.previousElementSibling);
+    //                 }
+    //             }, false);
+    //         });
+    //
+    //         this.newAuction.querySelector("input[type='submit'][name='newAuctionButton']").addEventListener('click', (e) => {
+    //             var eventFieldset = e.target.closest("fieldset"), vaild = true;
+    //             for (let i = 0; i < eventFieldset.elements.lenght; i++) {
+    //                 if (!eventFieldset.elements[i].checkValidity()) {
+    //                     eventFieldset.elements[i].reportValidity();
+    //                     valid = false;
+    //                     break;
+    //                 }
+    //             }
+    //             if (valid) {
+    //                 let self = this;
+    //                 makeCall("POST", "CreateNewAuction", e.target.closest("form"),
+    //                     function (req) {
+    //                         if (req.readyState == XMLHttpRequest.DONE) {
+    //                             var message = req.responseText;
+    //                             if (req.status == 200) {
+    //                                 orchestrator.refresh(message);
+    //                             } else if (req.status == 403) {
+    //                                 window.location.href = req.getResponseHeader("Location");
+    //                                 window.sessionStorage.removeItem('username');
+    //                             } else {
+    //                                 self.alert.textContent = message;
+    //                                 self.reset();
+    //                             }
+    //                         }
+    //                     });
+    //             }
+    //         });
+    //
+    //         this.newAuction.querySelector("input[type='button'].cancel").addEventListener('click', (e) => {
+    //             e.target.closest('form').reset();
+    //             this.reset();
+    //         });
+    //     };
+    //
+    //     this.reset = function () {
+    //         var fieldsets = document.querySelectorAll("#" + this.newAuction.id + " fieldest");
+    //         fieldsets[0].hidden = false;
+    //         fieldsets[1].hidden = true;
+    //     }
+    //
+    //     this.changeStep = function (origin, destination) {
+    //         origin.hidden = true;
+    //         destination.hidden = false;
+    //     }
+    // }
+    //
 
-    function CreateNewAuction(newAuction, alert) {
-        var now = new Date(), formattedDate = now.toISOString().substring(0, 10);
-        this.newAuction = newAuction;
-        this.alert = alert;
-        this.newAuction.querySelector('input[type="datetime-local"]').setAttribute("min", formattedDate);
-        this.registerEvents = function (orchestrator) {
-            Array.from(this.newAuction.querySelectorAll("input[type='button'].next, input[type='button'].prev")).forEach(b => {
-                b.addEventListener("click", (e) => {
-                    var eventFieldset = e.target.closest("fieldset"), valid = true;
-                    if (e.target.className == "next") {
-                        for (i = 0; i < eventFieldset.elements.length; i++) {
-                            if (!eventFieldset.elements[i].checkValidity()) {
-                                eventFieldset.elements[i].reportValidity();
-                                valid = false;
-                                break;
-                            }
-                        }
-                    }
-                    if (valid) {
-                        this.changeStep(e.target.parentNode, (e.target.className === "next") ?
-                            e.target.parentNode.nextElementSibling : e.target.parentNode.previousElementSibling);
-                    }
-                }, false);
-            });
-
-            this.newAuction.querySelector("input[type='submit'][name='newAuctionButton']").addEventListener('click', (e) => {
-                var eventFieldset = e.target.closest("fieldset"), vaild = true;
-                for (let i = 0; i < eventFieldset.elements.lenght; i++) {
-                    if (!eventFieldset.elements[i].checkValidity()) {
-                        eventFieldset.elements[i].reportValidity();
-                        valid = false;
-                        break;
-                    }
-                }
-                if (valid) {
-                    let self = this;
-                    makeCall("POST", "CreateNewAuction", e.target.closest("form"),
-                        function (req) {
-                            if (req.readyState == XMLHttpRequest.DONE) {
-                                var message = req.responseText;
-                                if (req.status == 200) {
-                                    orchestrator.refresh(message);
-                                } else if (req.status == 403) {
-                                    window.location.href = req.getResponseHeader("Location");
-                                    window.sessionStorage.removeItem('username');
-                                } else {
-                                    self.alert.textContent = message;
-                                    self.reset();
-                                }
-                            }
-                        });
-                }
-            });
-
-            this.newAuction.querySelector("input[type='button'].cancel").addEventListener('click', (e) => {
-                e.target.closest('form').reset();
-                this.reset();
-            });
-        };
-
-        this.reset = function () {
-            var fieldsets = document.querySelectorAll("#" + this.newAuction.id + " fieldest");
-            fieldsets[0].hidden = false;
-            fieldsets[1].hidden = true;
-        }
-
-        this.changeStep = function (origin, destination) {
-            origin.hidden = true;
-            destination.hidden = false;
-        }
-    }
-
-
-    function OpenAuctionList(_alert, _id_openAuction, _id_openAuctionBody) {
+    function OpenAuctionList(_alert, _id_openAuction, _id_openAuctionBody, _orchestrator) {
         this.alert = _alert;
         this.openAuction = _id_openAuction;
         this.openAuctionBody = _id_openAuctionBody;
+        this.orchestrator = _orchestrator;
         this.current_openAuction;
 
         this.reset = function () {
@@ -245,6 +258,40 @@
                     ONautionDetails.show(e.target.getAttribute("aucID"));
                     ONitemDetails.show(e.target.getAttribute("aucID"));
                     ONofferDetails.show(e.target.getAttribute("aucID"));
+
+                    makeCall("GET", "CheckStatusAuction?aucID=" + e.target.getAttribute("aucID"), null,
+                        function (req) {
+                            if (req.readyState == XMLHttpRequest.DONE) {
+                                var message = req.responseText;
+                                if (req.status == 200) {
+                                    let canClose = JSON.parse(req.responseText);
+                                    if (canClose != 0) {
+                                        document.getElementById("id_closeForm").querySelector("input[type='button']")
+                                            .addEventListener('click', (e) => {
+                                                let form = e.target.closest("form"),
+                                                    acutionToClose = form.querySelector("input[type = 'hidden']").value;
+                                                makeCall("POST", "CloseAuction", form,
+                                                    function (req) {
+                                                        if (req.readyState === XMLHttpRequest.DONE) {
+                                                            let message = req.responseText;
+                                                            if (req.status === 200) {
+                                                                openAuctionList.orchestrator.refresh(acutionToClose);
+                                                            } else if (req.status === 403) {
+                                                                window.location.href = req.getResponseHeader("Location");
+                                                                window.sessionStorage.removeItem('username');
+                                                            } else {
+                                                                self.alert.textContent = message;
+                                                            }
+                                                        }
+                                                    });
+                                            });
+                                    }
+                                } else {
+                                    self.alert.textContent = message;
+                                }
+                            }
+                        });
+
                 }, false);
                 anchor.href = "#";
                 row.appendChild(linckCell);
@@ -252,7 +299,9 @@
             });
             this.openAuction.style.visibility = "visible";
         }
+
     }
+
 
     function ClosedAuctionList(_alert, _id_closedAuction, _id_closedAuctionBody) {
         this.alert = _alert;
@@ -535,7 +584,8 @@
             openAuctionList = new OpenAuctionList(
                 alertContainer,
                 document.getElementById("id_myOpenAuctionsContainer"),
-                document.getElementById("id_myOpenAuctionsBody")
+                document.getElementById("id_myOpenAuctionsBody"),
+                this
             );
 
             closedAuctionList = new ClosedAuctionList(
@@ -580,10 +630,18 @@
                 document.getElementById("id_OFFoffersDetailsBody")
             );
 
-            createNewItem = new CreateNewItem(document.getElementById("id_createItemForm"), alertContainer);
+            createNewItem = new CreateNewItem(
+                alertContainer,
+                document.getElementById("id_createItemForm")
+            );
             createNewItem.registerEvents(this);
-            createNewAuction = new CreateNewAuction(document.getElementById("id_createAuctionForm"), alertContainer);
-            createNewAuction.registerEvents(this);
+
+            //
+            // createNewAuction = new CreateNewAuction(
+            //     alertContainer,
+            //     document.getElementById("id_createAuctionForm")
+            // );
+            // createNewAuction.registerEvents(this);
         };
 
         this.refresh = function (currentSellPage) {
