@@ -2,7 +2,7 @@
 	let keyAucList = null;
 	let offerList = null;
 	let wonAuctionList = null;
-	let itemList = null;
+	let itemDetailsList = null;
 	let currentAuctionID = null;
 
 	let searchKeywordForm = document.getElementById('id_getKeyAuctionForm');
@@ -47,6 +47,10 @@
 			return;
 		}
 		keyAucList.show(keyword);
+		offerList.reset();
+		wonAuctionList.reset();
+		itemDetailsList.reset();
+		giveOfferForm.style.visibility = "hidden";
 	}, false);
 
 	giveOfferForm.addEventListener("submit", function(e) {
@@ -159,15 +163,16 @@
 				anchor.setAttribute("keyAucID", auction.aucID);
 				anchor.addEventListener("click", function(e) {
 					e.preventDefault();
-					wonAuctionList.show();
 					currentAuctionID = e.target.getAttribute("keyAucID");
 					alertContainer.textContent = "";
 					let auctionID = e.target.getAttribute("keyAucID");
-
 					let urlToCall = "GetOfferData?aucID=" + auctionID;
-					//after clicking on the details shows the details of items and wonAuction of user
 
-					itemList.show(auctionID);
+					//after clicking on the details shows the details of items and wonAuction of user
+					giveOfferForm.style.visibility = "visible";
+					wonAuctionList.show();
+					itemDetailsList.show(auctionID);
+					offerList.show(auctionID);
 					makeCall("GET", urlToCall, null, function(req) {
 						if (req.readyState === 4) {
 							if (req.status === 200) {
@@ -222,8 +227,9 @@
 							alertContainer.textContent = "No offer yet!";
 							return;
 						}
+						self.listcontainer.style.visibility = "visible";
 						self.update(offerToShow);
-						self.listcontainer.classList.remove("hidden");
+
 					} else {
 						alertContainer.textContent = req.responseText;
 					}
@@ -291,8 +297,9 @@
 							alertContainer.textContent = "No wonAuction yet!";
 							return;
 						}
+						self.listcontainer.style.visibility = "visible";
 						self.update(wonAucToShow);
-						self.listcontainer.classList.remove("hidden");
+
 					} else {
 						alertContainer.textContent = req.responseText;
 					}
@@ -345,6 +352,7 @@
 							self.listcontainerbody.innerHTML = "No items found.";
 							return;
 						}
+						self.listcontainer.style.visibility = "visible";
 						self.update(itemToShow);
 					}
 				}
