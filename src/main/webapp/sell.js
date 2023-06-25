@@ -156,10 +156,6 @@
                         if (req.status === 200) {
                             let openAuctionToShow = JSON.parse(req.responseText);
                             openAuctionList.current_openAuction = openAuctionToShow;
-                            if (openAuctionToShow.length === 0) {
-                                self.alert.textContent = "No Open Auction yet!";
-                                return;
-                            }
                             self.update(openAuctionToShow);
                         } else {
                             self.alert.textContent = message;
@@ -309,10 +305,6 @@
                         let message = req.responseText;
                         if (req.status === 200) {
                             let closedAuctionToShow = JSON.parse(req.responseText);
-                            if (closedAuctionToShow.length === 0) {
-                                self.alert.textContent = "No Closed Auction yet!";
-                                return;
-                            }
                             self.update(closedAuctionToShow);
                         } else {
                             self.alert.textContent = message;
@@ -404,10 +396,6 @@
                         var message = req.responseText;
                         if (req.status === 200) {
                             let auctionToShow = JSON.parse(req.responseText);
-                            if (auctionToShow.length === 0) {
-                                self.alert.textContent = "No Auction available!"
-                                return;
-                            }
                             self.textListItem.style.visibility = "visible";
                             self.textListOffer.style.visibility = "visible";
                             self.update(auctionToShow);
@@ -463,10 +451,6 @@
                         var message = req.responseText;
                         if (req.status === 200) {
                             let itemToShow = JSON.parse(req.responseText);
-                            if (itemToShow.length === 0) {
-                                self.alert.textContent = "No Item available!"
-                                return;
-                            }
                             self.update(itemToShow);
                         } else {
                             self.alert.textContent = message;
@@ -522,10 +506,6 @@
                         var message = req.responseText;
                         if (req.status === 200) {
                             let offerToShow = JSON.parse(req.responseText);
-                            if (offerToShow.length === 0) {
-                                self.alert.textContent = "No Offer available!"
-                                return;
-                            }
                             self.update(offerToShow);
                         } else {
                             self.alert.textContent = message;
