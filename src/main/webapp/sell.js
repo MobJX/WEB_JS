@@ -2,8 +2,7 @@
     //page components
     let createNewItem, openAuctionList, closedAuctionList, ONautionDetails, ONitemDetails,
         ONofferDetails, OFFautionDetails, OFFitemDetails, OFFofferDetails, createNewAuction,
-        pageOrchestrator = new PageOrchestrator();
-    //var itemButton = document.getElementById("id_newItemButton");
+        availableItemList, closeAuction, pageOrchestrator = new PageOrchestrator();
 
     window.addEventListener("load", () => {
         if (sessionStorage.getItem("username") == null) {
@@ -14,10 +13,10 @@
         }
     }, false);
 
-    function PersonalMessage(_username, messagecontainer) {
+    function PersonalMessage(_username, _messageContainer) {
         this.username = _username;
         this.show = function () {
-            messagecontainer.textContent = this.username;
+            _messageContainer.textContent = this.username;
         }
     }
 
@@ -25,19 +24,10 @@
         this.alert = _alert;
         this.createNewItem = _id_createNewItem;
         this.createItemButton = document.getElementById("id_newItemButton");
-        this.itemName = document.getElementById("id_itemName");
-        this.itemPrice = document.getElementById("id_itemPrice");
-        this.itemDescription = document.getElementById("id_itemDescription");
-        this.itemImage = document.getElementById("id_itemImage");
-
-        this.reset = function () {
-            this.createNewItem.style.visibility = "hidden";
-            this.this.createItemButton.style.visibility = "hidden";
-        }
 
         this.registerEvents = function (orchestrator) {
             this.createItemButton.addEventListener('click', (e) => {
-                var form = e.target.closest("form");
+                let form = e.target.closest("form");
                 if (form.checkValidity()) {
                     e.preventDefault();
                     let self = this;
@@ -47,7 +37,9 @@
                             if (req.readyState === XMLHttpRequest.DONE) {
                                 var message = req.responseText;
                                 if (req.status === 200) {
-                                    orchestrator.refresh(message);
+                                    orchestrator.refresh();
+                                    self.alert.textContent = "";
+                                    window.alert("Item Created Successfully!");
                                 } else if (req.status === 403) {
                                     window.location.href = req.getResponseHeader("Location");
                                     window.sessionStorage.removeItem('username');
@@ -66,141 +58,103 @@
 
     }
 
-    /*
-    function CreateNewItem() {
-        // 获取表单元素的值
-        var itemName = document.getElementById("id_itemName").value;
-        var itemPrice = document.getElementById("id_itemPrice").value;
-        var itemDescription = document.getElementById("id_itemDescription").value;
-        var itemImage = document.getElementById("id_itemImage").value;
 
-        // 创建一个 FormData 对象，并添加表单数据
-        var formData = new FormData();
-        formData.append("itemName", itemName);
-        formData.append("itemPrice", itemPrice);
-        formData.append("itemDescription", itemDescription);
-        formData.append("itemImage", itemImage);
+    function CreateNewAuction(_alert, _id_createNewAuction) {
+        var now = new Date(), formattedDate = now.toISOString().substring(0, 10);
+        this.alert = _alert;
+        this.createNewAuction = _id_createNewAuction;
+        this.createAuctionButton = document.getElementById("id_newAuctionButton");
+        this.createNewAuction.querySelector('input[type="datetime-local"]').setAttribute("min", formattedDate);
 
-        // 创建一个 XMLHttpRequest 对象
-        var xhr = new XMLHttpRequest();
+        this.registerEvents = function (orchestrator) {
+            Array.from(this.createNewAuction.querySelectorAll("input[type='button'].next, input[type='button'].prev")).forEach(b => {
+                b.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    var eventFieldset = e.target.closest("fieldset"), valid = true;
+                    if (e.target.className === "next") {
+                        for (i = 0; i < eventFieldset.elements.length; i++) {
+                            if (!eventFieldset.elements[i].checkValidity()) {
+                                eventFieldset.elements[i].reportValidity();
+                                valid = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (valid) {
+                        this.changeStep(e.target.parentNode, (e.target.className === "next") ?
+                            e.target.parentNode.nextElementSibling : e.target.parentNode.previousElementSibling);
+                    }
+                }, false);
+            });
 
-        // 设置请求的方法、URL 和异步标志
-        xhr.open("GET", "CreateNewItem", true);
-
-        // 监听 AJAX 请求的状态变化
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    // 请求成功处理逻辑
-                    var response = xhr.responseText;
-                    // 处理返回的响应数据
-                    console.log(response);
-                } else {
-                    // 请求失败处理逻辑
-                    console.error("请求失败: " + xhr.status);
+            this.createAuctionButton.addEventListener('click', (e) => {
+                let eventFieldset = e.target.closest("fieldset"), valid = true;
+                for (let i = 0; i < eventFieldset.elements.length; i++) {
+                    if (!eventFieldset.elements[i].checkValidity()) {
+                        eventFieldset.elements[i].reportValidity();
+                        valid = false;
+                        break;
+                    }
                 }
-            }
+                if (valid) {
+                    e.preventDefault();
+                    let self = this;
+                    makeCall("POST", "CreateNewAuction", e.target.closest("form"),
+                        function (req) {
+                            if (req.readyState === XMLHttpRequest.DONE) {
+                                let message = req.responseText;
+                                if (req.status === 200) {
+                                    orchestrator.refresh();
+                                } else if (req.status === 403) {
+                                    window.location.href = req.getResponseHeader("Location");
+                                    window.sessionStorage.removeItem('username');
+                                } else {
+                                    self.alert.textContent = message;
+                                    self.reset();
+                                }
+                            }
+                        });
+                }
+            });
+
+            this.createNewAuction.querySelector("input[type='button'].cancel").addEventListener('click', (e) => {
+                e.target.closest('form').reset();
+                this.reset();
+            });
         };
 
-        // 发送 AJAX 请求
-        xhr.send(formData);
-    }
-*/
-    //
-    // function CreateNewAuction(newAuction, alert) {
-    //     var now = new Date(), formattedDate = now.toISOString().substring(0, 10);
-    //     this.newAuction = newAuction;
-    //     this.alert = alert;
-    //     this.newAuction.querySelector('input[type="datetime-local"]').setAttribute("min", formattedDate);
-    //     this.registerEvents = function (orchestrator) {
-    //         Array.from(this.newAuction.querySelectorAll("input[type='button'].next, input[type='button'].prev")).forEach(b => {
-    //             b.addEventListener("click", (e) => {
-    //                 var eventFieldset = e.target.closest("fieldset"), valid = true;
-    //                 if (e.target.className == "next") {
-    //                     for (i = 0; i < eventFieldset.elements.length; i++) {
-    //                         if (!eventFieldset.elements[i].checkValidity()) {
-    //                             eventFieldset.elements[i].reportValidity();
-    //                             valid = false;
-    //                             break;
-    //                         }
-    //                     }
-    //                 }
-    //                 if (valid) {
-    //                     this.changeStep(e.target.parentNode, (e.target.className === "next") ?
-    //                         e.target.parentNode.nextElementSibling : e.target.parentNode.previousElementSibling);
-    //                 }
-    //             }, false);
-    //         });
-    //
-    //         this.newAuction.querySelector("input[type='submit'][name='newAuctionButton']").addEventListener('click', (e) => {
-    //             var eventFieldset = e.target.closest("fieldset"), vaild = true;
-    //             for (let i = 0; i < eventFieldset.elements.lenght; i++) {
-    //                 if (!eventFieldset.elements[i].checkValidity()) {
-    //                     eventFieldset.elements[i].reportValidity();
-    //                     valid = false;
-    //                     break;
-    //                 }
-    //             }
-    //             if (valid) {
-    //                 let self = this;
-    //                 makeCall("POST", "CreateNewAuction", e.target.closest("form"),
-    //                     function (req) {
-    //                         if (req.readyState == XMLHttpRequest.DONE) {
-    //                             var message = req.responseText;
-    //                             if (req.status == 200) {
-    //                                 orchestrator.refresh(message);
-    //                             } else if (req.status == 403) {
-    //                                 window.location.href = req.getResponseHeader("Location");
-    //                                 window.sessionStorage.removeItem('username');
-    //                             } else {
-    //                                 self.alert.textContent = message;
-    //                                 self.reset();
-    //                             }
-    //                         }
-    //                     });
-    //             }
-    //         });
-    //
-    //         this.newAuction.querySelector("input[type='button'].cancel").addEventListener('click', (e) => {
-    //             e.target.closest('form').reset();
-    //             this.reset();
-    //         });
-    //     };
-    //
-    //     this.reset = function () {
-    //         var fieldsets = document.querySelectorAll("#" + this.newAuction.id + " fieldest");
-    //         fieldsets[0].hidden = false;
-    //         fieldsets[1].hidden = true;
-    //     }
-    //
-    //     this.changeStep = function (origin, destination) {
-    //         origin.hidden = true;
-    //         destination.hidden = false;
-    //     }
-    // }
-    //
+        this.reset = function () {
+            let fieldsets = document.querySelectorAll("#" + this.createNewAuction.id + " fieldset");
+            fieldsets[0].hidden = false;
+            fieldsets[1].hidden = true;
+        }
 
-    function OpenAuctionList(_alert, _id_openAuction, _id_openAuctionBody, _orchestrator) {
+        this.changeStep = function (origin, destination) {
+            origin.hidden = true;
+            destination.hidden = false;
+        }
+    }
+
+    function OpenAuctionList(_alert, _id_openAuction, _id_openAuctionBody) {
         this.alert = _alert;
         this.openAuction = _id_openAuction;
         this.openAuctionBody = _id_openAuctionBody;
-        this.orchestrator = _orchestrator;
-        this.current_openAuction;
+        this.openDetails = document.getElementById("id_OpenDetails");
 
         this.reset = function () {
-            this.openAuction.style.visibility = "hidden";
+            this.openDetails.style.visibility = "hidden";
         }
 
         this.show = function () {
             let self = this;
             makeCall("GET", "GetOpenAuction", null,
                 function (req) {
-                    if (req.readyState == XMLHttpRequest.DONE) {
-                        var message = req.responseText;
-                        if (req.status == 200) {
-                            var openAuctionToShow = JSON.parse(req.responseText);
+                    if (req.readyState === XMLHttpRequest.DONE) {
+                        let message = req.responseText;
+                        if (req.status === 200) {
+                            let openAuctionToShow = JSON.parse(req.responseText);
                             openAuctionList.current_openAuction = openAuctionToShow;
-                            if (openAuctionToShow.length == 0) {
+                            if (openAuctionToShow.length === 0) {
                                 self.alert.textContent = "No Open Auction yet!";
                                 return;
                             }
@@ -213,7 +167,7 @@
         };
 
         this.update = function (openAuctionList) {
-            let row, rowItem, auctionIDCell, itemsCell, maxOfferCell, timeRemainingCell, linckCell, anchor;
+            let row, rowItem, auctionIDCell, itemsCell, maxOfferCell, timeRemainingCell, linkCell, anchor;
             this.openAuctionBody.innerHTML = "";
             let self = this;
             openAuctionList.forEach(function (auction) {
@@ -247,9 +201,9 @@
                 timeRemainingCell = document.createElement("td");
                 timeRemainingCell.textContent = formatDuration(auction.remaingTimes);
                 row.appendChild(timeRemainingCell);
-                linckCell = document.createElement("td");
+                linkCell = document.createElement("td");
                 anchor = document.createElement("a");
-                linckCell.appendChild(anchor);
+                linkCell.appendChild(anchor);
                 linkText = document.createTextNode("Details");
                 anchor.appendChild(linkText);
                 anchor.setAttribute('aucID', auction.aucID);
@@ -258,48 +212,77 @@
                     ONautionDetails.show(e.target.getAttribute("aucID"));
                     ONitemDetails.show(e.target.getAttribute("aucID"));
                     ONofferDetails.show(e.target.getAttribute("aucID"));
+                    closeAuction.checkStatus(e.target.getAttribute("aucID"));
 
-                    makeCall("GET", "CheckStatusAuction?aucID=" + e.target.getAttribute("aucID"), null,
+                }, false);
+                anchor.href = "#";
+                row.appendChild(linkCell);
+                self.openAuctionBody.appendChild(row);
+            });
+            this.openAuction.style.visibility = "visible";
+        }
+    }
+
+    function CloseAuction(_alert, _closeForm, _closeAuctionButton, _orchestrator) {
+        this.alert = _alert;
+        this.closeForm = _closeForm;
+        this.closeAuctionButton = _closeAuctionButton;
+        this.orchestrator = _orchestrator;
+
+        this.hidden = function () {
+            this.closeForm.style.visibility = "hidden";
+        }
+
+        this.checkStatus = function (aucID) {
+            let self = this;
+            makeCall("GET", "CheckStatusAuction?aucID=" + aucID, null,
+                function (req) {
+                    if (req.readyState === XMLHttpRequest.DONE) {
+                        let message = req.responseText;
+                        if (req.status === 200) {
+                            let canClose = JSON.parse(req.responseText);
+                            if (canClose === 0) {
+                                self.hidden();
+                                return;
+                            }
+                            self.registerEvents(aucID);
+                        } else if (req.status === 403) {
+                            window.location.href = req.getResponseHeader("Location");
+                            window.sessionStorage.removeItem('username');
+                        } else {
+                            self.alert.textContent = message;
+                        }
+                    }
+                });
+        };
+
+        this.registerEvents = function (aucID) {
+            this.closeAuctionButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                let form = e.target.closest("form");
+                if (form.checkValidity()) {
+                    let self = this;
+                    makeCall("POST", "CloseAuction?aucID=" + aucID, form,
                         function (req) {
-                            if (req.readyState == XMLHttpRequest.DONE) {
-                                var message = req.responseText;
-                                if (req.status == 200) {
-                                    let canClose = JSON.parse(req.responseText);
-                                    if (canClose != 0) {
-                                        document.getElementById("id_closeForm").querySelector("input[type='button']")
-                                            .addEventListener('click', (e) => {
-                                                let form = e.target.closest("form"),
-                                                    acutionToClose = form.querySelector("input[type = 'hidden']").value;
-                                                makeCall("POST", "CloseAuction", form,
-                                                    function (req) {
-                                                        if (req.readyState === XMLHttpRequest.DONE) {
-                                                            let message = req.responseText;
-                                                            if (req.status === 200) {
-                                                                openAuctionList.orchestrator.refresh(acutionToClose);
-                                                            } else if (req.status === 403) {
-                                                                window.location.href = req.getResponseHeader("Location");
-                                                                window.sessionStorage.removeItem('username');
-                                                            } else {
-                                                                self.alert.textContent = message;
-                                                            }
-                                                        }
-                                                    });
-                                            });
-                                    }
+                            if (req.readyState === XMLHttpRequest.DONE) {
+                                let message = req.responseText;
+                                if (req.status === 200) {
+                                    self.orchestrator.refresh();
+                                    self.alert.textContent = "";
+                                    window.alert("Auction Closed Successfully!");
+                                } else if (req.status === 403) {
+                                    window.location.href = req.getResponseHeader("Location");
+                                    window.sessionStorage.removeItem('username');
                                 } else {
                                     self.alert.textContent = message;
                                 }
                             }
                         });
-
-                }, false);
-                anchor.href = "#";
-                row.appendChild(linckCell);
-                self.openAuctionBody.appendChild(row);
+                } else {
+                    form.reportValidity();
+                }
             });
-            this.openAuction.style.visibility = "visible";
         }
-
     }
 
 
@@ -307,22 +290,22 @@
         this.alert = _alert;
         this.closedAuction = _id_closedAuction;
         this.closedAuctionBody = _id_closedAuctionBody;
-        this.current_closedAuction;
+        this.closedDetails = document.getElementById("id_closedDetails");
 
         this.reset = function () {
-            this.closedAuction.style.visibility = "hidden";
+            this.closedDetails.style.visibility = "hidden";
         }
 
         this.show = function () {
             let self = this;
             makeCall("GET", "GetClosedAuction", null,
                 function (req) {
-                    if (req.readyState == XMLHttpRequest.DONE) {
-                        var message = req.responseText;
-                        if (req.status == 200) {
-                            var closedAuctionToShow = JSON.parse(req.responseText);
+                    if (req.readyState === XMLHttpRequest.DONE) {
+                        let message = req.responseText;
+                        if (req.status === 200) {
+                            let closedAuctionToShow = JSON.parse(req.responseText);
                             closedAuctionList.current_closedAuction = closedAuctionToShow;
-                            if (closedAuctionToShow.length == 0) {
+                            if (closedAuctionToShow.length === 0) {
                                 self.alert.textContent = "No Closed Auction yet!";
                                 return;
                             }
@@ -336,7 +319,7 @@
 
         this.update = function (closedAuctionList) {
             let row, rowBidder, auctionIDCell, startPriceCell, minUpCell,
-                exprDayTimeCell, bidderCell, finalPriceCell, linckCell, anchor;
+                exprDayTimeCell, bidderCell, finalPriceCell, linkCell, anchor;
             this.closedAuctionBody.innerHTML = "";
             let self = this;
             closedAuctionList.forEach(function (auction) {
@@ -361,15 +344,15 @@
                 bidderCell = document.createElement("td");
                 rowBidder = document.createElement("tr");
 
-                var bidderIdCell = document.createElement("td");
+                let bidderIdCell = document.createElement("td");
                 bidderIdCell.textContent = auction.bidder != null ? auction.bidder.id : "";
                 rowBidder.appendChild(bidderIdCell);
 
-                var bidderUsernameCell = document.createElement("td");
+                let bidderUsernameCell = document.createElement("td");
                 bidderUsernameCell.textContent = auction.bidder != null ? auction.bidder.username : "";
                 rowBidder.appendChild(bidderUsernameCell);
 
-                var bidderAddressCell = document.createElement("td");
+                let bidderAddressCell = document.createElement("td");
                 bidderAddressCell.textContent = auction.bidder != null ? auction.bidder.address : "";
                 rowBidder.appendChild(bidderAddressCell);
                 row.appendChild(rowBidder);
@@ -378,9 +361,9 @@
                 finalPriceCell.textContent = auction.maxOffer + " €";
                 row.appendChild(finalPriceCell);
 
-                linckCell = document.createElement("td");
+                linkCell = document.createElement("td");
                 anchor = document.createElement("a");
-                linckCell.appendChild(anchor);
+                linkCell.appendChild(anchor);
                 linkText = document.createTextNode("Details");
                 anchor.appendChild(linkText);
                 anchor.setAttribute('aucID', auction.aucID);
@@ -391,7 +374,8 @@
                     OFFofferDetails.show(e.target.getAttribute("aucID"));
                 }, false);
                 anchor.href = "#";
-                row.appendChild(linckCell);
+                row.appendChild(linkCell);
+
                 self.closedAuctionBody.appendChild(row);
             });
             this.closedAuction.style.visibility = "visible";
@@ -407,14 +391,14 @@
         }
 
         this.show = function (aucID) {
-            var self = this;
+            let self = this;
             makeCall("GET", "GetAuctionData?aucID=" + aucID, null,
                 function (req) {
-                    if (req.readyState == XMLHttpRequest.DONE) {
+                    if (req.readyState === XMLHttpRequest.DONE) {
                         var message = req.responseText;
-                        if (req.status == 200) {
+                        if (req.status === 200) {
                             let auctionToShow = JSON.parse(req.responseText);
-                            if (auctionToShow.length == 0) {
+                            if (auctionToShow.length === 0) {
                                 self.alert.textContent = "No Auction available!"
                                 return;
                             }
@@ -426,28 +410,28 @@
                 });
         };
 
-        this.update = function (autionDetails) {
+        this.update = function (auctionDetails) {
             let row, auctionID, ownerID, startPrice, minRaise, exprDTime, closed;
             this.auctionDetailsBody.innerHTML = "";
             let self = this;
             row = document.createElement("tr");
-            auctionIDCell = document.createElement("td");
-            auctionIDCell.textContent = autionDetails.aucID;
-            row.appendChild(auctionIDCell);
+            auctionID = document.createElement("td");
+            auctionID.textContent = auctionDetails.aucID;
+            row.appendChild(auctionID);
             ownerID = document.createElement("td");
-            ownerID.textContent = autionDetails.ownerID;
+            ownerID.textContent = auctionDetails.ownerID;
             row.appendChild(ownerID);
             startPrice = document.createElement("td");
-            startPrice.textContent = autionDetails.aucPrice + " €";
+            startPrice.textContent = auctionDetails.aucPrice + " €";
             row.appendChild(startPrice);
             minRaise = document.createElement("td");
-            minRaise.textContent = autionDetails.minUP + " €";
+            minRaise.textContent = auctionDetails.minUP + " €";
             row.appendChild(minRaise);
             exprDTime = document.createElement("td");
-            exprDTime.textContent = autionDetails.expiryDateTime;
+            exprDTime.textContent = auctionDetails.expiryDateTime;
             row.appendChild(exprDTime);
             closed = document.createElement("td");
-            closed.textContent = autionDetails.isClosed;
+            closed.textContent = auctionDetails.isClosed;
             row.appendChild(closed);
             self.auctionDetailsBody.appendChild(row);
             this.auctionDetailsContainer.style.visibility = "visible";
@@ -464,14 +448,14 @@
         }
 
         this.show = function (aucID) {
-            var self = this;
+            let self = this;
             makeCall("GET", "GetItemData?aucID=" + aucID, null,
                 function (req) {
-                    if (req.readyState == XMLHttpRequest.DONE) {
+                    if (req.readyState === XMLHttpRequest.DONE) {
                         var message = req.responseText;
-                        if (req.status == 200) {
+                        if (req.status === 200) {
                             let itemToShow = JSON.parse(req.responseText);
-                            if (itemToShow.length == 0) {
+                            if (itemToShow.length === 0) {
                                 self.alert.textContent = "No Item available!"
                                 return;
                             }
@@ -487,7 +471,6 @@
             let row, itemID, itemName, itemDescription, itemPrice, itemImage;
             this.itemDetailsBody.innerHTML = "";
             let self = this;
-            row = document.createElement("tr");
             itemDetails.forEach(function (item) {
                 row = document.createElement("tr");
                 itemID = document.createElement("td");
@@ -527,11 +510,11 @@
             var self = this;
             makeCall("GET", "GetOfferData?aucID=" + aucID, null,
                 function (req) {
-                    if (req.readyState == XMLHttpRequest.DONE) {
+                    if (req.readyState === XMLHttpRequest.DONE) {
                         var message = req.responseText;
-                        if (req.status == 200) {
+                        if (req.status === 200) {
                             let offerToShow = JSON.parse(req.responseText);
-                            if (offerToShow.length == 0) {
+                            if (offerToShow.length === 0) {
                                 self.alert.textContent = "No Offer available!"
                                 return;
                             }
@@ -566,8 +549,78 @@
         }
     }
 
+    function AvailableItemList(_alert, _id_availableItemListContainer, _id_availableItemListBody) {
+        this.alert = _alert;
+        this.availableItemListContainer = _id_availableItemListContainer;
+        this.availableItemListBody = _id_availableItemListBody;
+
+        this.reset = function () {
+            this.availableItemListContainer.style.visibility = "hidden";
+        }
+
+        this.show = function () {
+            let self = this;
+            makeCall("GET", "GetAvailableItem", null,
+                function (req) {
+                    if (req.readyState === XMLHttpRequest.DONE) {
+                        let message = req.responseText;
+                        if (req.status === 200) {
+                            let availableToShow = JSON.parse(req.responseText);
+                            if (availableToShow.length === 0) {
+                                self.alert.textContent = "No Item available!"
+                                return;
+                            }
+                            self.update(availableToShow);
+                        } else {
+                            self.alert.textContent = message;
+                        }
+                    }
+                });
+        };
+
+        this.update = function (availableItemList) {
+            let row, itemID, itemName, itemDescription, itemPrice, itemImage, checkboxCell, checkbox;
+            this.availableItemListBody.innerHTML = "";
+            let self = this;
+            availableItemList.forEach(function (item) {
+                row = document.createElement("tr");
+                itemID = document.createElement("td");
+                itemID.textContent = item.itemID;
+                row.appendChild(itemID);
+                itemName = document.createElement("td");
+                itemName.textContent = item.itemName;
+                row.appendChild(itemName);
+                itemDescription = document.createElement("td");
+                itemDescription.textContent = item.description;
+                row.appendChild(itemDescription);
+                itemPrice = document.createElement("td");
+                itemPrice.textContent = item.itemPrice + " €";
+                row.appendChild(itemPrice);
+
+                itemImage = document.createElement("img");
+                itemImage.src = item.imagePath;
+                itemImage.style.maxWidth = "200px";
+                itemImage.style.maxHeight = "180px";
+                row.appendChild(itemImage);
+
+                checkboxCell = document.createElement("td");
+                checkbox = document.createElement("input");
+                checkbox.type = "checkbox";
+                checkbox.name = "selectedItems";
+                checkbox.value = item.itemID;
+                checkboxCell.appendChild(checkbox);
+                row.appendChild(checkboxCell);
+
+
+                self.availableItemListBody.appendChild(row);
+            });
+
+            this.availableItemListContainer.style.visibility = "visible";
+        }
+    }
+
     function PageOrchestrator() {
-        var alertContainer = document.getElementById("id_alert");
+        let alertContainer = document.getElementById("id_alert");
 
         this.start = function () {
             personalMessage = new PersonalMessage(sessionStorage.getItem('username'), document.getElementById("id_username"));
@@ -576,14 +629,26 @@
             openAuctionList = new OpenAuctionList(
                 alertContainer,
                 document.getElementById("id_myOpenAuctionsContainer"),
-                document.getElementById("id_myOpenAuctionsBody"),
-                this
+                document.getElementById("id_myOpenAuctionsBody")
             );
 
             closedAuctionList = new ClosedAuctionList(
                 alertContainer,
                 document.getElementById("id_myClosedAuctionsContainer"),
                 document.getElementById("id_myClosedAuctionsBody")
+            );
+
+            availableItemList = new AvailableItemList(
+                alertContainer,
+                document.getElementById("id_availableItemListContainer"),
+                document.getElementById("id_availableItemListBody")
+            );
+
+            closeAuction = new CloseAuction(
+                alertContainer,
+                document.getElementById("id_closeForm"),
+                document.getElementById("id_closeAuctionButton"),
+                this
             );
 
             ONautionDetails = new AuctionDetails(
@@ -628,25 +693,23 @@
             );
             createNewItem.registerEvents(this);
 
-            //
-            // createNewAuction = new CreateNewAuction(
-            //     alertContainer,
-            //     document.getElementById("id_createAuctionForm")
-            // );
-            // createNewAuction.registerEvents(this);
+            createNewAuction = new CreateNewAuction(
+                alertContainer,
+                document.getElementById("id_createAuctionForm")
+            );
+            createNewAuction.registerEvents(this);
         };
 
-        this.refresh = function (currentSellPage) {
+        this.refresh = function () {
             alertContainer.textContent = "";
             openAuctionList.show();
+            openAuctionList.reset();
             closedAuctionList.show();
-            //    createNewItem.reset;
-            //    createNewAuction.reset;
+            closedAuctionList.reset();
+            availableItemList.show();
+            createNewAuction.reset();
+            closeAuction.hidden();
         }
     }
-
-    // itemButton.addEventListener("click", (e) =>{
-    //    CreateNewItem();
-    // });
 
 }

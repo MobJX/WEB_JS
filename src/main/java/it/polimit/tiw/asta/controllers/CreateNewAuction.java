@@ -12,13 +12,12 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.google.gson.Gson;
 
 import it.polimit.tiw.asta.beans.Auction;
 import it.polimit.tiw.asta.beans.Item;
@@ -28,6 +27,7 @@ import it.polimit.tiw.asta.dao.ItemDAO;
 import it.polimit.tiw.asta.utils.ConnectionHandler;
 
 @WebServlet("/CreateNewAuction")
+@MultipartConfig
 public class CreateNewAuction extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	private Connection connection = null;
@@ -62,7 +62,10 @@ public class CreateNewAuction extends HttpServlet{
 		} catch (NumberFormatException | NullPointerException e) {
 			isBadRequest = true;
 			e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
+		}
+		if (isBadRequest) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Incorrect or missing param values");
 			return;
 		}
 		
@@ -76,6 +79,7 @@ public class CreateNewAuction extends HttpServlet{
 		AuctionDAO auctionDAO = new AuctionDAO(connection);
 		List<Item> aucitems = new ArrayList<>();
 		Auction auction = null;
+		int newAucID;
 		try {
 			
 			// for all itemID selected count the price
@@ -89,7 +93,7 @@ public class CreateNewAuction extends HttpServlet{
 			
 			//update auction SQL
 			//auctionDAO.createAuction(auction);
-			int newAucID = auctionDAO.createAuction(auction);
+			newAucID = auctionDAO.createAuction(auction);
 			auction.setAucID(newAucID);
 			
 			// return a list of item in this auction to NewAuction
@@ -106,15 +110,15 @@ public class CreateNewAuction extends HttpServlet{
 
 			
 		} catch (SQLException e){
-			e.printStackTrace();
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.getWriter().println("Not possible to create auction");
+			return;
 		}
 
-		// Convert item to JSON
-				String json = new Gson().toJson(auction);
 				response.setStatus(HttpServletResponse.SC_OK);
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");
-				response.getWriter().write(json);
+				response.getWriter().print(newAucID);
 
 	}
 

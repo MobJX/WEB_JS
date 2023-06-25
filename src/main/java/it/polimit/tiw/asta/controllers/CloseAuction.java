@@ -10,9 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import it.polimit.tiw.asta.beans.User;
 import it.polimit.tiw.asta.beans.Auction;
 import it.polimit.tiw.asta.dao.AuctionDAO;
 import it.polimit.tiw.asta.utils.ConnectionHandler;
@@ -32,11 +29,10 @@ public class CloseAuction extends HttpServlet {
 	}
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		// get and check params
 		Integer auctionID = null;
 		try {
-			auctionID = Integer.parseInt(request.getParameter("auctionID"));
+			auctionID = Integer.parseInt(request.getParameter("aucID"));
 		} catch (NumberFormatException | NullPointerException e) {
 			// for debugging only e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -44,26 +40,22 @@ public class CloseAuction extends HttpServlet {
 			return;
 		}
 
-		// Update mission status
-		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute("user");
 		AuctionDAO auctionDAO = new AuctionDAO(connection);
-
 		try {
-			// Check that only the user who created the mission edits it
+
 			Auction auction = auctionDAO.findAuction(auctionID);
 			if (auction == null) {
 				response.setStatus(HttpServletResponse.SC_PRECONDITION_FAILED);
 				response.getWriter().println("Auction not found");
 				return;
 			}
+			// Update auction status
 			auction.setClosed(auctionDAO.closeAuction(auction));
 		} catch (SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.getWriter().println("Auction not closable");		
 			return;
 		}
-
 	}
 
 	public void destroy() {
