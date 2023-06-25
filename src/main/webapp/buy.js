@@ -27,14 +27,16 @@
 			document.getElementById("id_wonAuctionContainer"),
 			document.getElementById("id_wonAuctionContainerBody")
 		);
-		itemList = new ItemDetailList(
+		itemDetailsList = new ItemDetailList(
 			document.getElementById("id_itemlistContainer"),
 			document.getElementById("id_itemlistContainerBody")
 		)
 
 
 		keyAucList.reset();
-		//offerList.reset();
+		offerList.reset();
+		wonAuctionList.reset();
+		itemDetailsList.reset();
 	}, false);
 
 	searchKeywordForm.addEventListener("submit", function(e) {
@@ -101,15 +103,12 @@
 							alertContainer.textContent = "No keyAuction yet!";
 							return;
 						}
-						if(req.status === 404){
-							alert("No keyAuction found!");
-							return;
-						}
+
 						self.update(keyAucToShow);
 						self.listcontainer.style.visibility = "visible";
 						//self.listcontainer.classList.remove("hidden");
 					} else {
-						alertContainer.textContent = req.responseText;
+						alert("No keyAuction found!");
 					}
 				}
 			})
@@ -267,9 +266,7 @@
 
 
 		this.reset = function() {
-
 			this.listcontainer.style.visibility = "hidden";
-
 		}
 	}
 
@@ -324,6 +321,9 @@
 				endDateCell.textContent = wonAuction.expiryDateTime;
 
 			});
+		}
+		this.reset = function() {
+			this.listcontainer.style.visibility = "hidden";
 		}
 	}
 
@@ -383,6 +383,9 @@
 			}
 
 
+		}
+		this.reset = function() {
+			this.listcontainer.style.visibility = "hidden";
 		}
 	}
 
