@@ -43,7 +43,7 @@ public class GetClosedAuction extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
-
+		System.out.println("--------------------CREATE A CLOSE AUCTION SERVLET----------------");
 		UserDAO userDAO = new UserDAO(connection);
 		AuctionDAO auctionDAO = new AuctionDAO(connection);
 		OfferDAO offerDAO = new OfferDAO(connection);
@@ -56,6 +56,11 @@ public class GetClosedAuction extends HttpServlet {
 		try {
 			// Closed Auctions
 			aucOFF = auctionDAO.findAllAuctionOFF(user);
+			if	(aucOFF==null||aucOFF.size()==0) {
+				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+				response.getWriter().println("Not possible to recover item");
+				return;
+			}
 			for (Auction auc : aucOFF) {
 				maxOffer = 0;
 				offers = offerDAO.findAllOfferOfAuction(auc);
@@ -68,6 +73,7 @@ public class GetClosedAuction extends HttpServlet {
 				auc.setBidder(bidder);
 				auc.setMaxOffer(maxOffer);
 			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -78,7 +84,7 @@ public class GetClosedAuction extends HttpServlet {
 		// Redirect to the Home page and add items to the parameters
 		Gson gson = new GsonBuilder().registerTypeAdapter(Duration.class, new DurationSerializer()).create();
 		String json = gson.toJson(aucOFF);
-		System.out.println(json);
+		System.out.println("This is the closed auction:" + json);
 
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");

@@ -31,7 +31,7 @@
                 var self = this;
                 let form = e.target.closest("form");
                 if (form.checkValidity()) {
-                    makeCall("POST", 'CreateNewItem', e.target.closest("form"),
+                    makeCall("POST", 'CreateNewItem', form,
                         function (req) {
                             if (req.readyState == XMLHttpRequest.DONE) {
                                 var message = req.responseText;
@@ -288,9 +288,9 @@
         this.update = function (closedAuctionList) {
             let row, rowBidder, auctionIDCell, startPriceCell, minUpCell,
                 exprDayTimeCell, bidderCell, finalPriceCell, linckCell, anchor;
-            this.openAuctionBody.innerHTML = "";
+            this.closedAuctionBody.innerHTML = "";
             let self = this;
-            openAuctionList.forEach(function (auction) {
+            closedAuctionList.forEach(function (auction) {
                 row = document.createElement("tr");
 
                 auctionIDCell = document.createElement("td");
@@ -312,18 +312,17 @@
                 bidderCell = document.createElement("td");
                 rowBidder = document.createElement("tr");
 
-                bidderCell.id = document.createElement("td");
-                bidderCell.id = auction.bidder != null ? auction.bidder.id : "";
-                rowBidder.appendChild(bidderCell.id);
+                var bidderIdCell = document.createElement("td");
+                bidderIdCell.textContent = auction.bidder != null ? auction.bidder.id : "";
+                rowBidder.appendChild(bidderIdCell);
 
-                bidderCell.username = document.createElement("td");
-                bidderCell.username = auction.bidder != null ? auction.bidder.username : "";
-                rowBidder.appendChild(bidderCell.username);
+                var bidderUsernameCell = document.createElement("td");
+                bidderUsernameCell.textContent = auction.bidder != null ? auction.bidder.username : "";
+                rowBidder.appendChild(bidderUsernameCell);
 
-                bidderCell.address = document.createElement("td");
-                bidderCell.address = auction.bidder != null ? auction.bidder.address : "";
-                rowBidder.appendChild(bidderCell.address);
-
+                var bidderAddressCell = document.createElement("td");
+                bidderAddressCell.textContent = auction.bidder != null ? auction.bidder.address : "";
+                rowBidder.appendChild(bidderAddressCell);
                 row.appendChild(rowBidder);
 
                 finalPriceCell = document.createElement("td");
@@ -590,6 +589,7 @@
         this.refresh = function (currentSellPage) {
             alertContainer.textContent = "";
             openAuctionList.show();
+            closedAuctionList.show();
             //    createNewItem.reset;
             //    createNewAuction.reset;
         }
