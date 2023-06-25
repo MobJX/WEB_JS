@@ -101,6 +101,10 @@
 							alertContainer.textContent = "No keyAuction yet!";
 							return;
 						}
+						if(req.status === 404){
+							alert("No keyAuction found!");
+							return;
+						}
 						self.update(keyAucToShow);
 						self.listcontainer.style.visibility = "visible";
 						//self.listcontainer.classList.remove("hidden");
@@ -194,6 +198,7 @@
 
 		}
 		this.reset = function() {
+
 			this.listcontainer.style.visibility = "hidden";
 			
 		}
@@ -262,8 +267,9 @@
 
 
 		this.reset = function() {
-			this.listcontainer.innerHTML = "";
-			this.listcontainer.classList.add("hidden");
+
+			this.listcontainer.style.visibility = "hidden";
+
 		}
 	}
 

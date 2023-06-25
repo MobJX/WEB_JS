@@ -61,7 +61,7 @@ public class GetKeyAuctionList extends HttpServlet {
 		try {
 			// items = itemDAO.findItemWithKeyWord(keyword);
 			itemsID = itemDAO.findItem_ID_WithKeyWord(keyword);
-			if (itemsID == null) {
+			if (itemsID == null ) {
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				response.getWriter().println("Resource not found");
 				return;
@@ -74,15 +74,12 @@ public class GetKeyAuctionList extends HttpServlet {
 
 		try {
 			auctions = auctionDAO.findAllAuctionWithItemID(itemsID);
-			if (auctions == null) {
+			if (auctions == null || auctions.size()== 0 ) {
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				response.getWriter().println("Resource not found");
 				return;
 			} else {
-				System.out.println("this is auctions sieze: " + auctions.size());
-				System.out.println(auctions.get(0).getAucID());
-				System.out.println("executing finding keyword");
-
+				
 				// Redirect to the Home page and add auctions to the parameters
 				Gson gson = new GsonBuilder().registerTypeAdapter(Duration.class, new DurationSerializer()).create();
 				String json = gson.toJson(auctions);
