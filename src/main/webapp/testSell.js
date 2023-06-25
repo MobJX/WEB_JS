@@ -1,7 +1,8 @@
 {
     //page components
-    let createNewItem, openAuctionList, closedAuctionList, autionDetails,
-        createNewAuction, pageOrchestrator = new PageOrchestrator();
+    let createNewItem, openAuctionList, closedAuctionList, ONautionDetails, ONitemDetails,
+        ONofferDetails, OFFautionDetails, OFFitemDetails, OFFofferDetails, createNewAuction,
+        pageOrchestrator = new PageOrchestrator();
     //var itemButton = document.getElementById("id_newItemButton");
 
     window.addEventListener("load", () => {
@@ -240,7 +241,10 @@
                 anchor.appendChild(linkText);
                 anchor.setAttribute('aucID', auction.aucID);
                 anchor.addEventListener("click", (e) => {
-                    autionDetails.show(e.target.getAttribute("aucID"));
+                    e.preventDefault();
+                    ONautionDetails.show(e.target.getAttribute("aucID"));
+                    ONitemDetails.show(e.target.getAttribute("aucID"));
+                    ONofferDetails.show(e.target.getAttribute("aucID"));
                 }, false);
                 anchor.href = "#";
                 row.appendChild(linckCell);
@@ -250,11 +254,107 @@
         }
     }
 
+    function ClosedAuctionList(_alert, _id_closedAuction, _id_closedAuctionBody) {
+        this.alert = _alert;
+        this.closedAuction = _id_closedAuction;
+        this.closedAuctionBody = _id_closedAuctionBody;
+        this.current_closedAuction;
+
+        this.reset = function () {
+            this.closedAuction.style.visibility = "hidden";
+        }
+
+        this.show = function () {
+            let self = this;
+            makeCall("GET", "GetClosedAuction", null,
+                function (req) {
+                    if (req.readyState == XMLHttpRequest.DONE) {
+                        var message = req.responseText;
+                        if (req.status == 200) {
+                            var closedAuctionToShow = JSON.parse(req.responseText);
+                            closedAuctionList.current_closedAuction = closedAuctionToShow;
+                            if (closedAuctionToShow.length == 0) {
+                                self.alert.textContent = "No Closed Auction yet!";
+                                return;
+                            }
+                            self.update(closedAuctionToShow);
+                        } else {
+                            self.alert.textContent = message;
+                        }
+                    }
+                });
+        };
+
+        this.update = function (closedAuctionList) {
+            let row, rowBidder, auctionIDCell, startPriceCell, minUpCell,
+                exprDayTimeCell, bidderCell, finalPriceCell, linckCell, anchor;
+            this.openAuctionBody.innerHTML = "";
+            let self = this;
+            openAuctionList.forEach(function (auction) {
+                row = document.createElement("tr");
+
+                auctionIDCell = document.createElement("td");
+                auctionIDCell.textContent = auction.aucID;
+                row.appendChild(auctionIDCell);
+
+                startPriceCell = document.createElement("td");
+                startPriceCell.textContent = auction.aucPrice;
+                row.appendChild(startPriceCell);
+
+                minUpCell = document.createElement("td");
+                minUpCell.textContent = auction.minUP;
+                row.appendChild(minUpCell);
+
+                exprDayTimeCell = document.createElement("td");
+                exprDayTimeCell.textContent = auction.expiryDateTime;
+                row.appendChild(exprDayTimeCell);
+
+                bidderCell = document.createElement("td");
+                rowBidder = document.createElement("tr");
+
+                bidderCell.id = document.createElement("td");
+                bidderCell.id = auction.bidder != null ? auction.bidder.id : "";
+                rowBidder.appendChild(bidderCell.id);
+
+                bidderCell.username = document.createElement("td");
+                bidderCell.username = auction.bidder != null ? auction.bidder.username : "";
+                rowBidder.appendChild(bidderCell.username);
+
+                bidderCell.address = document.createElement("td");
+                bidderCell.address = auction.bidder != null ? auction.bidder.address : "";
+                rowBidder.appendChild(bidderCell.address);
+
+                row.appendChild(rowBidder);
+
+                finalPriceCell = document.createElement("td");
+                finalPriceCell.textContent = auction.maxOffer;
+                row.appendChild(finalPriceCell);
+
+                linckCell = document.createElement("td");
+                anchor = document.createElement("a");
+                linckCell.appendChild(anchor);
+                linkText = document.createTextNode("Details");
+                anchor.appendChild(linkText);
+                anchor.setAttribute('aucID', auction.aucID);
+                anchor.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    OFFautionDetails.show(e.target.getAttribute("aucID"));
+                    OFFitemDetails.show(e.target.getAttribute("aucID"));
+                    OFFofferDetails.show(e.target.getAttribute("aucID"));
+                }, false);
+                anchor.href = "#";
+                row.appendChild(linckCell);
+                self.closedAuctionBody.appendChild(row);
+            });
+            this.closedAuction.style.visibility = "visible";
+        }
+    }
+
     function AuctionDetails(_alert, _id_auctionDetailsContainer, _id_auctionDetailsBody) {
         this.alert = _alert;
         this.auctionDetailsContainer = _id_auctionDetailsContainer;
         this.auctionDetailsBody = _id_auctionDetailsBody;
-        this.currentAuctionDetails;
+        //this.currentAuctionDetails;
 
         this.reset = function () {
             this.auctionDetailsContainer.style.visibility = "hidden";
@@ -268,7 +368,7 @@
                         var message = req.responseText;
                         if (req.status == 200) {
                             let auctionToShow = JSON.parse(req.responseText);
-                            autionDetails.currentAuctionDetails = auctionToShow;
+                            //auctionDetails.currentAuctionDetails = auctionToShow;
                             if (auctionToShow.length == 0) {
                                 self.alert.textContent = "No Auction available!"
                                 return;
@@ -281,7 +381,7 @@
                 });
         };
 
-        this.update = function (autionDetails){
+        this.update = function (autionDetails) {
             let row, auctionID, ownerID, startPrice, minRaise, exprDTime, closed;
             this.auctionDetailsBody.innerHTML = "";
             let self = this;
@@ -309,6 +409,123 @@
         }
     }
 
+    function ItemDetails(_alert, _id_itemDetailsContainer, _id_itemDetailsBody) {
+        this.alert = _alert;
+        this.itemDetailsContainer = _id_itemDetailsContainer;
+        this.itemDetailsBody = _id_itemDetailsBody;
+        //this.currentItemDetails;
+
+        this.reset = function () {
+            this.itemDetailsContainer.style.visibility = "hidden";
+        }
+
+        this.show = function (aucID) {
+            var self = this;
+            makeCall("GET", "GetItemData?aucID=" + aucID, null,
+                function (req) {
+                    if (req.readyState == XMLHttpRequest.DONE) {
+                        var message = req.responseText;
+                        if (req.status == 200) {
+                            let itemToShow = JSON.parse(req.responseText);
+                            //itemDetails.currentItemDetails = itemToShow;
+                            if (itemToShow.length == 0) {
+                                self.alert.textContent = "No Item available!"
+                                return;
+                            }
+                            self.update(itemToShow);
+                        } else {
+                            self.alert.textContent = message;
+                        }
+                    }
+                });
+        };
+
+        this.update = function (itemDetails) {
+            let row, itemID, itemName, itemDescription, itemPrice, itemImage;
+            this.itemDetailsBody.innerHTML = "";
+            let self = this;
+            row = document.createElement("tr");
+            itemDetails.forEach(function (item) {
+                row = document.createElement("tr");
+                itemID = document.createElement("td");
+                itemID.textContent = item.itemID;
+                row.appendChild(itemID);
+                itemName = document.createElement("td");
+                itemName.textContent = item.itemName;
+                row.appendChild(itemName);
+                itemDescription = document.createElement("td");
+                itemDescription.textContent = item.description;
+                row.appendChild(itemDescription);
+                itemPrice = document.createElement("td");
+                itemPrice.textContent = item.itemPrice;
+                row.appendChild(itemPrice);
+
+                itemImage = document.createElement("img");
+                itemImage.src = item.imagePath;
+                itemImage.style.maxWidth = "200px";
+                itemImage.style.maxHeight = "180px";
+                row.appendChild(itemImage);
+
+                self.itemDetailsBody.appendChild(row);
+            });
+            this.itemDetailsContainer.style.visibility = "visible";
+        }
+    }
+
+    function OfferDetails(_alert, _id_offerDetailsContainer, _id_offerDetailsBody) {
+        this.alert = _alert;
+        this.offerDetailsContainer = _id_offerDetailsContainer;
+        this.offerDetailsBody = _id_offerDetailsBody;
+        //this.currentOfferDetails;
+
+        this.reset = function () {
+            this.offerDetailsContainer.style.visibility = "hidden";
+        }
+
+        this.show = function (aucID) {
+            var self = this;
+            makeCall("GET", "GetOfferData?aucID=" + aucID, null,
+                function (req) {
+                    if (req.readyState == XMLHttpRequest.DONE) {
+                        var message = req.responseText;
+                        if (req.status == 200) {
+                            let offerToShow = JSON.parse(req.responseText);
+                            //offerDetails.currentOfferDetails = offerToShow;
+                            if (offerToShow.length == 0) {
+                                self.alert.textContent = "No Offer available!"
+                                return;
+                            }
+                            self.update(offerToShow);
+                        } else {
+                            self.alert.textContent = message;
+                        }
+                    }
+                });
+        };
+
+        this.update = function (offerDetails) {
+            let row, userName, offerAmount, offerDate;
+            this.offerDetailsBody.innerHTML = "";
+            let self = this;
+            row = document.createElement("tr");
+            offerDetails.forEach(function (offer) {
+                row = document.createElement("tr");
+                userName = document.createElement("td");
+                userName.textContent = offer.userName;
+                row.appendChild(userName);
+                offerAmount = document.createElement("td");
+                offerAmount.textContent = offer.offerPrice;
+                row.appendChild(offerAmount);
+                offerDate = document.createElement("td");
+                offerDate.textContent = offer.offerDayTime;
+                row.appendChild(offerDate);
+
+                self.offerDetailsBody.appendChild(row);
+            });
+            this.offerDetailsContainer.style.visibility = "visible";
+        }
+    }
+
     function PageOrchestrator() {
         var alertContainer = document.getElementById("id_alert");
 
@@ -322,10 +539,46 @@
                 document.getElementById("id_myOpenAuctionsBody")
             );
 
-            autionDetails = new AuctionDetails(
+            closedAuctionList = new ClosedAuctionList(
                 alertContainer,
-                document.getElementById("id_auctionDetailsContainer"),
-                document.getElementById("id_auctionDetailsBody")
+                document.getElementById("id_myClosedAuctionsContainer"),
+                document.getElementById("id_myClosedAuctionsBody")
+            );
+
+            ONautionDetails = new AuctionDetails(
+                alertContainer,
+                document.getElementById("id_ONauctionDetailsContainer"),
+                document.getElementById("id_ONauctionDetailsBody")
+            );
+
+            ONitemDetails = new ItemDetails(
+                alertContainer,
+                document.getElementById("id_ONitemDetailsContainer"),
+                document.getElementById("id_ONitemDetailsBody")
+            );
+
+            ONofferDetails = new OfferDetails(
+                alertContainer,
+                document.getElementById("id_ONoffersDetailsContainer"),
+                document.getElementById("id_ONoffersDetailsBody")
+            );
+
+            OFFautionDetails = new AuctionDetails(
+                alertContainer,
+                document.getElementById("id_OFFauctionDetailsContainer"),
+                document.getElementById("id_OFFauctionDetailsBody")
+            );
+
+            OFFitemDetails = new ItemDetails(
+                alertContainer,
+                document.getElementById("id_OFFitemDetailsContainer"),
+                document.getElementById("id_OFFitemDetailsBody")
+            );
+
+            OFFofferDetails = new OfferDetails(
+                alertContainer,
+                document.getElementById("id_OFFoffersDetailsContainer"),
+                document.getElementById("id_OFFoffersDetailsBody")
             );
 
             createNewItem = new CreateNewItem(document.getElementById("id_createItemForm"), alertContainer);

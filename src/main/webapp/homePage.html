@@ -71,7 +71,6 @@
 
     <p><b>My Open Auctions </b></p>
     <div>
-
         <table id="id_myOpenAuctionsContainer" border='1'>
             <thead>
             <tr>
@@ -84,46 +83,52 @@
             <tbody id="id_myOpenAuctionsBody">
             </tbody>
         </table>
-        <table id="id_auctionDetailsContainer">
-            <thead>
-            <tr>
-                <th>Auction ID</th>
-                <th>Owner ID</th>
-                <th>Starting Price</th>
-                <th>Minimum Raise</th>
-                <th>Expiry Date Time</th>
-                <th>Closed</th>
-            </tr>
-            </thead>
-            <tbody id="id_auctionDetailsBody">
-            </tbody>
-        </table>
-        <label for="id_itemDetailsContainer"><i>List of Items:</i></label>
-        <table id="id_itemDetailsContainer">
-            <thead>
-            <tr>
-                <th>Item ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Image</th>
-            </tr>
-            </thead>
-            <tbody id="id_itemDetailsBody">
-            </tbody>
-        </table>
-        <label for="id_offersDetailsContainer"><i>List of Offers:</i></label>
-        <table id="id_offersDetailsContainer">
-            <thead>
-            <tr>
-                <th>User Name</th>
-                <th>Offer Amount</th>
-                <th>Offer Date</th>
-            </tr>
-            </thead>
-            <tbody id="id_offersDetailsBody">
-            </tbody>
-        </table>
+        <fieldset>
+            <table id="id_ONauctionDetailsContainer">
+                <thead>
+                <tr>
+                    <th>Auction ID</th>
+                    <th>Owner ID</th>
+                    <th>Starting Price</th>
+                    <th>Minimum Raise</th>
+                    <th>Expiry Date Time</th>
+                    <th>Closed</th>
+                </tr>
+                </thead>
+                <tbody id="id_ONauctionDetailsBody">
+                </tbody>
+            </table>
+        </fieldset>
+        <fieldset>
+            <label for="id_ONitemDetailsContainer"><i>List of Items:</i></label>
+            <table id="id_ONitemDetailsContainer" border='1'>
+                <thead>
+                <tr>
+                    <th>Item ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                </tr>
+                </thead>
+                <tbody id="id_ONitemDetailsBody" border='1'>
+                </tbody>
+            </table>
+        </fieldset>
+        <fieldset>
+            <label for="id_ONoffersDetailsContainer"><i>List of Offers:</i></label>
+            <table id="id_ONoffersDetailsContainer">
+                <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Offer Amount</th>
+                    <th>Offer Date</th>
+                </tr>
+                </thead>
+                <tbody id="id_ONoffersDetailsBody">
+                </tbody>
+            </table>
+        </fieldset>
     </div>
 
 
@@ -143,6 +148,52 @@
             <tbody id="id_myClosedAuctionsBody">
             </tbody>
         </table>
+        <fieldset>
+            <table id="id_OFFauctionDetailsContainer">
+                <thead>
+                <tr>
+                    <th>Auction ID</th>
+                    <th>Owner ID</th>
+                    <th>Starting Price</th>
+                    <th>Minimum Raise</th>
+                    <th>Expiry Date Time</th>
+                    <th>Closed</th>
+                </tr>
+                </thead>
+                <tbody id="id_OFFauctionDetailsBody">
+                </tbody>
+            </table>
+        </fieldset>
+        <fieldset>
+            <label for="id_OFFitemDetailsContainer"><i>List of Items:</i></label>
+            <table id="id_OFFitemDetailsContainer" border='1'>
+                <thead>
+                <tr>
+                    <th>Item ID</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                </tr>
+                </thead>
+                <tbody id="id_OFFitemDetailsBody" border='1'>
+                </tbody>
+            </table>
+        </fieldset>
+        <fieldset>
+            <label for="id_OFFoffersDetailsContainer"><i>List of Offers:</i></label>
+            <table id="id_OFFoffersDetailsContainer">
+                <thead>
+                <tr>
+                    <th>User Name</th>
+                    <th>Offer Amount</th>
+                    <th>Offer Date</th>
+                </tr>
+                </thead>
+                <tbody id="id_OFFoffersDetailsBody">
+                </tbody>
+            </table>
+        </fieldset>
         <br><br>
     </div>
 </div>

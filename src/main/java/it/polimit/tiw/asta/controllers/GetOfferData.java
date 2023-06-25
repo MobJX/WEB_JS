@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import it.polimit.tiw.asta.beans.Offer;
 import it.polimit.tiw.asta.beans.User;
 import it.polimit.tiw.asta.dao.OfferDAO;
+import it.polimit.tiw.asta.dao.UserDAO;
 import it.polimit.tiw.asta.utils.ConnectionHandler;
 
 @WebServlet("/GetOfferData")
@@ -39,6 +40,7 @@ public class GetOfferData extends HttpServlet{
 
 		HttpSession session = request.getSession();
         User user = (User) session.getAttribute("user");
+        UserDAO userDAO = new UserDAO(connection);
 		OfferDAO offerDAO = new OfferDAO(connection);
 		List<Offer> offers = null;
 		Integer aucID = null;
@@ -54,6 +56,11 @@ public class GetOfferData extends HttpServlet{
 		
 		try {
 			offers = offerDAO.findAllOfferOfAuctionByAucId(aucID);
+			
+			for (Offer offer:offers) {
+				User userOffer = userDAO.findUserOfAuctionByOffer(offer);
+				offer.setUserName(userOffer.getUsername());
+			}
 			
 		} catch (SQLException   e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
