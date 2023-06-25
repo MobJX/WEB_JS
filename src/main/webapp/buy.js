@@ -33,7 +33,7 @@
 		)
 
 
-		// keyAucList.reset();
+		keyAucList.reset();
 		//offerList.reset();
 	}, false);
 
@@ -102,6 +102,7 @@
 							return;
 						}
 						self.update(keyAucToShow);
+						self.listcontainer.style.visibility = "visible";
 						//self.listcontainer.classList.remove("hidden");
 					} else {
 						alertContainer.textContent = req.responseText;
@@ -122,6 +123,7 @@
 			let anchor;
 
 			this.listcontainerbody.innerHTML = "";
+		
 
 			//build updated list of auctions
 			let self = this;
@@ -192,9 +194,10 @@
 
 		}
 		this.reset = function() {
-			this.listcontainer.innerHTML = "";
-			this.listcontainer.classList.add("hidden");
+			this.listcontainer.style.visibility = "hidden";
+			
 		}
+
 
 	}
 

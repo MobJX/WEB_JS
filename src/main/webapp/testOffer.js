@@ -33,7 +33,7 @@
 		)
 
 
-		// keyAucList.reset();
+		keyAucList.reset();
 		//offerList.reset();
 	}, false);
 

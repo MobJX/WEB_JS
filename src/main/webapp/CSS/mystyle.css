@@ -1,4 +1,8 @@
-@charset "UTF-8";
-.hidden{
-	display:none;
+.boxed {
+	border: 1px solid black;
+}
+
+
+.alertmessage{
+	color: red;
 }
