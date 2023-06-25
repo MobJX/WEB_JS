@@ -241,10 +241,11 @@
                         let message = req.responseText;
                         if (req.status === 200) {
                             let canClose = JSON.parse(req.responseText);
-                            if (canClose === 0) {
+                            if (canClose === false) {
                                 self.hidden();
                                 return;
                             }
+                            self.closeForm.style.visibility = "visible";
                             self.registerEvents(aucID);
                         } else if (req.status === 403) {
                             window.location.href = req.getResponseHeader("Location");

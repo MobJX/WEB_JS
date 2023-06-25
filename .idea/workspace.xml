@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="117a10fe-4f2e-4df5-a6f3-f918b41c8ec1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimit/tiw/asta/controllers/CloseAuction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimit/tiw/asta/controllers/CloseAuction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/it/polimit/tiw/asta/controllers/CreateNewAuction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/it/polimit/tiw/asta/controllers/CreateNewAuction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/homePage.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/homePage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/testCreateNewItem.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/webapp/testSell.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/testSell.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/webapp/sell.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/webapp/sell.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +53,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1687713105528</updated>
-      <workItem from="1687713109658" duration="11550000" />
+      <workItem from="1687713109658" duration="11883000" />
     </task>
     <servers />
   </component>
