@@ -220,10 +220,10 @@
                 ownerCell.textContent = auction.ownerID;
                 row.appendChild(ownerCell);
                 priceCell = document.createElement("td");
-                priceCell.textContent = auction.aucPrice;
+                priceCell.textContent = auction.aucPrice+"€";
                 row.appendChild(priceCell);
                 minUpCell = document.createElement("td");
-                minUpCell.textContent = auction.minUP;
+                minUpCell.textContent = auction.minUP+"€";
                 row.appendChild(minUpCell);
                 endDateCell = document.createElement("td");
                 endDateCell.textContent = auction.expiryDateTime;
@@ -335,7 +335,7 @@
                 aucIdCell.textContent = offer.aucID;
                 row.appendChild(aucIdCell);
                 offerCell = document.createElement("td");
-                offerCell.textContent = offer.offerPrice;
+                offerCell.textContent = offer.offerPrice+"€";
                 row.appendChild(offerCell);
                 offerDateCell = document.createElement("td");
                 offerDateCell.textContent = offer.offerDayTime;
@@ -413,11 +413,11 @@
                 row.appendChild(itemsCell);
 
                 auctionPriceCell = document.createElement("td");
-                auctionPriceCell.textContent = auction.aucPrice;
+                auctionPriceCell.textContent = auction.aucPrice+"€";
                 row.appendChild(auctionPriceCell);
 
                 finalPriceCell = document.createElement("td");
-                finalPriceCell.textContent = auction.winningBid;
+                finalPriceCell.textContent = auction.winningBid+"€";
                 row.appendChild(finalPriceCell);
 
                 endDateCell = document.createElement("td");
@@ -480,7 +480,7 @@
                     itemIDCell.textContent = item.itemID;
                     itemNameCell.textContent = item.itemName;
                     itemDescriptionCell.textContent = item.description;
-                    itemPriceCell.textContent = item.itemPrice;
+                    itemPriceCell.textContent = item.itemPrice+"€";
 
                     // create<img>TAG，and setting src URL
                     let img = document.createElement("img");
