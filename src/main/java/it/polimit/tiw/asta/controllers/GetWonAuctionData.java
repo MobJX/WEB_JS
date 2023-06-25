@@ -17,8 +17,11 @@ import javax.servlet.http.HttpSession;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import it.polimit.tiw.asta.beans.Auction;
+import it.polimit.tiw.asta.beans.Item;
 import it.polimit.tiw.asta.beans.User;
 import it.polimit.tiw.asta.beans.WonAuction;
+import it.polimit.tiw.asta.dao.ItemDAO;
 import it.polimit.tiw.asta.dao.WonAuctionDAO;
 import it.polimit.tiw.asta.utils.ConnectionHandler;
 import it.polimit.tiw.asta.utils.DurationSerializer;
@@ -42,6 +45,8 @@ public class GetWonAuctionData extends HttpServlet {
 		// find all info of auction tha won by the user
 		WonAuctionDAO wonAuctionDAO = new WonAuctionDAO(connection);
 		List<WonAuction> wonAuctions = new ArrayList<>();
+		List<Item>items = new ArrayList<Item>();
+		ItemDAO itemDAO = new ItemDAO(connection);
 
 		try {
 			wonAuctions = wonAuctionDAO.findAllAuctionsWonByUser(user.getId());
@@ -49,6 +54,18 @@ public class GetWonAuctionData extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		try {
+			for (Auction auc : wonAuctions) {
+				items = itemDAO.findAll_Item_OfAuction(auc.getAucID());
+				auc.setAucItems(items);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		
 
 		// Redirect to the Home page and add wonAuctions to the parameters
 		Gson gson = new GsonBuilder().registerTypeAdapter(Duration.class, new DurationSerializer()).create();
