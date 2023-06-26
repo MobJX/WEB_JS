@@ -1,64 +1,76 @@
+body, h1, h2, h3, h4.h6.p, dl, dd {
+    margin: 0;
+}
+
+body{
+    font-size: 14px;
+    color: #333333;
+    font-family: "Verdana";
+}
+
 .boxed {
-	border: 1px solid black;
+    border: 1px solid black;
 }
 
 
-.alertmessage{
-	color: red;
-	
+.alertmessage {
+    color: red;
+
 }
 
 
 .login-form {
-  font-family: Arial, sans-serif;
-  background-color: #f1f1f1;
-  padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f1f1f1;
+    padding: 20px;
 }
 
 .login-form h1 {
-  text-align: center;
-  color: #333;
+    text-align: center;
+    color: #333;
 }
 
 .login-form form {
-  max-width: 300px;
-  margin: 0 auto;
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .login-form fieldset {
-  border: none;
-  padding: 0;
-  margin: 0;
+    border: none;
+    padding: 0;
+    margin: 0;
 }
 
 .login-form input[type="text"],
 .login-form input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 .login-form input[type="button"] {
-  width: 100%;
-  padding: 10px;
-  background-color: #4CAF50;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+    width: 100%;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .login-form input[type="button"]:hover {
-  background-color: #45a049;
+    background-color: #45a049;
 }
 
 .login-form #errormessage {
-  color: red;
-  text-align: center;
+    color: red;
+    text-align: center;
 }
+
+
