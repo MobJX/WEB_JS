@@ -9,10 +9,10 @@
     // SELL PAGE components
     let createNewItem, openAuctionList, closedAuctionList, ONautionDetails, ONitemDetails,
         ONofferDetails, OFFautionDetails, OFFitemDetails, OFFofferDetails, createNewAuction,
-        availableItemList, closeAuction ;
+        availableItemList, closeAuction;
 
     // BUY PAGE components
-    let keyAucList, offerList, wonAuctionList, itemDetailsList, currentAuctionID, stillOpenAuctionList;
+    let keyAucList, offerList, wonAuctionList, itemDetailsList, currentAuctionID;
 
     let searchKeywordForm = document.getElementById('id_getKeyAuctionForm');
     let keywordInput = document.getElementById('id_keyword');
@@ -20,7 +20,7 @@
     let alertContainer = document.getElementById('id_alert');
     let buyBlock = document.getElementById('id_buyBlock');
     let sellBlock = document.getElementById('id_sellBlock');
-    let stillOpenAuctionBlock = document.getElementById('id_stillOpenAuctionBlock');
+    let stillOpenAuctionList = document.getElementById('id_stillOpenAuctionBlock');
 
 
     // COOKIE components
@@ -33,6 +33,39 @@
         } else {
             pageOrchestrator.start();
             pageOrchestrator.refresh();
+
+
+            // -------------------------COOKIE-------------------------
+            var isNewUser = getCookie('isNewUser');
+
+            console.log("User is : " + user); //Only for Testing //TODO remove this line
+            console.log(getLastAction(user)); //TODO remove this line
+
+            if (isNewUser === 'true') {
+                // User is a new user show the BUY  component
+                console.log("User is a new user"); //Only for Testing //TODO remove this line
+                buyBlock.style.display = 'block';
+                sellBlock.style.display = 'none'; //TODO 要不要加个按钮 让用户显示SELL的Component
+            } else {
+
+                const pageToShow = determinePageToShow();
+                // 根据 pageToShow 的值显示相应内容
+                if (pageToShow === 'NOTCREATEAUCTION') {
+                    // User is not a new user  show the Buy component only showing all those auctions that user clicked and still with status open
+                    //initialize the still open auction list
+
+                    sendClickedAuctionsToServlet();
+                    buyBlock.style.display = 'block';
+
+                } else if (pageToShow === 'CREATEAUCTION') {
+                    // otherwise show the SELL  component if last action was create auction
+                    sellBlock.style.display = 'block';
+
+                }
+
+
+            }
+
         }
     }, false);
 
@@ -51,6 +84,7 @@
         const expirationUTCString = expirationDate.toUTCString();
         document.cookie = `${cookieName}=${cookieValue}; expires=${expirationUTCString}; path=/`;
     }
+
     function getCookie(cookieName) {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
@@ -73,14 +107,14 @@
     }
 
     function recordClickedAuction(auctionId) {
-        const clickedAuctions = getCookie('clickedAuctions_'+user);
+        const clickedAuctions = getCookie('clickedAuctions_' + user);
         if (clickedAuctions) {
             // 如果已存在 clickedAuctions cookie，则将新的 Auction ID 添加到其中
             const updatedAuctions = clickedAuctions + ',' + auctionId;
-            setCookie('clickedAuctions_'+user, updatedAuctions, 30);
+            setCookie('clickedAuctions_' + user, updatedAuctions, 30);
         } else {
             // 如果 clickedAuctions cookie 不存在，则创建新的 cookie
-            setCookie('clickedAuctions_'+user, auctionId, 30);
+            setCookie('clickedAuctions_' + user, auctionId, 30);
         }
     }
 
@@ -92,7 +126,7 @@
      * @returns {boolean}
      */
     function isAuctionClicked(auctionId) {
-        const clickedAuctions = getCookie('clickedAuctions_'+user);
+        const clickedAuctions = getCookie('clickedAuctions_' + user);
         if (clickedAuctions) {
             const auctionsArray = clickedAuctions.split(',');
             return auctionsArray.includes(auctionId.toString());
@@ -115,7 +149,7 @@
 
 
             var req = new XMLHttpRequest();
-            req.onreadystatechange = function() {
+            req.onreadystatechange = function () {
                 if (req.readyState === XMLHttpRequest.DONE) {
                     const message = req.responseText;
                     if (req.status === 200) {
@@ -133,9 +167,6 @@
         }
         return false; //if there are no clicked auctions, return false
     }
-
-
-
 
 
     //    ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ SELL PAGE ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -340,7 +371,7 @@
                     let currentONAuctionID = e.target.getAttribute("aucID");
                     //adding Auction ID into Cookies
                     isAuctionClicked(currentONAuctionID);
-                    if(!isAuctionClicked(currentONAuctionID)){
+                    if (!isAuctionClicked(currentONAuctionID)) {
                         recordClickedAuction(currentONAuctionID);
                     }
 
@@ -530,7 +561,7 @@
                         if (req.status === 200) {
                             let auctionToShow = JSON.parse(req.responseText);
                             self.textListItem.style.display = "block";
-                            self.textListOffer.style.display= "block";
+                            self.textListOffer.style.display = "block";
                             self.update(auctionToShow);
                         } else {
                             self.alert.textContent = message;
@@ -811,7 +842,7 @@
 
                     //adding Auction ID into Cookies
                     isAuctionClicked(currentAuctionID);
-                    if(!isAuctionClicked(currentAuctionID)){
+                    if (!isAuctionClicked(currentAuctionID)) {
                         recordClickedAuction(currentAuctionID);
                     }
 
@@ -1057,7 +1088,7 @@
 
         this.show = function () {
             let self = this;
-           //sendClickedAuctionsToServlet();
+            //sendClickedAuctionsToServlet();
         }
 
         this.update = function (stillOpenAucToShow) {
@@ -1065,7 +1096,7 @@
                 linkCell, linktext, anchor;
 
             this.listcontainerbody.innerHTML = "";
-            this.listcontainer.display = "block";
+            this.listcontainer.style.display = "block";
 
             //build updated list of auctions
             let self = this;
@@ -1104,7 +1135,7 @@
                     currentAuctionID = e.target.getAttribute("stillOpenAucID");
 
                     //adding Auction ID into Cookies //
-                    if(!isAuctionClicked(currentAuctionID)){
+                    if (!isAuctionClicked(currentAuctionID)) {
                         recordClickedAuction(currentAuctionID);
                     }
                     //sendClickedAuctionsToServlet();
@@ -1139,7 +1170,7 @@
         }
     }
 
-    
+
     //    ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ Event Listener ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     sellButton.addEventListener("click", function (e) {
         e.preventDefault();
@@ -1203,11 +1234,10 @@
 
 
     function determinePageToShow() {
-        let action = getCookie("lastAction_"+user);
-        if(action === 'createauction'){
+        let action = getCookie("lastAction_" + user);
+        if (action === 'createauction') {
             return 'CREATEAUCTION';
-        }
-        else{
+        } else {
             return 'NOTCREATEAUCTION';
         }
 
@@ -1220,40 +1250,6 @@
         this.start = function () {
             personalMessage = new PersonalMessage(sessionStorage.getItem('username'), document.getElementById("id_username"));
             personalMessage.show();
-
-            // -------------------------COOKIE-------------------------
-            var isNewUser = getCookie('isNewUser');
-
-            console.log("User is : " + user); //Only for Testing //TODO remove this line
-            console.log(getLastAction(user)); //TODO remove this line
-
-            if (isNewUser === 'true') {
-                // User is a new user show the BUY  component
-                console.log("User is a new user"); //Only for Testing //TODO remove this line
-                buyBlock.style.display = 'block';
-                sellBlock.style.display = 'none'; //TODO 要不要加个按钮 让用户显示SELL的Component
-            } else {
-
-                const pageToShow = determinePageToShow();
-                // 根据 pageToShow 的值显示相应内容
-                if (pageToShow === 'NOTCREATEAUCTION') {
-                    // User is not a new user  show the Buy component only showing all those auctions that user clicked and still with status open
-                    //initialize the still open auction list
-                    stillOpenAuctionList = new StillOpenAuctionList(
-                        document.getElementById("id_stillOpenAuctionContainer"),
-                        document.getElementById("id_stillOpenAuctionContainerBody")
-                    ) ;
-                    sendClickedAuctionsToServlet();
-                    buyBlock.style.display = 'block';
-
-                } else if (pageToShow === 'CREATEAUCTION') {
-                    // otherwise show the SELL  component if last action was create auction
-                    sellBlock.style.display = 'block';
-
-                }
-
-
-            }
 
             // -------------------------SELL PAGE ELEMENTS-------------------------
             openAuctionList = new OpenAuctionList(
