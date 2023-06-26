@@ -9,15 +9,29 @@
     <link rel="stylesheet" type="text/css" media="all" href="CSS/mystyle.css"/>
 </head>
 <body>
-<div align="right">
-    <a href="Logout">Logout</a>
-</div>
+<header id="head">
+    <div class="head">
+        <div class="center clearfix">
+            <div class="left">Nice to see you again <span id="id_username"></span></div>
+            <div class="right"><a href="Logout"><b>Logout</b></a></div>
+        </div>
+    </div>
+</header>
 
-<h1>Welcome to Auction Online Home Page</h1>
-<p>
-    Nice to see you again <span id="id_username"></span>
-</p>
+<h1><b>Welcome to Auction Online Home Page</b></h1>
+
 <div id="id_alert" class="alertmessage"></div>
+
+<nav class="nav">
+    <div class="center clearfix">
+        <ul class="navBar">
+            <li class="sell"><a href="#">SELL</a></li>
+            <li class="separate">|</li>
+            <li class="buy"><a href="#">BUY</a></li>
+        </ul>
+    </div>
+</nav>
+
 <div id="id_sellBlock">
     <p><b>Create a new Item</b></p>
     <p>Please enter the following information</p>
@@ -239,9 +253,6 @@
         </div>
 
 
-
-
-
         <p><b>Search Item</b></p>
         <!-- KeyWordSearch COMPONENT -->
         <div>
@@ -342,6 +353,6 @@
 
 
     </div>
-    </div>
+</div>
 </body>
 </html>

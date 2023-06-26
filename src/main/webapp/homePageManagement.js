@@ -156,6 +156,7 @@
                                     orchestrator.refresh();
                                     self.alert.textContent = "";
                                     window.alert("Item Created Successfully!");
+                                    setLastAction("createitem");
                                 } else if (req.status === 403) {
                                     window.location.href = req.getResponseHeader("Location");
                                     window.sessionStorage.removeItem('username');
@@ -186,7 +187,7 @@
             Array.from(this.createNewAuction.querySelectorAll("input[type='button'].next, input[type='button'].prev")).forEach(b => {
                 b.addEventListener("click", (e) => {
                     e.preventDefault();
-                    var eventFieldset = e.target.closest("fieldset"), valid = true;
+                    let eventFieldset = e.target.closest("fieldset"), valid = true;
                     if (e.target.className === "next") {
                         for (i = 0; i < eventFieldset.elements.length; i++) {
                             if (!eventFieldset.elements[i].checkValidity()) {
@@ -221,6 +222,9 @@
                                 let message = req.responseText;
                                 if (req.status === 200) {
                                     orchestrator.refresh();
+                                    self.alert.textContent = "";
+                                    window.alert("Auction Created Successfully!");
+                                    setLastAction("createauction");
                                 } else if (req.status === 403) {
                                     window.location.href = req.getResponseHeader("Location");
                                     window.sessionStorage.removeItem('username');
@@ -330,6 +334,13 @@
                     ONofferDetails.show(e.target.getAttribute("aucID"));
                     closeAuction.checkStatus(e.target.getAttribute("aucID"));
 
+                    let currentONAuctionID = e.target.getAttribute("aucID");
+                    //adding Auction ID into Cookies
+                    isAuctionClicked(currentONAuctionID);
+                    if(!isAuctionClicked(currentONAuctionID)){
+                        recordClickedAuction(currentONAuctionID);
+                    }
+
                 }, false);
                 anchor.href = "#";
                 row.appendChild(linkCell);
@@ -387,6 +398,7 @@
                                     self.orchestrator.refresh();
                                     self.alert.textContent = "";
                                     window.alert("Auction Closed Successfully!");
+                                    setLastAction("closeauction");
                                 } else if (req.status === 403) {
                                     window.location.href = req.getResponseHeader("Location");
                                     window.sessionStorage.removeItem('username');
@@ -813,10 +825,6 @@
                         if (req.readyState === 4) {
                             if (req.status === 200) {
                                 let offerToShow = JSON.parse(req.responseText);
-                                if (offerToShow.length === 0) {
-                                    alertContainer.textContent = "No offer yet!";
-                                    return;
-                                }
                                 offerList.update(offerToShow);
                                 // offerContainer.classList.remove("hidden");
                             } else {
@@ -851,10 +859,6 @@
                 if (req.readyState === 4) {
                     if (req.status === 200) {
                         let offerToShow = JSON.parse(req.responseText);
-                        if (offerToShow.length === 0) {
-                            alertContainer.textContent = "No offer yet!";
-                            return;
-                        }
                         self.listcontainer.style.visibility = "visible";
                         self.update(offerToShow);
                         ONofferDetails.update(offerToShow);
@@ -915,10 +919,6 @@
                 if (req.readyState === 4) {
                     if (req.status === 200) {
                         let wonAucToShow = JSON.parse(req.responseText);
-                        if (wonAucToShow.length === 0) {
-                            alertContainer.textContent = "No wonAuction yet!";
-                            return;
-                        }
                         self.listcontainer.style.visibility = "visible";
                         self.update(wonAucToShow);
 
@@ -996,10 +996,6 @@
                     let message = req.responseText;
                     if (req.status === 200) {
                         let itemToShow = JSON.parse(req.responseText);
-                        if (itemToShow.length === 0) {
-                            self.listcontainerbody.innerHTML = "No items found.";
-                            return;
-                        }
                         self.listcontainer.style.visibility = "visible";
                         self.update(itemToShow);
                     }
@@ -1122,10 +1118,6 @@
                         if (req.readyState === 4) {
                             if (req.status === 200) {
                                 let offerToShow = JSON.parse(req.responseText);
-                                if (offerToShow.length === 0) {
-                                    alertContainer.textContent = "No offer yet!";
-                                    return;
-                                }
                                 offerList.update(offerToShow);
                                 // offerContainer.classList.remove("hidden");
                             } else {

@@ -56,11 +56,11 @@ public class GetClosedAuction extends HttpServlet {
 		try {
 			// Closed Auctions
 			aucOFF = auctionDAO.findAllAuctionOFF(user);
-			if	(aucOFF==null||aucOFF.size()==0) {
-				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			/*if	(aucOFF==null||aucOFF.size()==0) {
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				response.getWriter().println("Not possible to recover item");
 				return;
-			}
+			}*/
 			for (Auction auc : aucOFF) {
 				maxOffer = 0;
 				offers = offerDAO.findAllOfferOfAuction(auc);

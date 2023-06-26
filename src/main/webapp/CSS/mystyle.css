@@ -2,12 +2,182 @@ body, h1, h2, h3, h4.h6.p, dl, dd {
     margin: 0;
 }
 
-body{
-    font-size: 14px;
+body {
+    font-size: 16px;
     color: #333333;
-    font-family: "Verdana";
+    font-family: "Times New Roman";
 }
 
+ul, ol, li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+img {
+    border: none;
+    vertical-align: middle;
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+a:hover {
+    color: #b4a078;
+}
+
+h1 {
+    color: #b4a078;
+    position: relative;
+    left: 50%;
+    margin: 50px 0 20px -250px;
+    font-size: 30px;
+    font-weight: normal;
+    vertical-align: middle;
+}
+
+input {
+    margin: 0;
+    padding: 0;
+    vertical-align: middle;
+    border: 1px solid #ccc;
+}
+
+label {
+    vertical-align: middle;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 0;
+}
+
+.center {
+    width: 1090px;
+    margin: 0 auto;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.clearfix:after {
+    content: '';
+    clear: both;
+    display: block;
+}
+
+/* ---------------- HEADER --------------- */
+#head {
+    border-bottom: 1px solid #f3f3f3;
+    box-shadow: 0 2px 2px #f3f3f3;
+}
+
+#head .head {
+    background: #333;
+    font-size: 16px;
+    line-height: 36px;
+}
+
+#head .head .left {
+    margin-left: -300px;
+    color: #ccc;
+}
+
+#head .head a {
+    color: #ccc;
+    padding: 0 10px;
+    border-left: 1px solid #5c5c5c;
+}
+
+#head .head a:hover {
+    color: #fff;
+}
+
+/* ---------------- NAV --------------- */
+.nav {
+    position: relative;
+    background: #fff;
+}
+
+.nav .center {
+    position: relative;
+}
+
+.navBar, .nav .subNav {
+    text-align: center;
+    font-size: 0;
+}
+
+.navBar li, .nav .subNav li {
+    display: inline-block;
+    font-size: 14px;
+    padding: 0 30px;
+    height: 50px;
+}
+
+.navBar li.separate {
+    padding: 0;
+    color: #ccc;
+}
+
+.navBar li a {
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+.navBar li a:hover, .navBar li.active a {
+    border-bottom: 3px solid #b4a078;
+}
+
+.navBar li .sell:hover ~ #id_sellBlock,
+.navBar li .buy:hover ~ #id_buyBlock {
+    display: block;
+}
+/* ---------------- SELL BLOCK --------------- */
+/*#id_sellBlock {*/
+/*    display: none;*/
+/*}*/
+
+/*!* ---------------- BUY BLOCK --------------- *!*/
+/*#id_buyBlock {*/
+/*    display: none;*/
+/*}*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ----------- LOGIN --------------------*/
 .boxed {
     border: 1px solid black;
 }
