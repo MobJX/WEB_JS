@@ -3,6 +3,9 @@
     let pageOrchestrator = new PageOrchestrator();
     let personalMessage;
 
+    let sellButton = document.getElementById('id_sellButton');
+    let buyButton = document.getElementById('id_buyButton');
+
     // SELL PAGE components
     let createNewItem, openAuctionList, closedAuctionList, ONautionDetails, ONitemDetails,
         ONofferDetails, OFFautionDetails, OFFitemDetails, OFFofferDetails, createNewAuction,
@@ -264,8 +267,8 @@
             ONautionDetails.reset();
             ONitemDetails.reset();
             ONofferDetails.reset();
-            document.getElementById("id_ONtextListItem").style.visibility = "hidden";
-            document.getElementById("id_ONtextListOffer").style.visibility = "hidden";
+            document.getElementById("id_ONtextListItem").style.display = "none";
+            document.getElementById("id_ONtextListOffer").style.display = "none";
         }
 
         this.show = function () {
@@ -346,7 +349,7 @@
                 row.appendChild(linkCell);
                 self.openAuctionBody.appendChild(row);
             });
-            this.openAuction.style.visibility = "visible";
+            this.openAuction.style.display = "block";
         }
     }
 
@@ -357,7 +360,7 @@
         this.orchestrator = _orchestrator;
 
         this.hidden = function () {
-            this.closeForm.style.visibility = "hidden";
+            this.closeForm.style.display = "none";
         }
 
         this.checkStatus = function (aucID) {
@@ -372,7 +375,7 @@
                                 self.hidden();
                                 return;
                             }
-                            self.closeForm.style.visibility = "visible";
+                            self.closeForm.style.display = "block";
                             self.registerEvents(aucID);
                         } else if (req.status === 403) {
                             window.location.href = req.getResponseHeader("Location");
@@ -422,9 +425,9 @@
         this.closedDetails = document.getElementById("id_closedDetails");
 
         this.reset = function () {
-            this.closedDetails.style.visibility = "hidden";
-            document.getElementById("id_OFFtextListItem").style.visibility = "hidden";
-            document.getElementById("id_OFFtextListOffer").style.visibility = "hidden";
+            this.closedDetails.style.display = "none";
+            document.getElementById("id_OFFtextListItem").style.display = "none";
+            document.getElementById("id_OFFtextListOffer").style.display = "none";
         }
 
         this.show = function () {
@@ -504,7 +507,7 @@
 
                 self.closedAuctionBody.appendChild(row);
             });
-            this.closedAuction.style.visibility = "visible";
+            this.closedAuction.style.display = "block";
         }
     }
 
@@ -515,7 +518,7 @@
         this.textListItem = _id_textListItem;
         this.textListOffer = _id_textListOffer;
         this.reset = function () {
-            this.auctionDetailsContainer.style.visibility = "hidden";
+            this.auctionDetailsContainer.style.display = "none";
         }
 
         this.show = function (aucID) {
@@ -526,8 +529,8 @@
                         var message = req.responseText;
                         if (req.status === 200) {
                             let auctionToShow = JSON.parse(req.responseText);
-                            self.textListItem.style.visibility = "visible";
-                            self.textListOffer.style.visibility = "visible";
+                            self.textListItem.style.display = "block";
+                            self.textListOffer.style.display= "block";
                             self.update(auctionToShow);
                         } else {
                             self.alert.textContent = message;
@@ -560,7 +563,7 @@
             closed.textContent = auctionDetails.isClosed;
             row.appendChild(closed);
             self.auctionDetailsBody.appendChild(row);
-            this.auctionDetailsContainer.style.visibility = "visible";
+            this.auctionDetailsContainer.style.display = "block";
         }
     }
 
@@ -570,7 +573,7 @@
         this.itemDetailsBody = _id_itemDetailsBody;
 
         this.reset = function () {
-            this.itemDetailsContainer.style.visibility = "hidden";
+            this.itemDetailsContainer.style.display = "none";
         }
 
         this.show = function (aucID) {
@@ -616,7 +619,7 @@
 
                 self.itemDetailsBody.appendChild(row);
             });
-            this.itemDetailsContainer.style.visibility = "visible";
+            this.itemDetailsContainer.style.display = "block";
         }
     }
 
@@ -625,7 +628,7 @@
         this.offerDetailsContainer = _id_offerDetailsContainer;
         this.offerDetailsBody = _id_offerDetailsBody;
         this.reset = function () {
-            this.offerDetailsContainer.style.visibility = "hidden";
+            this.offerDetailsContainer.style.display = "none";
         }
 
         this.show = function (aucID) {
@@ -663,7 +666,7 @@
 
                 self.offerDetailsBody.appendChild(row);
             });
-            this.offerDetailsContainer.style.visibility = "visible";
+            this.offerDetailsContainer.style.display = "block";
         }
     }
 
@@ -673,7 +676,7 @@
         this.availableItemListBody = _id_availableItemListBody;
 
         this.reset = function () {
-            this.availableItemListContainer.style.visibility = "hidden";
+            this.availableItemListContainer.style.display = "none";
         }
 
         this.show = function () {
@@ -733,7 +736,7 @@
                 self.availableItemListBody.appendChild(row);
             });
 
-            this.availableItemListContainer.style.visibility = "visible";
+            this.availableItemListContainer.style.display = "block";
         }
     }
 
@@ -757,7 +760,7 @@
                         }
 
                         self.update(keyAucToShow);
-                        self.listcontainer.style.visibility = "visible";
+                        self.listcontainer.style.display = "block";
                         //self.listcontainer.classList.remove("hidden");
                     } else {
                         alert("No keyAuction found!");
@@ -817,7 +820,7 @@
                     let urlToCall = "GetOfferData?aucID=" + auctionID;
 
                     //after clicking on the details shows the details of items and wonAuction of user
-                    giveOfferForm.style.visibility = "visible";
+                    giveOfferForm.style.display = "block";
                     wonAuctionList.show();
                     itemDetailsList.show(auctionID);
                     offerList.show(auctionID);
@@ -843,7 +846,7 @@
             });
         }
         this.reset = function () {
-            this.listcontainer.style.visibility = "hidden";
+            this.listcontainer.style.display = "none";
         }
     }
 
@@ -859,7 +862,7 @@
                 if (req.readyState === 4) {
                     if (req.status === 200) {
                         let offerToShow = JSON.parse(req.responseText);
-                        self.listcontainer.style.visibility = "visible";
+                        self.listcontainer.style.display = "block";
                         self.update(offerToShow);
                         ONofferDetails.update(offerToShow);
 
@@ -898,7 +901,7 @@
         }
 
         this.reset = function () {
-            this.listcontainer.style.visibility = "hidden";
+            this.listcontainer.style.display = "none";
         }
     }
 
@@ -907,7 +910,7 @@
         this.listcontainer = container;
         this.listcontainerbody = listcontainer;
         this.reset = function () {
-            this.listcontainer.style.visibility = "hidden";
+            this.listcontainer.style.display = "none";
         }
 
         this.show = function () {
@@ -919,7 +922,7 @@
                 if (req.readyState === 4) {
                     if (req.status === 200) {
                         let wonAucToShow = JSON.parse(req.responseText);
-                        self.listcontainer.style.visibility = "visible";
+                        self.listcontainer.style.display = "block";
                         self.update(wonAucToShow);
 
                     } else {
@@ -978,7 +981,7 @@
 
 
         this.reset = function () {
-            this.listcontainer.style.visibility = "hidden";
+            this.listcontainer.style.display = "none";
         }
     }
 
@@ -996,7 +999,7 @@
                     let message = req.responseText;
                     if (req.status === 200) {
                         let itemToShow = JSON.parse(req.responseText);
-                        self.listcontainer.style.visibility = "visible";
+                        self.listcontainer.style.display = "block";
                         self.update(itemToShow);
                     }
                 }
@@ -1037,7 +1040,7 @@
 
         }
         this.reset = function () {
-            this.listcontainer.style.visibility = "hidden";
+            this.listcontainer.style.display = "none";
         }
     }
 
@@ -1048,7 +1051,7 @@
         this.listcontainer = container;
         this.listcontainerbody = listcontainer;
         this.reset = function () {
-            this.listcontainer.style.visibility = "hidden";
+            this.listcontainer.style.display = "none";
         }
 
         this.show = function () {
@@ -1061,7 +1064,7 @@
                 linkCell, linktext, anchor;
 
             this.listcontainerbody.innerHTML = "";
-            this.listcontainer.visibility = "visible";
+            this.listcontainer.display = "block";
 
             //build updated list of auctions
             let self = this;
@@ -1110,7 +1113,7 @@
                     let urlToCall = "GetOfferData?aucID=" + auctionID;
 
                     //after clicking on the details shows the details of items and wonAuction of user
-                    giveOfferForm.style.visibility = "visible";
+                    giveOfferForm.style.display = "block";
                     wonAuctionList.show();
                     itemDetailsList.show(auctionID);
                     offerList.show(auctionID);
@@ -1137,7 +1140,17 @@
 
     
     //    ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ Event Listener ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+    sellButton.addEventListener("click", function (e) {
+        e.preventDefault();
+        document.getElementById("id_buyBlock").style.display = "none";
+        document.getElementById("id_sellBlock").style.display = "block";
+    }, false);
 
+    buyButton.addEventListener("click", function (e) {
+        e.preventDefault();
+        document.getElementById("id_sellBlock").style.display = "none";
+        document.getElementById("id_buyBlock").style.display = "block";
+    }, false);
 
     searchKeywordForm.addEventListener("submit", function (e) {
         e.preventDefault();
@@ -1150,7 +1163,7 @@
         keyAucList.show(keyword);
         offerList.reset();
         itemDetailsList.reset();
-        giveOfferForm.style.visibility = "hidden";
+        giveOfferForm.style.display = "none";
     }, false);
 
     giveOfferForm.addEventListener("submit", function (e) {

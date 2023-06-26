@@ -139,19 +139,24 @@ th, td {
     border-bottom: 3px solid #b4a078;
 }
 
-.navBar li .sell:hover ~ #id_sellBlock,
-.navBar li .buy:hover ~ #id_buyBlock {
+.navBar li .id_sell, .navBar li .id_buy {
+    cursor: pointer;
+}
+
+.navBar li .id_sell:hover ~ #id_sellBlock,
+.navBar li .id_buy:hover ~ #id_buyBlock {
     display: block;
 }
-/* ---------------- SELL BLOCK --------------- */
-/*#id_sellBlock {*/
-/*    display: none;*/
-/*}*/
 
-/*!* ---------------- BUY BLOCK --------------- *!*/
-/*#id_buyBlock {*/
-/*    display: none;*/
-/*}*/
+/* ---------------- SELL BLOCK --------------- */
+#id_sellBlock {
+    display: none;
+}
+
+/* ---------------- BUY BLOCK --------------- */
+#id_buyBlock {
+    display: none;
+}
 
 
 

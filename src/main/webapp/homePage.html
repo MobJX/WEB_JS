@@ -25,9 +25,9 @@
 <nav class="nav">
     <div class="center clearfix">
         <ul class="navBar">
-            <li class="sell"><a href="#">SELL</a></li>
+            <li id="id_sellButton"><a href="#">SELL</a></li>
             <li class="separate">|</li>
-            <li class="buy"><a href="#">BUY</a></li>
+            <li id="id_buyButton"><a href="#">BUY</a></li>
         </ul>
     </div>
 </nav>
@@ -209,150 +209,149 @@
             <br><br>
         </div>
     </div>
+</div>
+<div id="id_buyBlock">
+    <!-- WonAuction Detail COMPONENT -->
 
-    <div id="id_buyBlock">
-        <!-- WonAuction Detail COMPONENT -->
+    <div id="id_wonAuctionContainer">
+        <p><b>Won Auctions <span id="id_username_won"></span></b></p>
+        <table class="boxed">
+            <thead>
+            <tr>
+                <th>Auction ID</th>
+                <th>Items Name and Price</th>
+                <th>Starting Price</th>
+                <th>Final Price</th>
+                <th>End Time</th>
 
-        <div id="id_wonAuctionContainer">
-            <p><b>Won Auctions <span id="id_username_won"></span></b></p>
-            <table class="boxed">
-                <thead>
-                <tr>
-                    <th>Auction ID</th>
-                    <th>Items Name and Price</th>
-                    <th>Starting Price</th>
-                    <th>Final Price</th>
-                    <th>End Time</th>
+            </tr>
+            </thead>
+            <tbody id="id_wonAuctionContainerBody">
 
-                </tr>
-                </thead>
-                <tbody id="id_wonAuctionContainerBody">
-
-                </tbody>
-            </table>
-        </div>
-
-
-        <div id="id_stillOpenAuctionBlock">
-            <p><b>Do not miss these auctions!</b></p>
-            <table class="boxed">
-                <thead>
-                <tr>
-                    <th>Auction ID</th>
-                    <th>Items Name and Price</th>
-                    <th>Starting Price</th>
-                    <th>Minimum Raise</th>
-                    <th>End Time</th>
-                    <th>Time Remaining</th>
-                </tr>
-                </thead>
-                <tbody id="id_stillOpenAuctionBlockBody">
-
-                </tbody>
-            </table>
-        </div>
+            </tbody>
+        </table>
+    </div>
 
 
-        <p><b>Search Item</b></p>
-        <!-- KeyWordSearch COMPONENT -->
-        <div>
-            <form id="id_getKeyAuctionForm">
-                <p>
-                    Enter the keyword: <input type="text" id="id_keyword" name="keyword"
-                                              required> <input type="submit" id="id_keywordButton"
-                                                               name="searchButton" value="search">
-                </p>
-            </form>
+    <div id="id_stillOpenAuctionBlock">
+        <p><b>Do not miss these auctions!</b></p>
+        <table class="boxed">
+            <thead>
+            <tr>
+                <th>Auction ID</th>
+                <th>Items Name and Price</th>
+                <th>Starting Price</th>
+                <th>Minimum Raise</th>
+                <th>End Time</th>
+                <th>Time Remaining</th>
+            </tr>
+            </thead>
+            <tbody id="id_stillOpenAuctionBlockBody">
 
-            <p></p>
-
-            <table>
-                <tr>
-                    <td>
-                        <table id="id_keyAuclistContainer" class="boxed">
-                            <thead>
-                            <tr>
-                                <th>Auction ID</th>
-                                <th>Owner ID</th>
-                                <th>Starting Price</th>
-                                <th>Minimum Raise</th>
-                                <th>End Time</th>
-                                <th>Auction Status</th>
-
-                            </tr>
-                            </thead>
-                            <tbody id="id_keyAuclistContainerBody">
-                            </tbody>
-
-                        </table>
-                    </td>
-
-                </tr>
-
-            </table>
-        </div>
+            </tbody>
+        </table>
+    </div>
 
 
-        <!-- Items Detail COMPONENT -->
-        <div id="id_itemlistContainer">
-            <p><b>Item Details of Auction </b></p>
-            <table class="boxed">
-                <thead>
-                <tr>
-                    <th>Item ID</th>
-                    <th>Item Name</th>
-                    <th>Item Description</th>
-                    <th>Price</th>
-                    <th>Image</th>
+    <p><b>Search Item</b></p>
+    <!-- KeyWordSearch COMPONENT -->
+    <div>
+        <form id="id_getKeyAuctionForm">
+            <p>
+                Enter the keyword: <input type="text" id="id_keyword" name="keyword"
+                                          required> <input type="submit" id="id_keywordButton"
+                                                           name="searchButton" value="search">
+            </p>
+        </form>
 
-                </tr>
-                </thead>
-                <tbody id="id_itemlistContainerBody">
+        <p></p>
 
-                </tbody>
-            </table>
-        </div>
+        <table>
+            <tr>
+                <td>
+                    <table id="id_keyAuclistContainer" class="boxed">
+                        <thead>
+                        <tr>
+                            <th>Auction ID</th>
+                            <th>Owner ID</th>
+                            <th>Starting Price</th>
+                            <th>Minimum Raise</th>
+                            <th>End Time</th>
+                            <th>Auction Status</th>
 
-        <!-- Offer Detail COMPONENT -->
-        <div id="id_giveOfferForm" style="visibility: hidden">
-            <p><b>Make Offer</b></p>
-            <form>
-                <p>
-                    Enter the Offer: <input type="number" id="id_givenOfferButton"
-                                            name="givenOffer" required> <input type="submit"
-                                                                               id="id_offerButton" name="offerButton"
-                                                                               value="confirm">
-                </p>
-            </form>
-            <table>
-                <tr>
-                    <td>
-                        <table id="id_offerlistContainer" class="boxed">
-                            <thead>
-                            <tr>
-                                <th>Offer ID</th>
-                                <th>User ID</th>
-                                <th>Auction ID</th>
-                                <th>Offer Amount</th>
-                                <th>Offer Date</th>
+                        </tr>
+                        </thead>
+                        <tbody id="id_keyAuclistContainerBody">
+                        </tbody>
 
-                            </tr>
-                            </thead>
-                            <tbody id="id_offerlistContainerBody">
+                    </table>
+                </td>
 
-                            </tbody>
+            </tr>
 
-                        </table>
-                    </td>
+        </table>
+    </div>
 
-                </tr>
 
-            </table>
+    <!-- Items Detail COMPONENT -->
+    <div id="id_itemlistContainer">
+        <p><b>Item Details of Auction </b></p>
+        <table class="boxed">
+            <thead>
+            <tr>
+                <th>Item ID</th>
+                <th>Item Name</th>
+                <th>Item Description</th>
+                <th>Price</th>
+                <th>Image</th>
 
-        </div>
+            </tr>
+            </thead>
+            <tbody id="id_itemlistContainerBody">
 
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Offer Detail COMPONENT -->
+    <div id="id_giveOfferForm" style="visibility: hidden">
+        <p><b>Make Offer</b></p>
+        <form>
+            <p>
+                Enter the Offer: <input type="number" id="id_givenOfferButton"
+                                        name="givenOffer" required> <input type="submit"
+                                                                           id="id_offerButton" name="offerButton"
+                                                                           value="confirm">
+            </p>
+        </form>
+        <table>
+            <tr>
+                <td>
+                    <table id="id_offerlistContainer" class="boxed">
+                        <thead>
+                        <tr>
+                            <th>Offer ID</th>
+                            <th>User ID</th>
+                            <th>Auction ID</th>
+                            <th>Offer Amount</th>
+                            <th>Offer Date</th>
+
+                        </tr>
+                        </thead>
+                        <tbody id="id_offerlistContainerBody">
+
+                        </tbody>
+
+                    </table>
+                </td>
+
+            </tr>
+
+        </table>
 
     </div>
+
+
 </div>
 </body>
 </html>
