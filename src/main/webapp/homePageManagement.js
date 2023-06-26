@@ -6,7 +6,7 @@
     // SELL PAGE components
     let createNewItem, openAuctionList, closedAuctionList, ONautionDetails, ONitemDetails,
         ONofferDetails, OFFautionDetails, OFFitemDetails, OFFofferDetails, createNewAuction,
-        availableItemList, closeAuction;
+        availableItemList, closeAuction ;
 
     // BUY PAGE components
     let keyAucList, offerList, wonAuctionList, itemDetailsList, currentAuctionID, stillOpenAuctionList;
@@ -18,6 +18,7 @@
     let buyBlock = document.getElementById('id_buyBlock');
     let sellBlock = document.getElementById('id_sellBlock');
     let stillOpenAuctionBlock = document.getElementById('id_stillOpenAuctionBlock');
+
 
     // COOKIE components
     let user = sessionStorage.getItem('username');
@@ -41,51 +42,12 @@
 
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ COOKIES MANAGEMENT COMPONENT ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     //
-    // 设置 Cookie
-//     function setCookie(cookieName, cookieValue, daysToExpire) {
-//         const expirationDate = new Date();
-//         expirationDate.setDate(expirationDate.getDate() + daysToExpire);
-//         const expirationUTCString = expirationDate.toUTCString();
-//         document.cookie = `${cookieName}=${cookieValue}; expires=${expirationUTCString}; path=/`;
-//     }
-//
-// // 获取 Cookie 值
-//     function getCookie(cookieName) {
-//         const cookies = document.cookie.split(';');
-//         for (let i = 0; i < cookies.length; i++) {
-//             const cookie = cookies[i].trim();
-//             if (cookie.startsWith(cookieName + '=')) {
-//                 return cookie.substring(cookieName.length + 1);
-//             }
-//         }
-//         return null;
-//     }
-//
-//     /**
-//      * used for testing new user login
-//      * @param cookieName
-//      */
-//     function deleteCookie(cookieName) {
-//         document.cookie = cookieName + "=; expires=Thu, 01 Jan 2000 00:00:00 UTC; path=/;";
-//     }
-//
-//     //Set the last action of User
-//     function setLastAction(action,user) {
-//         const cookieName = 'action'+user;
-//         setCookie(cookieName, action, 30); // 设置名为 'lastAction' 的 Cookie，有效期为 30 天
-//     }
-//     function getLastAction(user) {
-//         const cookieName = 'action'+user;
-//         return getCookie(cookieName);
-//     }
-
     function setCookie(cookieName, cookieValue, daysToExpire) {
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + daysToExpire);
         const expirationUTCString = expirationDate.toUTCString();
         document.cookie = `${cookieName}=${cookieValue}; expires=${expirationUTCString}; path=/`;
     }
-
     function getCookie(cookieName) {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
@@ -95,10 +57,6 @@
             }
         }
         return null;
-    }
-
-    function deleteCookie(cookieName) {
-        document.cookie = cookieName + "=; expires=Thu, 01 Jan 2000 00:00:00 UTC; path=/;";
     }
 
     function setLastAction(action) {
@@ -111,63 +69,70 @@
         return getCookie(lastActionCookieName);
     }
 
-
-    //check which page Component to show
-    // function determinePageToShow() {
-    //     const lastAction = getLastAction()
-    //    // const auctionList =  getClickedAuctionsFromCookies(); //TODO
-    //
-    //     if (!lastAction) {
-    //         // 如果用户第一次访问应用，显示“购买”页面内容
-    //         //if user is a new user show the BUY component
-    //         setCookie('lastAction', 'acquisto', 30); //TODO 还需要处理lastAction 添加到cookie里并测试
-    //         return 'ACQUISTO';
-    //     } else {
-    //         if (lastAction === 'creazioneAsta') {
-    //             // 如果用户最后一次操作是创建拍卖，显示“出售”页面内容
-    //             //if user last action was create auction show the SELL component
-    //             return 'VENDO';
-    //         } else {
-    //             // 否则，显示“购买”页面内容并列出之前访问过的拍卖（如果有）
-    //             //otherwise show the BUY component only showing all those auctions that user clicked and still with status open
-    //             const auctionListArray = auctionList ? auctionList.split(',') : [];
-    //             return 'ACQUISTO';
-    //         }
-    //     }
-    // }
-
-    //TODO 这部分还有争议 需要讨论处理
-    //TODO 到底是传ArrayID通过JSON到servlet 还是 传全部的COOKIES 到 servlet 然后在servlet里面处理
-    // 添加拍卖标识符到拍卖列表
-    // Add auction id  to auction list BY CLICKING DETAILS
-    function addToClickedAuctions(auctionID) {
-        // 获取之前保存的点击过的 auction ID 数组（如果存在）
-        const clickedAuctions = getCookie('clickedAuctions');
-        let clickedAuctionsArray = [];
-
+    function recordClickedAuction(auctionId) {
+        const clickedAuctions = getCookie('clickedAuctions_'+user);
         if (clickedAuctions) {
-            clickedAuctionsArray = JSON.parse(clickedAuctions);
-        }
-
-        // 将当前的 auction ID 添加到数组中
-        clickedAuctionsArray.push(auctionID);
-
-        // 将更新后的数组保存回 cookies
-        setCookie('clickedAuctions', JSON.stringify(clickedAuctionsArray), 30);
-    }
-
-    function getClickedAuctionsFromCookies() {
-        // 从 cookies 中获取保存的点击过的 auction ID
-        const clickedAuctions = getCookie('clickedAuctions');
-
-        if (clickedAuctions) {
-            const clickedAuctionsArray = JSON.parse(clickedAuctions);
-
-
-            // 在这里可以根据需要使用 clickedAuctionsArray 来进行后续处理
-            console.log(clickedAuctionsArray); //Only for Testing //TODO remove this line
+            // 如果已存在 clickedAuctions cookie，则将新的 Auction ID 添加到其中
+            const updatedAuctions = clickedAuctions + ',' + auctionId;
+            setCookie('clickedAuctions_'+user, updatedAuctions, 30);
+        } else {
+            // 如果 clickedAuctions cookie 不存在，则创建新的 cookie
+            setCookie('clickedAuctions_'+user, auctionId, 30);
         }
     }
+
+// 检查某个 Auction ID 是否已被点击
+    /**
+     * Used for checking if this aucID is already clicked
+     * only save the clicked auction ID in the cookie with this method could avoid the duplication of the clicked auction ID
+     * @param auctionId
+     * @returns {boolean}
+     */
+    function isAuctionClicked(auctionId) {
+        const clickedAuctions = getCookie('clickedAuctions_'+user);
+        if (clickedAuctions) {
+            const auctionsArray = clickedAuctions.split(',');
+            return auctionsArray.includes(auctionId.toString());
+        }
+        return false;
+    }
+
+    /**
+     * Used for sending the clicked auction ID to the servlet
+     * the servlet will return the still open auction list
+     * will automatically update the still open auction list
+     * @returns {boolean}
+     */
+    function sendClickedAuctionsToServlet() {
+        const clickedAuctions = getCookie('clickedAuctions_' + user);
+        if (clickedAuctions) {
+            const idArray = clickedAuctions.split(',');
+
+            var jsonString = JSON.stringify(idArray);
+
+
+            var req = new XMLHttpRequest();
+            req.onreadystatechange = function() {
+                if (req.readyState === XMLHttpRequest.DONE) {
+                    const message = req.responseText;
+                    if (req.status === 200) {
+                        console.log(message); //TODO remove this line
+                        stillOpenAuctionList.update(JSON.parse(message));
+                    } else {
+                        alert('Something went wrong with the clicked auctions');
+                    }
+                }
+            };
+
+            req.open('POST', 'GetStillOpenAucData');
+            req.setRequestHeader('Content-Type', 'application/json');
+            req.send(jsonString);
+        }
+        return false; //if there are no clicked auctions, return false
+    }
+
+
+
 
 
     //    ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ SELL PAGE ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
@@ -829,7 +794,11 @@
                     currentAuctionID = e.target.getAttribute("keyAucID");
 
                     //adding Auction ID into Cookies
-                    addToClickedAuctions(currentAuctionID);
+                    isAuctionClicked(currentAuctionID);
+                    if(!isAuctionClicked(currentAuctionID)){
+                        recordClickedAuction(currentAuctionID);
+                    }
+
 
                     alertContainer.textContent = "";
                     let auctionID = e.target.getAttribute("keyAucID");
@@ -1076,7 +1045,7 @@
         }
     }
 
-    //TODO：这部分还没测试 是需要检查的 主要部分就是还差一个servlet 要写
+
     //StillOpenAuctionList VIEW COMPONENT
     function StillOpenAuctionList(container, listcontainer) {
         let self = this;
@@ -1085,67 +1054,18 @@
         this.reset = function () {
             this.listcontainer.style.visibility = "hidden";
         }
+
         this.show = function () {
             let self = this;
-            let urlToCall = "GetStillOpenAuctionData";
-            makeCall("GET", urlToCall, null, function (req) {
-                if (req.readyState === 4) {
-                    if (req.status === 200) {
-                        let stillOpenAucToShow = JSON.parse(req.responseText);
-                        if (stillOpenAucToShow.length === 0) {
-                            alertContainer.textContent = "No still open auction yet!";
-                            return;
-                        }
-                        self.listcontainer.style.visibility = "visible";
-                        self.update(stillOpenAucToShow);
-                    } else {
-                        alertContainer.textContent = req.responseText;
-                    }
-                }
-            })
+           //sendClickedAuctionsToServlet();
         }
 
-
-        // this.update = function (stillOpenAucToShow) {
-        //     let row;
-        //     let auctionIdCell;
-        //     let ownerCell;
-        //     let priceCell;
-        //     let minUpCell;
-        //     let endDateCell;
-        //     let statusCell;
-        //     let linkCell;
-        //     let linktext;
-        //     let anchor;
-        //     this.listcontainerbody.innerHTML = "";
-        //     stillOpenAucToShow.forEach(function (auction) {
-        //         row = self.listcontainerbody.insertRow();
-        //         auctionIdCell = row.insertCell();
-        //         ownerCell = row.insertCell();
-        //         priceCell = row.insertCell();
-        //         minUpCell = row.insertCell();
-        //         endDateCell = row.insertCell();
-        //         statusCell = row.insertCell();
-        //         linkCell = row.insertCell();
-        //         auctionIdCell.textContent = auction.aucID;
-        //         ownerCell.textContent = auction.owner;
-        //         priceCell.textContent = auction.aucPrice + "€";
-        //         minUpCell.textContent = auction.minUp + "€";
-        //         endDateCell.textContent = auction.expiryDateTime;
-        //         statusCell.textContent = auction.status;
-        //         linktext = document.createTextNode("Details");
-        //         anchor = document.createElement("a");
-        //         anchor.href = "AuctionDetails?aucID=" + auction.aucID;
-        //         anchor.appendChild(linktext);
-        //         linkCell.appendChild(anchor);
-        //
-        //     });
-        // }
         this.update = function (stillOpenAucToShow) {
             let row, auctionIdCell, ownerCell, priceCell, minUpCell, endDateCell, statusCell,
                 linkCell, linktext, anchor;
 
             this.listcontainerbody.innerHTML = "";
+            this.listcontainer.visibility = "visible";
 
             //build updated list of auctions
             let self = this;
@@ -1169,6 +1089,9 @@
                 statusCell = document.createElement("td");
                 statusCell.textContent = auction.isClosed;
                 row.appendChild(statusCell);
+                endDateCell = document.createElement("td");
+                endDateCell.textContent = auction.expiryDateTime;
+                row.appendChild(endDateCell);
 
                 linkCell = document.createElement("td");
                 anchor = document.createElement("a");
@@ -1180,8 +1103,11 @@
                     e.preventDefault();
                     currentAuctionID = e.target.getAttribute("stillOpenAucID");
 
-                    //adding Auction ID into Cookies
-                    addToClickedAuctions(currentAuctionID);
+                    //adding Auction ID into Cookies //
+                    if(!isAuctionClicked(currentAuctionID)){
+                        recordClickedAuction(currentAuctionID);
+                    }
+                    //sendClickedAuctionsToServlet();
 
                     alertContainer.textContent = "";
                     let auctionID = e.target.getAttribute("stillOpenAucID");
@@ -1217,6 +1143,7 @@
         }
     }
 
+    
     //    ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ Event Listener ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
 
@@ -1408,6 +1335,10 @@
                 document.getElementById("id_itemlistContainer"),
                 document.getElementById("id_itemlistContainerBody")
             )
+            stillOpenAuctionList = new StillOpenAuctionList(
+                document.getElementById("id_stillOpenAuctionBlock"),
+                document.getElementById("id_stillOpenAuctionBlockBody")
+            );
 
         };
 

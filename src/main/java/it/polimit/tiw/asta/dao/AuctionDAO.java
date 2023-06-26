@@ -66,6 +66,33 @@ public class AuctionDAO {
 		}
 		return auc;
 	}
+	
+	public Auction findAuctionStillOpen( int id) throws SQLException{
+		
+		Auction auc = null;
+		String query ="SELECT * from Auction where aucID=? and isClosed = ? ";
+		try(PreparedStatement pstatement = con.prepareStatement(query);){
+			pstatement.setInt(1,id);
+			pstatement.setBoolean(2, false);
+			try(ResultSet result = pstatement.executeQuery();){
+				if(result.next()) {
+					auc = new Auction();
+					auc.setAucID(result.getInt("aucID"));
+					auc.setOwnerID(result.getInt("ownerID"));
+					auc.setAucPrice(result.getFloat("aucPrice"));
+					auc.setClosed(result.getBoolean("isClosed"));
+					auc.setMinUP(result.getFloat("minUP"));
+					auc.setExpiryDateTime(result.getTimestamp("expiryDateTime"));
+					
+				}
+			}
+		}
+		return auc;
+	}
+	
+	
+	
+	
 
 	
 	public int createAuction(Auction auction) throws SQLException {
