@@ -1199,6 +1199,18 @@
     }, false);
 
 
+    function determinePageToShow() {
+        let action = getCookie("lastAction_"+user);
+        if(action === 'createauction'){
+            return 'CREATEAUCTION';
+        }
+        else{
+            return 'NOTCREATEAUCTION';
+        }
+
+
+    }
+
     function PageOrchestrator() {
         let alertContainer = document.getElementById("id_alert");
 
@@ -1212,38 +1224,33 @@
             console.log("User is : " + user); //Only for Testing //TODO remove this line
             console.log(getLastAction(user)); //TODO remove this line
 
-            // if (isNewUser === 'true') {
-            //     // User is a new user show the BUY  component
-            //     console.log("User is a new user"); //Only for Testing //TODO remove this line
-            //     buyBlock.style.visibility = 'visible';
-            //     sellBlock.style.visibility = 'hidden'; //TODO 要不要加个按钮 让用户显示SELL的Component
-            //
-            // } else {
-            //
-            //     // 使用 determinePageToShow() 函数确定要显示的页面
-            //     const pageToShow = determinePageToShow();
-            //
-            //     // 根据 pageToShow 的值显示相应内容
-            //     if (pageToShow === 'ACQUISTO') {
-            //         // User is not a new user  show the Buy component only showing all those auctions that user clicked and still with status open
-            //         //initialize the still open auction list
-            //         stillOpenAuctionList = new StillOpenAuctionList(
-            //             document.getElementById("id_stillOpenAuctionContainer"),
-            //             document.getElementById("id_stillOpenAuctionContainerBody")
-            //         ) ;
-            //
-            //         getClickedAuctionsFromCookies() //还需要处理 show still open auction
-            //         buyBlock.style.visibility = 'visible';
-            //
-            //     } else if (pageToShow === 'VENDO') {
-            //         // otherwise show the SELL  component if last action was create auction
-            //         sellBlock.style.visibility = 'visible';
-            //
-            //     }
-            //
-            //     console.log("User is an existing user"); //Only for Testing //TODO remove this line
-            //
-            // }
+            if (isNewUser === 'true') {
+                // User is a new user show the BUY  component
+                console.log("User is a new user"); //Only for Testing //TODO remove this line
+                buyBlock.style.visibility = 'visible';
+                sellBlock.style.visibility = 'hidden'; //TODO 要不要加个按钮 让用户显示SELL的Component
+            } else {
+
+                const pageToShow = determinePageToShow();
+                // 根据 pageToShow 的值显示相应内容
+                if (pageToShow === 'NOTCREATEAUCTION') {
+                    // User is not a new user  show the Buy component only showing all those auctions that user clicked and still with status open
+                    //initialize the still open auction list
+                    stillOpenAuctionList = new StillOpenAuctionList(
+                        document.getElementById("id_stillOpenAuctionContainer"),
+                        document.getElementById("id_stillOpenAuctionContainerBody")
+                    ) ;
+                    sendClickedAuctionsToServlet();
+                    buyBlock.style.visibility = 'visible';
+
+                } else if (pageToShow === 'CREATEAUCTION') {
+                    // otherwise show the SELL  component if last action was create auction
+                    sellBlock.style.visibility = 'visible';
+
+                }
+
+
+            }
 
             // -------------------------SELL PAGE ELEMENTS-------------------------
             openAuctionList = new OpenAuctionList(
