@@ -55,10 +55,13 @@
                     //initialize the still open auction list
 
                     sendClickedAuctionsToServlet();
+                    sellBlock.style.display = 'none';
                     buyBlock.style.display = 'block';
+
 
                 } else if (pageToShow === 'CREATEAUCTION') {
                     // otherwise show the SELL  component if last action was create auction
+                    buyBlock.style.display = 'none';
                     sellBlock.style.display = 'block';
 
                 }
@@ -215,7 +218,17 @@
         this.alert = _alert;
         this.createNewAuction = _id_createNewAuction;
         this.createAuctionButton = document.getElementById("id_newAuctionButton");
-        this.createNewAuction.querySelector('input[type="datetime-local"]').setAttribute("min", formattedDate);
+        this.dateInput = document.getElementById("id_expiryDateTime");
+
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = ("0" + (now.getMonth() + 1)).slice(-2); // 月份从 0 开始，需要加 1
+        var day = ("0" + now.getDate()).slice(-2);
+        var hour = ("0" + now.getHours()).slice(-2);
+        var minute = ("0" + now.getMinutes()).slice(-2);
+        
+        this.dateInput.setAttribute("min", year + "-" + month + "-" + day + "T" + hour + ":" + minute);
+        //this.dateInput.setAttribute("min", formattedDate);
 
         this.registerEvents = function (orchestrator) {
             Array.from(this.createNewAuction.querySelectorAll("input[type='button'].next, input[type='button'].prev")).forEach(b => {
@@ -1234,7 +1247,7 @@
 
 
     function determinePageToShow() {
-        let action = getCookie("lastAction_" + user);
+        let action = getCookie("LastAction_" + user);
         if (action === 'createauction') {
             return 'CREATEAUCTION';
         } else {
