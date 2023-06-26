@@ -5,6 +5,9 @@
     let itemDetailsList = null;
     let currentAuctionID = null;
     let stillOpenAuctionList = null;
+   let user =  sessionStorage.getItem('username');
+    user = user.replace(/\r?\n|\r/g, '');
+
 
     let searchKeywordForm = document.getElementById('id_getKeyAuctionForm');
     let keywordInput = document.getElementById('id_keyword');
@@ -33,6 +36,8 @@
             document.getElementById("id_itemlistContainer"),
             document.getElementById("id_itemlistContainerBody")
         )
+        console.log("User is : " + user); //Only for Testing //TODO remove this line
+        console.log(getLastAction(user)); //TODO remove this line
 
         // if (isNewUser === 'true') {
         //     // User is a new user show the BUY  component
@@ -78,6 +83,43 @@
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ COOKIES MANAGEMENT COMPONENT ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     //
     // 设置 Cookie
+//     function setCookie(cookieName, cookieValue, daysToExpire) {
+//         const expirationDate = new Date();
+//         expirationDate.setDate(expirationDate.getDate() + daysToExpire);
+//         const expirationUTCString = expirationDate.toUTCString();
+//         document.cookie = `${cookieName}=${cookieValue}; expires=${expirationUTCString}; path=/`;
+//     }
+//
+// // 获取 Cookie 值
+//     function getCookie(cookieName) {
+//         const cookies = document.cookie.split(';');
+//         for (let i = 0; i < cookies.length; i++) {
+//             const cookie = cookies[i].trim();
+//             if (cookie.startsWith(cookieName + '=')) {
+//                 return cookie.substring(cookieName.length + 1);
+//             }
+//         }
+//         return null;
+//     }
+//
+//     /**
+//      * used for testing new user login
+//      * @param cookieName
+//      */
+//     function deleteCookie(cookieName) {
+//         document.cookie = cookieName + "=; expires=Thu, 01 Jan 2000 00:00:00 UTC; path=/;";
+//     }
+//
+//     //Set the last action of User
+//     function setLastAction(action,user) {
+//         const cookieName = 'action'+user;
+//         setCookie(cookieName, action, 30); // 设置名为 'lastAction' 的 Cookie，有效期为 30 天
+//     }
+//     function getLastAction(user) {
+//         const cookieName = 'action'+user;
+//         return getCookie(cookieName);
+//     }
+
     function setCookie(cookieName, cookieValue, daysToExpire) {
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + daysToExpire);
@@ -85,7 +127,6 @@
         document.cookie = `${cookieName}=${cookieValue}; expires=${expirationUTCString}; path=/`;
     }
 
-// 获取 Cookie 值
     function getCookie(cookieName) {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
@@ -97,37 +138,48 @@
         return null;
     }
 
-    /**
-     * used for testing new user login
-     * @param cookieName
-     */
     function deleteCookie(cookieName) {
         document.cookie = cookieName + "=; expires=Thu, 01 Jan 2000 00:00:00 UTC; path=/;";
     }
 
-    //check which page Component to show
-    function determinePageToShow() {
-        const lastAction = getCookie('lastAction');
-        const auctionList = getCookie('auctionList');
-
-        if (!lastAction) {
-            // 如果用户第一次访问应用，显示“购买”页面内容
-            //if user is a new user show the BUY component
-            setCookie('lastAction', 'acquisto', 30); //TODO 还需要处理lastAction 添加到cookie里并测试
-            return 'ACQUISTO';
-        } else {
-            if (lastAction === 'creazioneAsta') {
-                // 如果用户最后一次操作是创建拍卖，显示“出售”页面内容
-                //if user last action was create auction show the SELL component
-                return 'VENDO';
-            } else {
-                // 否则，显示“购买”页面内容并列出之前访问过的拍卖（如果有）
-                //otherwise show the BUY component only showing all those auctions that user clicked and still with status open
-                const auctionListArray = auctionList ? auctionList.split(',') : [];
-                return 'ACQUISTO';
-            }
-        }
+    function setLastAction(action) {
+        const lastActionCookieName = 'LastAction_' + user;
+        setCookie(lastActionCookieName, action, 30);
     }
+
+    function getLastAction() {
+        const lastActionCookieName = 'LastAction_' + user;
+        return getCookie(lastActionCookieName);
+    }
+
+
+
+
+
+
+    //check which page Component to show
+    // function determinePageToShow() {
+    //     const lastAction = getLastAction()
+    //    // const auctionList =  getClickedAuctionsFromCookies(); //TODO
+    //
+    //     if (!lastAction) {
+    //         // 如果用户第一次访问应用，显示“购买”页面内容
+    //         //if user is a new user show the BUY component
+    //         setCookie('lastAction', 'acquisto', 30); //TODO 还需要处理lastAction 添加到cookie里并测试
+    //         return 'ACQUISTO';
+    //     } else {
+    //         if (lastAction === 'creazioneAsta') {
+    //             // 如果用户最后一次操作是创建拍卖，显示“出售”页面内容
+    //             //if user last action was create auction show the SELL component
+    //             return 'VENDO';
+    //         } else {
+    //             // 否则，显示“购买”页面内容并列出之前访问过的拍卖（如果有）
+    //             //otherwise show the BUY component only showing all those auctions that user clicked and still with status open
+    //             const auctionListArray = auctionList ? auctionList.split(',') : [];
+    //             return 'ACQUISTO';
+    //         }
+    //     }
+    // }
 
     //TODO 这部分还有争议 需要讨论处理
     //TODO 到底是传ArrayID通过JSON到servlet 还是 传全部的COOKIES 到 servlet 然后在servlet里面处理
@@ -174,6 +226,7 @@
             alert("Insert a keyword!");
             return;
         }
+        setLastAction('searchKeyword');
         keyAucList.show(keyword);
         offerList.reset();
         itemDetailsList.reset();
@@ -186,9 +239,10 @@
         console.log(currentAuctionID);
         if (form.checkValidity()) {
             let input = form.querySelector("input[type='number']").value;
-
             let url = "CreateOffer?auctionID=" + currentAuctionID + "&offer=" + input;
             let tempAucID = currentAuctionID;
+            //set cookies of LastAction
+            setLastAction('giveOffer');
 
             makeCall("GET", url, null, function (req) {
                 if (req.readyState === 4) {
