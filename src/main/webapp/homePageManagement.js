@@ -806,6 +806,7 @@
                 anchor.setAttribute("keyAucID", auction.aucID);
                 anchor.addEventListener("click", function (e) {
                     e.preventDefault();
+                    giveOfferForm.style.display = "block";
                     currentAuctionID = e.target.getAttribute("keyAucID");
 
                     //adding Auction ID into Cookies
@@ -820,7 +821,7 @@
                     let urlToCall = "GetOfferData?aucID=" + auctionID;
 
                     //after clicking on the details shows the details of items and wonAuction of user
-                    giveOfferForm.style.display = "block";
+
                     wonAuctionList.show();
                     itemDetailsList.show(auctionID);
                     offerList.show(auctionID);
@@ -1142,12 +1143,14 @@
     //    ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ Event Listener ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     sellButton.addEventListener("click", function (e) {
         e.preventDefault();
+        pageOrchestrator.refresh();
         document.getElementById("id_buyBlock").style.display = "none";
         document.getElementById("id_sellBlock").style.display = "block";
     }, false);
 
     buyButton.addEventListener("click", function (e) {
         e.preventDefault();
+        pageOrchestrator.refresh();
         document.getElementById("id_sellBlock").style.display = "none";
         document.getElementById("id_buyBlock").style.display = "block";
     }, false);
@@ -1227,8 +1230,8 @@
             if (isNewUser === 'true') {
                 // User is a new user show the BUY  component
                 console.log("User is a new user"); //Only for Testing //TODO remove this line
-                buyBlock.style.visibility = 'visible';
-                sellBlock.style.visibility = 'hidden'; //TODO 要不要加个按钮 让用户显示SELL的Component
+                buyBlock.style.display = 'block';
+                sellBlock.style.display = 'none'; //TODO 要不要加个按钮 让用户显示SELL的Component
             } else {
 
                 const pageToShow = determinePageToShow();
@@ -1241,11 +1244,11 @@
                         document.getElementById("id_stillOpenAuctionContainerBody")
                     ) ;
                     sendClickedAuctionsToServlet();
-                    buyBlock.style.visibility = 'visible';
+                    buyBlock.style.display = 'block';
 
                 } else if (pageToShow === 'CREATEAUCTION') {
                     // otherwise show the SELL  component if last action was create auction
-                    sellBlock.style.visibility = 'visible';
+                    sellBlock.style.display = 'block';
 
                 }
 

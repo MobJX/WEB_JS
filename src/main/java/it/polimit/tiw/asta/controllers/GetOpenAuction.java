@@ -46,6 +46,7 @@ public class GetOpenAuction extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
+		System.out.println("My open auction: " + user.getUsername()); 
 
 		ItemDAO itemDAO = new ItemDAO(connection);
 		AuctionDAO auctionDAO = new AuctionDAO(connection);
