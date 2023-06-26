@@ -46,6 +46,10 @@
                 console.log("User is a new user"); //Only for Testing //TODO remove this line
                 buyBlock.style.display = 'block';
                 sellBlock.style.display = 'none'; //TODO 要不要加个按钮 让用户显示SELL的Component
+                sellButton.style.borderBottom ="3px solid #b4a078";
+                sellButton.style.color = "#b4a078";
+                buyButton.style.borderBottom ="none";
+                buyButton.style.color = "#333333";
             } else {
 
                 const pageToShow = determinePageToShow();
@@ -57,8 +61,10 @@
                     sendClickedAuctionsToServlet();
                     sellBlock.style.display = 'none';
                     buyBlock.style.display = 'block';
-
-
+                    buyButton.style.borderBottom ="3px solid #b4a078";
+                    buyButton.style.color = "#b4a078";
+                    sellButton.style.borderBottom ="none";
+                    sellButton.style.color = "#333333";
                 } else if (pageToShow === 'CREATEAUCTION') {
                     // otherwise show the SELL  component if last action was create auction
                     buyBlock.style.display = 'none';
@@ -173,9 +179,8 @@
 
 
     //    ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ SELL PAGE ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-    function CreateNewItem(_alert, _id_createNewItem) {
+    function CreateNewItem(_alert) {
         this.alert = _alert;
-        this.createNewItem = _id_createNewItem;
         this.createItemButton = document.getElementById("id_newItemButton");
 
         this.registerEvents = function (orchestrator) {
@@ -199,7 +204,6 @@
                                     window.sessionStorage.removeItem('username');
                                 } else {
                                     self.alert.textContent = message;
-                                    //self.reset();
                                 }
                             }
                         });
@@ -208,13 +212,10 @@
                 }
             });
         };
-
-
     }
 
 
     function CreateNewAuction(_alert, _id_createNewAuction) {
-        var now = new Date(), formattedDate = now.toISOString().substring(0, 10);
         this.alert = _alert;
         this.createNewAuction = _id_createNewAuction;
         this.createAuctionButton = document.getElementById("id_newAuctionButton");
@@ -226,7 +227,7 @@
         var day = ("0" + now.getDate()).slice(-2);
         var hour = ("0" + now.getHours()).slice(-2);
         var minute = ("0" + now.getMinutes()).slice(-2);
-        
+
         this.dateInput.setAttribute("min", year + "-" + month + "-" + day + "T" + hour + ":" + minute);
         //this.dateInput.setAttribute("min", formattedDate);
 
@@ -466,10 +467,11 @@
         this.alert = _alert;
         this.closedAuction = _id_closedAuction;
         this.closedAuctionBody = _id_closedAuctionBody;
-        this.closedDetails = document.getElementById("id_closedDetails");
 
         this.reset = function () {
-            this.closedDetails.style.display = "none";
+            OFFautionDetails.reset();
+            OFFitemDetails.reset();
+            OFFofferDetails.reset();
             document.getElementById("id_OFFtextListItem").style.display = "none";
             document.getElementById("id_OFFtextListOffer").style.display = "none";
         }
@@ -1190,6 +1192,10 @@
         pageOrchestrator.refresh();
         document.getElementById("id_buyBlock").style.display = "none";
         document.getElementById("id_sellBlock").style.display = "block";
+        sellButton.style.borderBottom ="3px solid #b4a078";
+        sellButton.style.color = "#b4a078";
+        buyButton.style.borderBottom ="none";
+        buyButton.style.color = "#333333";
     }, false);
 
     buyButton.addEventListener("click", function (e) {
@@ -1197,6 +1203,10 @@
         pageOrchestrator.refresh();
         document.getElementById("id_sellBlock").style.display = "none";
         document.getElementById("id_buyBlock").style.display = "block";
+        buyButton.style.borderBottom ="3px solid #b4a078";
+        buyButton.style.color = "#b4a078";
+        sellButton.style.borderBottom ="none";
+        sellButton.style.color = "#333333";
     }, false);
 
     searchKeywordForm.addEventListener("submit", function (e) {
@@ -1331,8 +1341,7 @@
             );
 
             createNewItem = new CreateNewItem(
-                alertContainer,
-                document.getElementById("id_createItemForm")
+                alertContainer
             );
             createNewItem.registerEvents(this);
 

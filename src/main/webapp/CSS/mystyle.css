@@ -6,6 +6,7 @@ body {
     font-size: 16px;
     color: #333333;
     font-family: "Times New Roman";
+    background: #e9dec987;
 }
 
 ul, ol, li {
@@ -33,7 +34,7 @@ h1 {
     position: relative;
     left: 50%;
     margin: 50px 0 20px -250px;
-    font-size: 30px;
+    font-size: 35px;
     font-weight: normal;
     vertical-align: middle;
 }
@@ -106,16 +107,18 @@ th, td {
 /* ---------------- NAV --------------- */
 .nav {
     position: relative;
-    background: #fff;
+    background: #e9dec900;
+    box-shadow: 0px 6px 6px #978f7b;
 }
 
 .nav .center {
     position: relative;
 }
 
-.navBar, .nav .subNav {
+.navBar {
     text-align: center;
     font-size: 0;
+    padding-bottom: 20px;
 }
 
 .navBar li, .nav .subNav li {
@@ -148,19 +151,150 @@ th, td {
     display: block;
 }
 
-/* ---------------- SELL BLOCK --------------- */
+/* ---------------- SELL BLOCK AND BUY BLOCK --------------- */
 #id_sellBlock {
     display: none;
 }
 
-/* ---------------- BUY BLOCK --------------- */
 #id_buyBlock {
     display: none;
 }
 
 
+#id_sellBlock b{
+    font-size: 18px;
+    color: #b4a078;
+}
+
+#id_sellBlock,
+#id_buyBlock {
+    padding: 20px;
+    background-color: #faf7f2;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#id_sellBlock h1,
+#id_buyBlock h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+#id_sellBlock fieldset,
+#id_buyBlock fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+#id_sellBlock input[type="submit"],
+#id_buyBlock input[type="submit"],
+#id_sellBlock input[type="button"],
+#id_buyBlock input[type="button"] {
+    background-color: #b4a078;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#id_sellBlock input[type="submit"]:hover,
+#id_buyBlock input[type="submit"]:hover,
+#id_sellBlock input[type="button"]:hover,
+#id_buyBlock input[type="button"]:hover {
+    background-color: #c4b79e;
+}
+
+#id_sellBlock table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
 
 
+#id_sellBlock tbody tr:nth-child(even),
+#id_bullBlock tbody tr:nth-child(even){
+    background-color: #f8f8f8;
+}
+
+
+#id_sellBlock .success-message {
+    color: #4caf50;
+    margin-top: 10px;
+}
+
+#id_sellBlock .error-message {
+    color: #f44336;
+    margin-top: 10px;
+}
+
+#id_sellBlock .info-message {
+    color: #2196f3;
+    margin-top: 10px;
+}
+
+
+#id_sellBlock p,#id_buyBlock p  {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#id_sellBlock form {
+    margin-bottom: 20px;
+}
+
+
+#id_buyBlock table.boxed,
+#id_sellBlock table.boxed{
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    width: 1500px;
+}
+
+#id_buyBlock table.boxed th,
+#id_buyBlock table.boxed td,
+#id_sellBlock table.boxed th,
+#id_sellBlock table.boxed td{
+    border: 1px solid #ccc;
+    padding: 7px;
+    text-align: left;
+    width: 1500px;
+    margin-bottom: 20px;
+}
+
+
+#id_buyBlock table.boxed th,
+#id_sellBlock table.boxed th {
+    background-color: #333333c7;
+    color:#eceae5;
+}
+
+#id_buyBlock #id_offerlistContainer {
+    margin-top: 20px;
+}
+
+#id_buyBlock #id_offerlistContainer th,
+#id_buyBlock #id_offerlistContainer td {
+    border: 1px solid #ccc;
+    padding: 7px;
+    text-align: left;
+}
+
+#id_buyBlock #id_giveOfferForm {
+    margin-top: 20px;
+}
+
+#id_buyBlock #id_giveOfferForm p {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#id_buyBlock #id_giveOfferForm form {
+    margin-bottom: 20px;
+}
 
 
 
@@ -247,5 +381,3 @@ th, td {
     color: red;
     text-align: center;
 }
-
-
