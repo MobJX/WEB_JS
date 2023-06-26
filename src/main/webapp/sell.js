@@ -182,8 +182,9 @@
                     itemsCell.itemName = document.createElement("td");
                     itemsCell.itemName.textContent = item.itemName;
                     rowItem.appendChild(itemsCell.itemName);
+                    itemsCell.appendChild(rowItem);
                 });
-                row.appendChild(rowItem);
+                row.appendChild(itemsCell);
                 maxOfferCell = document.createElement("td");
                 maxOfferCell.textContent = auction.maxOffer + " €";
                 row.appendChild(maxOfferCell);
