@@ -7,6 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,12 +78,17 @@ public class GetStillOpenAucData extends HttpServlet {
 		AuctionDAO auctionDAO = new AuctionDAO(connection);
 		List<Auction> aucOpenList = new ArrayList<Auction>();
 		Auction auc = null;
-		
+		Duration remaingTimes = null;
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime expiry;
 		
 		for (int id : intArray) {
 			try {
 				auc = auctionDAO.findAuctionStillOpen(id);
 				if(auc!=null) {
+					expiry = auc.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+					remaingTimes = Duration.between(now, expiry);
+					auc.setRemaingTimes(remaingTimes);
 					aucOpenList.add(auc);
 				}
 			} catch (SQLException e) {
