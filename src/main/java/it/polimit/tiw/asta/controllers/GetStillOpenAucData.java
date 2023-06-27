@@ -10,6 +10,9 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -90,6 +93,8 @@ public class GetStillOpenAucData extends HttpServlet {
 					remaingTimes = Duration.between(now, expiry);
 					auc.setRemaingTimes(remaingTimes);
 					aucOpenList.add(auc);
+					//TODO Sort base on Remainning Time
+					
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -97,6 +102,24 @@ public class GetStillOpenAucData extends HttpServlet {
 			}
 			
 		}
+			    // 按照结束日期（EndDate）对aucOpenList进行排序
+				//sort the list base on End Time which further date auction will be positioned on the top of list
+				Collections.sort(aucOpenList, new Comparator<Auction>() {
+				    @Override
+				    public int compare(Auction auc1, Auction auc2) {
+				        LocalDateTime expiry1 = auc1.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				        LocalDateTime expiry2 = auc2.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				        
+				        // 按照结束日期从大到小排序，将最远的日期放在头部
+				        return expiry2.compareTo(expiry1);
+				    }
+				});
+				
+//Only for Testing				
+//		for(Auction a : aucOpenList) {
+//			System.out.println("this is auctionID:"+a.getAucID()+"with End Date:"+a.getExpiryDateTime());
+//		}
+		
 		if(aucOpenList.size()==0) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			response.getWriter().println("All those auctions are closed!");

@@ -7,6 +7,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -83,7 +85,22 @@ public class GetOpenAuction extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.getWriter().println("Not possible to recover item");
 			return;
+		
 		}
+		
+		 // 按照结束日期（EndDate）对aucOpenList进行排序
+		//sort the list base on End Time which further date auction will be positioned on the top of list
+		Collections.sort(aucON, new Comparator<Auction>() {
+		    @Override
+		    public int compare(Auction auc1, Auction auc2) {
+		        LocalDateTime expiry1 = auc1.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+		        LocalDateTime expiry2 = auc2.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+		        
+		        // 按照结束日期从大到小排序，将最远的日期放在头部
+		        return expiry2.compareTo(expiry1);
+		    }
+		});
+		
 
 		// Redirect to the Home page and add items to the parameters
 		Gson gson = new GsonBuilder().registerTypeAdapter(Duration.class, new DurationSerializer()).create();
