@@ -382,16 +382,17 @@
                 maxOfferCell.textContent = auction.maxOffer + " €";
                 row.appendChild(maxOfferCell);
 
-                function formatDuration(duration) {
-                    const seconds = Math.floor((duration / 1000) % 60);
-                    const minutes = Math.floor((duration / (1000 * 60)) % 60);
-                    const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-                    const days = Math.floor(duration / (1000 * 60 * 60 * 24));
-                    return `${days} Days ${hours}:${minutes}:${seconds}`;
-                }
+
 
                 timeRemainingCell = document.createElement("td");
-                timeRemainingCell.textContent = formatDuration(auction.remaingTimes);
+                let time = auction.remaingTimes;
+                if(time < 0){
+                    timeRemainingCell.textContent = formatDurationNeg(time);
+                }else{
+                    timeRemainingCell.textContent = formatDuration(time);
+                }
+
+
                 row.appendChild(timeRemainingCell);
                 linkCell = document.createElement("td");
                 anchor = document.createElement("a");
@@ -892,15 +893,16 @@
                 // endDateCell = document.createElement("td");
                 // endDateCell.textContent = auction.expiryDateTime;
                 // row.appendChild(endDateCell);
-                function formatDuration(duration) {
-                    const seconds = Math.floor((duration / 1000) % 60);
-                    const minutes = Math.floor((duration / (1000 * 60)) % 60);
-                    const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-                    const days = Math.floor(duration / (1000 * 60 * 60 * 24));
-                    return `${days} Days ${hours}:${minutes}:${seconds}`;
-                }
 
                 timeRemainingCell = document.createElement("td");
+                let time = auction.remaingTimes;
+                if(time < 0){
+                    timeRemainingCell.textContent = formatDurationNeg(time);
+                }else{
+                    timeRemainingCell.textContent = formatDuration(time);
+                }
+
+
                 timeRemainingCell.textContent = formatDuration(auction.remaingTimes);
                 row.appendChild(timeRemainingCell);
                 statusCell = document.createElement("td");
@@ -1050,7 +1052,7 @@
 
 
         this.update = function (wonAucToShow) {
-            let row, rowItem, auctionIDCell, itemsCell, auctionPriceCell, finalPriceCell, endDateCell;
+            let row, rowItem, auctionIDCell, itemsCell, auctionPriceCell, finalPriceCell, timeRemainingCell;
             this.listcontainerbody.innerHTML = "";
             let self = this;
 
@@ -1085,9 +1087,16 @@
                 finalPriceCell.textContent = auction.winningBid + "€";
                 row.appendChild(finalPriceCell);
 
-                endDateCell = document.createElement("td");
-                endDateCell.textContent = auction.expiryDateTime;
-                row.appendChild(endDateCell);
+                timeRemainingCell = document.createElement("td");
+
+                let time = auction.remaingTimes;
+                if(time < 0){
+                    timeRemainingCell.textContent = formatDurationNeg(time);
+                }else{
+                    timeRemainingCell.textContent = formatDuration(time);
+                }
+
+                row.appendChild(timeRemainingCell);
 
                 self.listcontainerbody.appendChild(row);
             });
@@ -1199,16 +1208,16 @@
                 minUpCell = document.createElement("td");
                 minUpCell.textContent = auction.minUP + "€";
                 row.appendChild(minUpCell);
-                function formatDuration(duration) {
-                    const seconds = Math.floor((duration / 1000) % 60);
-                    const minutes = Math.floor((duration / (1000 * 60)) % 60);
-                    const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
-                    const days = Math.floor(duration / (1000 * 60 * 60 * 24));
-                    return `${days} Days ${hours}:${minutes}:${seconds}`;
-                }
+
 
                 timeRemainingCell = document.createElement("td");
-                timeRemainingCell.textContent = formatDuration(auction.remaingTimes);
+                let time = auction.remaingTimes;
+                if(time < 0){
+                    timeRemainingCell.textContent = formatDurationNeg(time);
+                }else{
+                    timeRemainingCell.textContent = formatDuration(time);
+                }
+
                 row.appendChild(timeRemainingCell);
                 statusCell = document.createElement("td");
                 statusCell.textContent = auction.isClosed;
@@ -1431,5 +1440,20 @@
             itemDetailsList.reset();
             giveOfferForm.style.display = "none";
         }
+    }
+
+    function formatDuration(duration) {
+        const seconds = Math.floor((duration / 1000) % 60);
+        const minutes = Math.floor((duration / (1000 * 60)) % 60);
+        const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+        const days = Math.floor(duration / (1000 * 60 * 60 * 24));
+        return `${days} Days ${hours}:${minutes}:${seconds}`;
+    }
+    function formatDurationNeg(duration) {
+        const seconds = Math.ceil((duration / 1000) % 60);
+        const minutes = Math.ceil((duration / (1000 * 60)) % 60);
+        const hours = Math.ceil((duration / (1000 * 60 * 60)) % 24);
+        const days = Math.ceil(duration / (1000 * 60 * 60 * 24));
+        return `${days} Days ${hours}:${minutes}:${seconds}`;
     }
 }

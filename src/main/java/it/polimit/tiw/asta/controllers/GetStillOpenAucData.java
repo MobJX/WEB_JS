@@ -102,7 +102,7 @@ public class GetStillOpenAucData extends HttpServlet {
 			}
 			
 		}
-			    // 按照结束日期（EndDate）对aucOpenList进行排序
+			    
 				//sort the list base on End Time which further date auction will be positioned on the top of list
 				Collections.sort(aucOpenList, new Comparator<Auction>() {
 				    @Override

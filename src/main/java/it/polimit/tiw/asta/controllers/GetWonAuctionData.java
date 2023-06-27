@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -47,6 +51,9 @@ public class GetWonAuctionData extends HttpServlet {
 		List<WonAuction> wonAuctions = new ArrayList<>();
 		List<Item>items = new ArrayList<Item>();
 		ItemDAO itemDAO = new ItemDAO(connection);
+		Duration remaingTimes = null;
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime expiry;
 
 		try {
 			wonAuctions = wonAuctionDAO.findAllAuctionsWonByUser(user.getId());
@@ -59,11 +66,26 @@ public class GetWonAuctionData extends HttpServlet {
 			for (Auction auc : wonAuctions) {
 				items = itemDAO.findAll_Item_OfAuction(auc.getAucID());
 				auc.setAucItems(items);
+				expiry = auc.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				remaingTimes = Duration.between(now, expiry);
+				System.out.println("this is Remain Time :"+ remaingTimes ); //TODO delete this Used for TEST
+				auc.setRemaingTimes(remaingTimes);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return;
 		}
+		//sort the list base on End Time which further date auction will be positioned on the top of list
+		Collections.sort(wonAuctions, new Comparator<Auction>() {
+		    @Override
+		    public int compare(Auction auc1, Auction auc2) {
+		        LocalDateTime expiry1 = auc1.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+		        LocalDateTime expiry2 = auc2.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+		        
+		        // 按照结束日期从大到小排序，将最远的日期放在头部
+		        return expiry2.compareTo(expiry1);
+		    }
+		});
 		
 		
 
