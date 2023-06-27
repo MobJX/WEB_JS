@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -57,6 +61,9 @@ public class GetKeyAuctionList extends HttpServlet {
 		// List<Item> items = null;
 		List<Integer> itemsID = new ArrayList<Integer>();
 		List<Auction> auctions = new ArrayList<Auction>();
+		Duration remaingTimes = null;
+		LocalDateTime now = LocalDateTime.now();
+		LocalDateTime expiry;
 
 		try {
 			// items = itemDAO.findItemWithKeyWord(keyword);
@@ -79,6 +86,24 @@ public class GetKeyAuctionList extends HttpServlet {
 				response.getWriter().println("Resource not found");
 				return;
 			} else {
+				
+				for(Auction a : auctions) {
+					expiry = a.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+					remaingTimes = Duration.between(now, expiry);
+					a.setRemaingTimes(remaingTimes);
+				}
+				
+				
+				Collections.sort(auctions, new Comparator<Auction>() {
+				    @Override
+				    public int compare(Auction auc1, Auction auc2) {
+				        LocalDateTime expiry1 = auc1.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				        LocalDateTime expiry2 = auc2.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+				        
+				        // 按照结束日期从大到小排序，将最远的日期放在头部
+				        return expiry2.compareTo(expiry1);
+				    }
+				});
 				
 				// Redirect to the Home page and add auctions to the parameters
 				Gson gson = new GsonBuilder().registerTypeAdapter(Duration.class, new DurationSerializer()).create();

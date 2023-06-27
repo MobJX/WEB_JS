@@ -870,7 +870,7 @@
             })
         }
         this.update = function (arrayAuctions) {
-            let row, auctionIdCell, ownerCell, priceCell, minUpCell, endDateCell, statusCell,
+            let row, auctionIdCell, ownerCell, priceCell, minUpCell, timeRemainingCell, statusCell,
                 linkCell, linktext, anchor;
             this.listcontainerbody.innerHTML = "";
             //build updated list of auctions
@@ -889,9 +889,20 @@
                 minUpCell = document.createElement("td");
                 minUpCell.textContent = auction.minUP + "€";
                 row.appendChild(minUpCell);
-                endDateCell = document.createElement("td");
-                endDateCell.textContent = auction.expiryDateTime;
-                row.appendChild(endDateCell);
+                // endDateCell = document.createElement("td");
+                // endDateCell.textContent = auction.expiryDateTime;
+                // row.appendChild(endDateCell);
+                function formatDuration(duration) {
+                    const seconds = Math.floor((duration / 1000) % 60);
+                    const minutes = Math.floor((duration / (1000 * 60)) % 60);
+                    const hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+                    const days = Math.floor(duration / (1000 * 60 * 60 * 24));
+                    return `${days} Days ${hours}:${minutes}:${seconds}`;
+                }
+
+                timeRemainingCell = document.createElement("td");
+                timeRemainingCell.textContent = formatDuration(auction.remaingTimes);
+                row.appendChild(timeRemainingCell);
                 statusCell = document.createElement("td");
                 statusCell.textContent = auction.isClosed;
                 row.appendChild(statusCell);
