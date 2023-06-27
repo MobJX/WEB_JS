@@ -220,12 +220,12 @@
         this.createAuctionButton = document.getElementById("id_newAuctionButton");
         this.dateInput = document.getElementById("id_expiryDateTime");
 
-        var now = new Date();
-        var year = now.getFullYear();
-        var month = ("0" + (now.getMonth() + 1)).slice(-2); // 月份从 0 开始，需要加 1
-        var day = ("0" + now.getDate()).slice(-2);
-        var hour = ("0" + now.getHours()).slice(-2);
-        var minute = ("0" + now.getMinutes()).slice(-2);
+        let now = new Date();
+        let year = now.getFullYear();
+        let month = ("0" + (now.getMonth() + 1)).slice(-2); // 月份从 0 开始，需要加 1
+        let day = ("0" + now.getDate()).slice(-2);
+        let hour = ("0" + now.getHours()).slice(-2);
+        let minute = ("0" + now.getMinutes()).slice(-2);
 
         this.dateInput.setAttribute("min", year + "-" + month + "-" + day + "T" + hour + ":" + minute);
         //this.dateInput.setAttribute("min", formattedDate);
@@ -319,8 +319,7 @@
         }
     }
 
-    function OpenAuctionList(_alert, _id_openAuction, _id_openAuctionBody) {
-        this.alert = _alert;
+    function OpenAuctionList(_id_openAuction, _id_openAuctionBody) {
         this.openAuction = _id_openAuction;
         this.openAuctionBody = _id_openAuctionBody;
 
@@ -343,7 +342,7 @@
                             openAuctionList.current_openAuction = openAuctionToShow;
                             self.update(openAuctionToShow);
                         } else {
-                            self.alert.textContent = message;
+                            window.alert(message);
                         }
                     }
                 });
@@ -414,8 +413,7 @@
         }
     }
 
-    function CloseAuction(_alert, _closeForm, _closeAuctionButton, _orchestrator) {
-        this.alert = _alert;
+    function CloseAuction(_closeForm, _closeAuctionButton, _orchestrator) {
         this.closeForm = _closeForm;
         this.closeAuctionButton = _closeAuctionButton;
         this.orchestrator = _orchestrator;
@@ -442,7 +440,7 @@
                             window.location.href = req.getResponseHeader("Location");
                             window.sessionStorage.removeItem('username');
                         } else {
-                            self.alert.textContent = message;
+                            window.alert(message);
                         }
                     }
                 });
@@ -460,14 +458,13 @@
                                 let message = req.responseText;
                                 if (req.status === 200) {
                                     self.orchestrator.refresh();
-                                    self.alert.textContent = "";
                                     window.alert("Auction Closed Successfully!");
                                     setLastAction("closeauction");
                                 } else if (req.status === 403) {
                                     window.location.href = req.getResponseHeader("Location");
                                     window.sessionStorage.removeItem('username');
                                 } else {
-                                    self.alert.textContent = message;
+                                    window.alert(message);
                                 }
                             }
                         });
@@ -479,8 +476,7 @@
     }
 
 
-    function ClosedAuctionList(_alert, _id_closedAuction, _id_closedAuctionBody) {
-        this.alert = _alert;
+    function ClosedAuctionList(_id_closedAuction, _id_closedAuctionBody) {
         this.closedAuction = _id_closedAuction;
         this.closedAuctionBody = _id_closedAuctionBody;
 
@@ -502,7 +498,7 @@
                             let closedAuctionToShow = JSON.parse(req.responseText);
                             self.update(closedAuctionToShow);
                         } else {
-                            self.alert.textContent = message;
+                            window.alert(message);
                         }
                     }
                 });
@@ -573,8 +569,7 @@
         }
     }
 
-    function AuctionDetails(_alert, _id_auctionDetailsContainer, _id_auctionDetailsBody, _id_textListItem, _id_textListOffer) {
-        this.alert = _alert;
+    function AuctionDetails(_id_auctionDetailsContainer, _id_auctionDetailsBody, _id_textListItem, _id_textListOffer) {
         this.auctionDetailsContainer = _id_auctionDetailsContainer;
         this.auctionDetailsBody = _id_auctionDetailsBody;
         this.textListItem = _id_textListItem;
@@ -595,7 +590,7 @@
                             self.textListOffer.style.display = "block";
                             self.update(auctionToShow);
                         } else {
-                            self.alert.textContent = message;
+                            window.alert(message);
                         }
                     }
                 });
@@ -629,8 +624,7 @@
         }
     }
 
-    function ItemDetails(_alert, _id_itemDetailsContainer, _id_itemDetailsBody) {
-        this.alert = _alert;
+    function ItemDetails(_id_itemDetailsContainer, _id_itemDetailsBody) {
         this.itemDetailsContainer = _id_itemDetailsContainer;
         this.itemDetailsBody = _id_itemDetailsBody;
 
@@ -648,7 +642,7 @@
                             let itemToShow = JSON.parse(req.responseText);
                             self.update(itemToShow);
                         } else {
-                            self.alert.textContent = message;
+                            window.alert(message);
                         }
                     }
                 });
@@ -685,8 +679,7 @@
         }
     }
 
-    function OfferDetails(_alert, _id_offerDetailsContainer, _id_offerDetailsBody) {
-        this.alert = _alert;
+    function OfferDetails(_id_offerDetailsContainer, _id_offerDetailsBody) {
         this.offerDetailsContainer = _id_offerDetailsContainer;
         this.offerDetailsBody = _id_offerDetailsBody;
         this.reset = function () {
@@ -703,7 +696,7 @@
                             let offerToShow = JSON.parse(req.responseText);
                             self.update(offerToShow);
                         } else {
-                            self.alert.textContent = message;
+                            window.alert(message);
                         }
                     }
                 });
@@ -732,8 +725,7 @@
         }
     }
 
-    function AvailableItemList(_alert, _id_availableItemListContainer, _id_availableItemListBody) {
-        this.alert = _alert;
+    function AvailableItemList(_id_availableItemListContainer, _id_availableItemListBody) {
         this.availableItemListContainer = _id_availableItemListContainer;
         this.availableItemListBody = _id_availableItemListBody;
 
@@ -749,13 +741,9 @@
                         let message = req.responseText;
                         if (req.status === 200) {
                             let availableToShow = JSON.parse(req.responseText);
-                            if (availableToShow.length === 0) {
-                                self.alert.textContent = "No Item available!"
-                                return;
-                            }
                             self.update(availableToShow);
                         } else {
-                            self.alert.textContent = message;
+                            window.alert(message);
                         }
                     }
                 });
@@ -817,15 +805,14 @@
                     if (req.status === 200) {
                         let keyAucToShow = JSON.parse(req.responseText);
                         if (keyAucToShow.length === 0) {
-                            alertContainer.textContent = "No keyAuction yet!";
+                            window.alert("No keyAuction yet!");
                             return;
                         }
 
                         self.update(keyAucToShow);
                         self.listcontainer.style.display = "block";
-                        //self.listcontainer.classList.remove("hidden");
                     } else {
-                        alert("No keyAuction found!");
+                        window.alert("No keyAuction found!");
                     }
                 }
             })
@@ -877,13 +864,10 @@
                         recordClickedAuction(currentAuctionID);
                     }
 
-
-                    alertContainer.textContent = "";
                     let auctionID = e.target.getAttribute("keyAucID");
                     let urlToCall = "GetOfferData?aucID=" + auctionID;
 
                     //after clicking on the details shows the details of items and wonAuction of user
-
                     wonAuctionList.show();
                     itemDetailsList.show(auctionID);
                     offerList.show(auctionID);
@@ -892,9 +876,8 @@
                             if (req.status === 200) {
                                 let offerToShow = JSON.parse(req.responseText);
                                 offerList.update(offerToShow);
-                                // offerContainer.classList.remove("hidden");
                             } else {
-                                alertContainer.textContent = req.responseText;
+                                window.alert(req.responseText);
                             }
                         }
                     });
@@ -930,7 +913,7 @@
                         ONofferDetails.update(offerToShow);
 
                     } else {
-                        alertContainer.textContent = req.responseText;
+                        window.alert(req.responseText);
                     }
                 }
             })
@@ -989,7 +972,7 @@
                         self.update(wonAucToShow);
 
                     } else {
-                        alertContainer.textContent = req.responseText;
+                        window.alert(req.responseText);
                     }
                 }
             })
@@ -1047,7 +1030,6 @@
             this.listcontainer.style.display = "none";
         }
     }
-
 
     //Item Details Of Auction VIEW COMPONENT
     function ItemDetailList(container, listcontainer) {
@@ -1123,7 +1105,7 @@
         }
 
         this.update = function (stillOpenAucToShow) {
-            let row, auctionIdCell, ownerCell, priceCell, minUpCell,  timeRemainingCell, statusCell,
+            let row, auctionIdCell, ownerCell, priceCell, minUpCell, timeRemainingCell, statusCell,
                 linkCell, linktext, anchor;
 
             this.listcontainerbody.innerHTML = "";
@@ -1180,7 +1162,6 @@
                     }
                     //sendClickedAuctionsToServlet();
 
-                    alertContainer.textContent = "";
                     let auctionID = e.target.getAttribute("stillOpenAucID");
                     let urlToCall = "GetOfferData?aucID=" + auctionID;
 
@@ -1196,7 +1177,7 @@
                                 offerList.update(offerToShow);
                                 // offerContainer.classList.remove("hidden");
                             } else {
-                                alertContainer.textContent = req.responseText;
+                                window.alert(req.responseText);
                             }
                         }
                     });
@@ -1293,40 +1274,33 @@
     }
 
     function PageOrchestrator() {
-        let alertContainer = document.getElementById("id_alert");
-
         this.start = function () {
             personalMessage = new PersonalMessage(sessionStorage.getItem('username'), document.getElementById("id_username"));
             personalMessage.show();
 
             // -------------------------SELL PAGE ELEMENTS-------------------------
             openAuctionList = new OpenAuctionList(
-                alertContainer,
                 document.getElementById("id_myOpenAuctionsContainer"),
                 document.getElementById("id_myOpenAuctionsBody")
             );
 
             closedAuctionList = new ClosedAuctionList(
-                alertContainer,
                 document.getElementById("id_myClosedAuctionsContainer"),
                 document.getElementById("id_myClosedAuctionsBody")
             );
 
             availableItemList = new AvailableItemList(
-                alertContainer,
                 document.getElementById("id_availableItemListContainer"),
                 document.getElementById("id_availableItemListBody")
             );
 
             closeAuction = new CloseAuction(
-                alertContainer,
                 document.getElementById("id_closeForm"),
                 document.getElementById("id_closeAuctionButton"),
                 this
             );
 
             ONautionDetails = new AuctionDetails(
-                alertContainer,
                 document.getElementById("id_ONauctionDetailsContainer"),
                 document.getElementById("id_ONauctionDetailsBody"),
                 document.getElementById("id_ONtextListItem"),
@@ -1334,19 +1308,16 @@
             );
 
             ONitemDetails = new ItemDetails(
-                alertContainer,
                 document.getElementById("id_ONitemDetailsContainer"),
                 document.getElementById("id_ONitemDetailsBody")
             );
 
             ONofferDetails = new OfferDetails(
-                alertContainer,
                 document.getElementById("id_ONoffersDetailsContainer"),
                 document.getElementById("id_ONoffersDetailsBody")
             );
 
             OFFautionDetails = new AuctionDetails(
-                alertContainer,
                 document.getElementById("id_OFFauctionDetailsContainer"),
                 document.getElementById("id_OFFauctionDetailsBody"),
                 document.getElementById("id_OFFtextListItem"),
@@ -1354,13 +1325,11 @@
             );
 
             OFFitemDetails = new ItemDetails(
-                alertContainer,
                 document.getElementById("id_OFFitemDetailsContainer"),
                 document.getElementById("id_OFFitemDetailsBody")
             );
 
             OFFofferDetails = new OfferDetails(
-                alertContainer,
                 document.getElementById("id_OFFoffersDetailsContainer"),
                 document.getElementById("id_OFFoffersDetailsBody")
             );
@@ -1398,7 +1367,6 @@
         };
 
         this.refresh = function () {
-            alertContainer.textContent = "";
             openAuctionList.show();
             openAuctionList.reset();
             closedAuctionList.show();
