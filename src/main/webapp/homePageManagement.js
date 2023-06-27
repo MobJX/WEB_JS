@@ -182,10 +182,8 @@
 
 
     //    ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ SELL PAGE ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-    function CreateNewItem(_alert) {
-        this.alert = _alert;
+    function CreateNewItem() {
         this.createItemButton = document.getElementById("id_newItemButton");
-
         this.registerEvents = function (orchestrator) {
             this.createItemButton.addEventListener('click', (e) => {
                 let form = e.target.closest("form");
@@ -196,17 +194,16 @@
                     makeCall("POST", 'CreateNewItem', form,
                         function (req) {
                             if (req.readyState === XMLHttpRequest.DONE) {
-                                var message = req.responseText;
+                                let message = req.responseText;
                                 if (req.status === 200) {
                                     orchestrator.refresh();
-                                    self.alert.textContent = "";
                                     window.alert("Item Created Successfully!");
                                     setLastAction("createitem");
                                 } else if (req.status === 403) {
                                     window.location.href = req.getResponseHeader("Location");
                                     window.sessionStorage.removeItem('username');
                                 } else {
-                                    self.alert.textContent = message;
+                                    window.alert(message);
                                 }
                             }
                         });
@@ -218,8 +215,7 @@
     }
 
 
-    function CreateNewAuction(_alert, _id_createNewAuction) {
-        this.alert = _alert;
+    function CreateNewAuction(_id_createNewAuction) {
         this.createNewAuction = _id_createNewAuction;
         this.createAuctionButton = document.getElementById("id_newAuctionButton");
         this.dateInput = document.getElementById("id_expiryDateTime");
@@ -300,7 +296,7 @@
                                 }
                             }
                         });
-                }else{
+                } else {
                     eventFieldset.reportValidity();
                 }
             });
@@ -1360,13 +1356,10 @@
                 document.getElementById("id_OFFoffersDetailsBody")
             );
 
-            createNewItem = new CreateNewItem(
-                alertContainer
-            );
+            createNewItem = new CreateNewItem();
             createNewItem.registerEvents(this);
 
             createNewAuction = new CreateNewAuction(
-                alertContainer,
                 document.getElementById("id_createAuctionForm")
             );
             createNewAuction.registerEvents(this);
