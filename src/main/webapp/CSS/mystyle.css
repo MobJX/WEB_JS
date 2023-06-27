@@ -161,7 +161,7 @@ th, td {
 }
 
 
-#id_sellBlock b{
+#id_sellBlock b {
     font-size: 18px;
     color: #b4a078;
 }
@@ -216,7 +216,7 @@ th, td {
 
 
 #id_sellBlock tbody tr:nth-child(even),
-#id_bullBlock tbody tr:nth-child(even){
+#id_bullBlock tbody tr:nth-child(even) {
     background-color: #f8f8f8;
 }
 
@@ -237,7 +237,7 @@ th, td {
 }
 
 
-#id_sellBlock p,#id_buyBlock p  {
+#id_sellBlock p, #id_buyBlock p {
     font-weight: bold;
     margin-bottom: 10px;
 }
@@ -248,16 +248,17 @@ th, td {
 
 
 #id_buyBlock table.boxed,
-#id_sellBlock table.boxed{
+#id_sellBlock table.boxed {
     border: 1px solid #ccc;
     border-collapse: collapse;
+    box-shadow: 0px 4px 6px #978f7b99;
     width: 1500px;
 }
 
 #id_buyBlock table.boxed th,
 #id_buyBlock table.boxed td,
 #id_sellBlock table.boxed th,
-#id_sellBlock table.boxed td{
+#id_sellBlock table.boxed td {
     border: 1px solid #ccc;
     padding: 7px;
     text-align: left;
@@ -269,7 +270,7 @@ th, td {
 #id_buyBlock table.boxed th,
 #id_sellBlock table.boxed th {
     background-color: #333333c7;
-    color:#eceae5;
+    color: #eceae5;
 }
 
 #id_buyBlock #id_offerlistContainer {
@@ -296,24 +297,28 @@ th, td {
     margin-bottom: 20px;
 }
 
+#id_newItemButton {
+    margin-top: 20px;
+}
 
+#id_itemName {
+    margin-left: 75px;
+    padding: 2px 120px 0 0;
+}
 
+#id_itemPrice {
+    margin-left: 70px;
+    padding: 2px 120px 0 0;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#id_keyword,
+#id_givenOfferButton,
+#id_itemImage,
+#id_itemDescription {
+    margin-left: 27px;
+    margin-right: 27px;
+    padding: 2px 120px 0 0;
+}
 
 
 /* ----------- LOGIN --------------------*/
@@ -330,7 +335,7 @@ th, td {
 
 .login-form {
     font-family: Arial, sans-serif;
-    background-color: #f1f1f1;
+    background-color: #33260d87;
     padding: 20px;
 }
 
@@ -341,11 +346,11 @@ th, td {
 
 .login-form form {
     max-width: 300px;
-    margin: 0 auto;
+    margin: auto;
     background-color: #fff;
-    padding: 20px;
+    padding: 50px;
     border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px #4d2911a1;
 }
 
 .login-form fieldset {
@@ -356,17 +361,18 @@ th, td {
 
 .login-form input[type="text"],
 .login-form input[type="password"] {
-    width: 100%;
+    width: 280px;
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
 .login-form input[type="button"] {
-    width: 100%;
+    width: 300px;
     padding: 10px;
-    background-color: #4CAF50;
+    margin-top: 20px;
+    background-color: #b4a078;;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -374,7 +380,7 @@ th, td {
 }
 
 .login-form input[type="button"]:hover {
-    background-color: #45a049;
+    background-color: #c4b79e;
 }
 
 .login-form #errormessage {

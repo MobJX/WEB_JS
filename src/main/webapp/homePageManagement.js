@@ -46,10 +46,10 @@
                 console.log("User is a new user"); //Only for Testing //TODO remove this line
                 buyBlock.style.display = 'block';
                 sellBlock.style.display = 'none'; //TODO 要不要加个按钮 让用户显示SELL的Component
-                sellButton.style.borderBottom ="3px solid #b4a078";
-                sellButton.style.color = "#b4a078";
-                buyButton.style.borderBottom ="none";
-                buyButton.style.color = "#333333";
+                buyButton.style.borderBottom = "3px solid #b4a078";
+                buyButton.style.color = "#b4a078";
+                sellButton.style.borderBottom = "none";
+                sellButton.style.color = "#333333";
             } else {
 
                 const pageToShow = determinePageToShow();
@@ -61,15 +61,18 @@
                     sendClickedAuctionsToServlet();
                     sellBlock.style.display = 'none';
                     buyBlock.style.display = 'block';
-                    buyButton.style.borderBottom ="3px solid #b4a078";
+                    buyButton.style.borderBottom = "3px solid #b4a078";
                     buyButton.style.color = "#b4a078";
-                    sellButton.style.borderBottom ="none";
+                    sellButton.style.borderBottom = "none";
                     sellButton.style.color = "#333333";
                 } else if (pageToShow === 'CREATEAUCTION') {
                     // otherwise show the SELL  component if last action was create auction
                     buyBlock.style.display = 'none';
                     sellBlock.style.display = 'block';
-
+                    sellButton.style.borderBottom = "3px solid #b4a078";
+                    sellButton.style.color = "#b4a078";
+                    buyButton.style.borderBottom = "none";
+                    buyButton.style.color = "#333333";
                 }
 
 
@@ -237,13 +240,29 @@
                     e.preventDefault();
                     let eventFieldset = e.target.closest("fieldset"), valid = true;
                     if (e.target.className === "next") {
-                        for (i = 0; i < eventFieldset.elements.length; i++) {
-                            if (!eventFieldset.elements[i].checkValidity()) {
-                                eventFieldset.elements[i].reportValidity();
-                                valid = false;
+
+                        let checkboxes = document.querySelectorAll("input[type='checkbox']");
+                        let checked = false;
+                        for (let i = 0; i < checkboxes.length; i++) {
+                            if (checkboxes[i].checked) {
+                                checked = true;
                                 break;
                             }
                         }
+                        if (!checked) {
+                            e.preventDefault();
+                            window.alert("You must select at least one item!");
+                            valid = false;
+                        } else {
+                            for (let i = 0; i < eventFieldset.elements.length; i++) {
+                                if (!eventFieldset.elements[i].checkValidity()) {
+                                    eventFieldset.elements[i].reportValidity();
+                                    valid = false;
+                                    break;
+                                }
+                            }
+                        }
+
                     }
                     if (valid) {
                         this.changeStep(e.target.parentNode, (e.target.className === "next") ?
@@ -270,18 +289,19 @@
                                 let message = req.responseText;
                                 if (req.status === 200) {
                                     orchestrator.refresh();
-                                    self.alert.textContent = "";
                                     window.alert("Auction Created Successfully!");
                                     setLastAction("createauction");
                                 } else if (req.status === 403) {
                                     window.location.href = req.getResponseHeader("Location");
                                     window.sessionStorage.removeItem('username');
                                 } else {
-                                    self.alert.textContent = message;
+                                    window.alert(message);
                                     self.reset();
                                 }
                             }
                         });
+                }else{
+                    eventFieldset.reportValidity();
                 }
             });
 
@@ -749,6 +769,7 @@
             let row, itemID, itemName, itemDescription, itemPrice, itemImage, checkboxCell, checkbox;
             this.availableItemListBody.innerHTML = "";
             let self = this;
+            let nextButton = document.getElementsByName("next");
             availableItemList.forEach(function (item) {
                 row = document.createElement("tr");
                 itemID = document.createElement("td");
@@ -777,7 +798,6 @@
                 checkbox.value = item.itemID;
                 checkboxCell.appendChild(checkbox);
                 row.appendChild(checkboxCell);
-
 
                 self.availableItemListBody.appendChild(row);
             });
@@ -1192,9 +1212,9 @@
         pageOrchestrator.refresh();
         document.getElementById("id_buyBlock").style.display = "none";
         document.getElementById("id_sellBlock").style.display = "block";
-        sellButton.style.borderBottom ="3px solid #b4a078";
+        sellButton.style.borderBottom = "3px solid #b4a078";
         sellButton.style.color = "#b4a078";
-        buyButton.style.borderBottom ="none";
+        buyButton.style.borderBottom = "none";
         buyButton.style.color = "#333333";
     }, false);
 
@@ -1203,9 +1223,9 @@
         pageOrchestrator.refresh();
         document.getElementById("id_sellBlock").style.display = "none";
         document.getElementById("id_buyBlock").style.display = "block";
-        buyButton.style.borderBottom ="3px solid #b4a078";
+        buyButton.style.borderBottom = "3px solid #b4a078";
         buyButton.style.color = "#b4a078";
-        sellButton.style.borderBottom ="none";
+        sellButton.style.borderBottom = "none";
         sellButton.style.color = "#333333";
     }, false);
 
@@ -1388,6 +1408,7 @@
             offerList.reset();
             wonAuctionList.show();
             itemDetailsList.reset();
+            giveOfferForm.style.display = "none";
         }
     }
 }
