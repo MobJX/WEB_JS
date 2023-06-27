@@ -9,10 +9,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import com.google.gson.Gson;
 
 import it.polimit.tiw.asta.utils.ConnectionHandler;
 import it.polimit.tiw.asta.beans.Item;
+import it.polimit.tiw.asta.beans.User;
 import it.polimit.tiw.asta.dao.ItemDAO;
 
 
@@ -31,6 +34,14 @@ public class CreateNewItem extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		User user = (User) session.getAttribute("user");
+		System.out.println("This is create Item");
+		System.out.println(user.getId());
+		System.out.println(user.getUsername());
+		System.out.println(user.getAddress());
+		
+		
 		System.out.println("----------Create a new Item SERVLET---------");
 		boolean isBadRequest = false;
 		String itemName = null;
@@ -77,7 +88,7 @@ public class CreateNewItem extends HttpServlet {
 		}
 		
 		// Create item in DB
-		Item item = new Item(itemName, itemDescription, Float.parseFloat(itemPrice), itemImage);
+		Item item = new Item(itemName, itemDescription, Float.parseFloat(itemPrice), itemImage, user.getId());
 		ItemDAO itemDAO = new ItemDAO(connection);
 		try {
 			int newItemID = itemDAO.createItem(item);

@@ -18,6 +18,8 @@
                                 // Check if user is new or existing
                                 // Set isNewUser cookie
                                 let username = message.replace(/\r?\n|\r/g, '');
+
+                                // Check if user is new or existing
                                 let k = getCookie(username);
                                 if (k == null) {
                                     setCookie('isNewUser', 'true', 30)

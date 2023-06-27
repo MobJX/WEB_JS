@@ -1,26 +1,27 @@
 package it.polimit.tiw.asta.beans;
 
 public class Item {
-	
+
 	private int itemID;
 	private String itemName;
 	private String description;
 	private float itemPrice;
 	private String imagePath;
 	private boolean isSold;
-	
+	private int creatorID;
+
 	public Item() {
 		super();
 	}
-	
-	
-	public Item(String itemName, String desc, float itemPrice, String imagePath) {
+
+	public Item(String itemName, String desc, float itemPrice, String imagePath, int creatorID) {
 		super();
 		this.itemName = itemName;
 		this.description = desc;
 		this.itemPrice = itemPrice;
 		this.imagePath = imagePath;
 		this.isSold = false;
+		this.creatorID = creatorID;
 	}
 
 	public int getItemID() {
@@ -71,8 +72,11 @@ public class Item {
 		this.isSold = isSold;
 	}
 
-	
-	
-	
+	public int getCreatorID() {
+		return creatorID;
+	}
 
+	public void setCreatorID(int creatorID) {
+		this.creatorID = creatorID;
+	}
 }

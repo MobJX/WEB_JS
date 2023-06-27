@@ -1,8 +1,10 @@
 {
     // page components
+    // Main controller
     let pageOrchestrator = new PageOrchestrator();
     let personalMessage;
 
+    // HOME PAGE components: nave bar
     let sellButton = document.getElementById('id_sellButton');
     let buyButton = document.getElementById('id_buyButton');
 
@@ -10,22 +12,20 @@
     let createNewItem, openAuctionList, closedAuctionList, ONautionDetails, ONitemDetails,
         ONofferDetails, OFFautionDetails, OFFitemDetails, OFFofferDetails, createNewAuction,
         availableItemList, closeAuction;
+    let sellBlock = document.getElementById('id_sellBlock');
 
     // BUY PAGE components
     let keyAucList, offerList, wonAuctionList, itemDetailsList, currentAuctionID;
-
     let searchKeywordForm = document.getElementById('id_getKeyAuctionForm');
     let keywordInput = document.getElementById('id_keyword');
     let giveOfferForm = document.getElementById('id_giveOfferForm');
-    let alertContainer = document.getElementById('id_alert');
     let buyBlock = document.getElementById('id_buyBlock');
-    let sellBlock = document.getElementById('id_sellBlock');
     let stillOpenAuctionList = document.getElementById('id_stillOpenAuctionBlock');
 
 
     // COOKIE components
     let user = sessionStorage.getItem('username');
-    user = user.replace(/\r?\n|\r/g, '');
+    user = user.replace(/\r?\n|\r/g, '');   // remove the \n or \r for the username
 
     window.addEventListener("load", () => {
         if (sessionStorage.getItem("username") == null) {
@@ -34,18 +34,13 @@
             pageOrchestrator.start();
             pageOrchestrator.refresh();
 
-
             // -------------------------COOKIE-------------------------
-            var isNewUser = getCookie('isNewUser');
-
-            console.log("User is : " + user); //Only for Testing //TODO remove this line
-            console.log(getLastAction(user)); //TODO remove this line
+            let isNewUser = getCookie('isNewUser');
 
             if (isNewUser === 'true') {
                 // User is a new user show the BUY  component
-                console.log("User is a new user"); //Only for Testing //TODO remove this line
                 buyBlock.style.display = 'block';
-                sellBlock.style.display = 'none'; //TODO 要不要加个按钮 让用户显示SELL的Component
+                sellBlock.style.display = 'none';
                 buyButton.style.borderBottom = "3px solid #b4a078";
                 buyButton.style.color = "#b4a078";
                 sellButton.style.borderBottom = "none";
@@ -53,11 +48,11 @@
             } else {
 
                 const pageToShow = determinePageToShow();
-                // 根据 pageToShow 的值显示相应内容
+                // Determine which page to show
                 if (pageToShow === 'NOTCREATEAUCTION') {
-                    // User is not a new user  show the Buy component only showing all those auctions that user clicked and still with status open
-                    //initialize the still open auction list
-
+                    // User is not a new user  show the Buy component only showing all those auctions that user clicked
+                    // and still with status open initialize the still open auction list sending the clicked auctions to
+                    // the servlet
                     sendClickedAuctionsToServlet();
                     sellBlock.style.display = 'none';
                     buyBlock.style.display = 'block';
@@ -74,13 +69,11 @@
                     buyButton.style.borderBottom = "none";
                     buyButton.style.color = "#333333";
                 }
-
-
             }
-
         }
     }, false);
 
+    // Show the user's name
     function PersonalMessage(_username, _messageContainer) {
         this.username = _username;
         this.show = function () {
@@ -89,7 +82,6 @@
     }
 
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ COOKIES MANAGEMENT COMPONENT ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
-    //
     function setCookie(cookieName, cookieValue, daysToExpire) {
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + daysToExpire);
@@ -108,16 +100,19 @@
         return null;
     }
 
+    // Set user's last action cookie
     function setLastAction(action) {
         const lastActionCookieName = 'LastAction_' + user;
         setCookie(lastActionCookieName, action, 30);
     }
 
+    // Get user's last action cookie
     function getLastAction() {
         const lastActionCookieName = 'LastAction_' + user;
         return getCookie(lastActionCookieName);
     }
 
+    // Recording the clicked auctions
     function recordClickedAuction(auctionId) {
         const clickedAuctions = getCookie('clickedAuctions_' + user);
         if (clickedAuctions) {
@@ -130,7 +125,7 @@
         }
     }
 
-// 检查某个 Auction ID 是否已被点击
+
     /**
      * Used for checking if this aucID is already clicked
      * only save the clicked auction ID in the cookie with this method could avoid the duplication of the clicked auction ID
@@ -147,8 +142,7 @@
     }
 
     /**
-     * Used for sending the clicked auction ID to the servlet
-     * the servlet will return the still open auction list
+     * Used for sending the clicked auction ID to the servlet will return the still open auction list
      * will automatically update the still open auction list
      * @returns {boolean}
      */
@@ -156,19 +150,13 @@
         const clickedAuctions = getCookie('clickedAuctions_' + user);
         if (clickedAuctions) {
             const idArray = clickedAuctions.split(',');
-
-            var jsonString = JSON.stringify(idArray);
-
-
-            var req = new XMLHttpRequest();
+            let jsonString = JSON.stringify(idArray);
+            let req = new XMLHttpRequest();
             req.onreadystatechange = function () {
                 if (req.readyState === XMLHttpRequest.DONE) {
                     const message = req.responseText;
                     if (req.status === 200) {
-                        console.log(message); //TODO remove this line
                         stillOpenAuctionList.update(JSON.parse(message));
-                    } else {
-                        alert('Something went wrong with the clicked auctions');
                     }
                 }
             };
@@ -181,6 +169,19 @@
     }
 
 
+    /**
+     * Function used for determining which page to show
+     * */
+    function determinePageToShow() {
+        let action = getCookie("LastAction_" + user);
+        if (action === 'createauction') {
+            return 'CREATEAUCTION';
+        } else {
+            return 'NOTCREATEAUCTION';
+        }
+    }
+
+
     //    ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ SELL PAGE ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     function CreateNewItem() {
         this.createItemButton = document.getElementById("id_newItemButton");
@@ -189,14 +190,13 @@
                 let form = e.target.closest("form");
                 if (form.checkValidity()) {
                     e.preventDefault();
-                    let self = this;
-
                     makeCall("POST", 'CreateNewItem', form,
                         function (req) {
                             if (req.readyState === XMLHttpRequest.DONE) {
                                 let message = req.responseText;
                                 if (req.status === 200) {
-                                    orchestrator.refresh();
+                                    availableItemList.show()
+                                    //orchestrator.refresh();
                                     window.alert("Item Created Successfully!");
                                     setLastAction("createitem");
                                 } else if (req.status === 403) {
@@ -214,7 +214,6 @@
         };
     }
 
-
     function CreateNewAuction(_id_createNewAuction) {
         this.createNewAuction = _id_createNewAuction;
         this.createAuctionButton = document.getElementById("id_newAuctionButton");
@@ -222,13 +221,12 @@
 
         let now = new Date();
         let year = now.getFullYear();
-        let month = ("0" + (now.getMonth() + 1)).slice(-2); // 月份从 0 开始，需要加 1
+        let month = ("0" + (now.getMonth() + 1)).slice(-2);
         let day = ("0" + now.getDate()).slice(-2);
         let hour = ("0" + now.getHours()).slice(-2);
         let minute = ("0" + now.getMinutes()).slice(-2);
 
         this.dateInput.setAttribute("min", year + "-" + month + "-" + day + "T" + hour + ":" + minute);
-        //this.dateInput.setAttribute("min", formattedDate);
 
         this.registerEvents = function (orchestrator) {
             Array.from(this.createNewAuction.querySelectorAll("input[type='button'].next, input[type='button'].prev")).forEach(b => {
@@ -236,7 +234,8 @@
                     e.preventDefault();
                     let eventFieldset = e.target.closest("fieldset"), valid = true;
                     if (e.target.className === "next") {
-
+                        // Check if at least one item is selected
+                        // If not, prevent the user from going to the next step
                         let checkboxes = document.querySelectorAll("input[type='checkbox']");
                         let checked = false;
                         for (let i = 0; i < checkboxes.length; i++) {
@@ -260,6 +259,7 @@
                         }
 
                     }
+                    // If the form is valid, go to the next step
                     if (valid) {
                         this.changeStep(e.target.parentNode, (e.target.className === "next") ?
                             e.target.parentNode.nextElementSibling : e.target.parentNode.previousElementSibling);
@@ -284,7 +284,10 @@
                             if (req.readyState === XMLHttpRequest.DONE) {
                                 let message = req.responseText;
                                 if (req.status === 200) {
-                                    orchestrator.refresh();
+                                    openAuctionList.show();
+                                    openAuctionList.reset();
+                                    availableItemList.show();
+                                    // orchestrator.refresh();
                                     window.alert("Auction Created Successfully!");
                                     setLastAction("createauction");
                                 } else if (req.status === 403) {
@@ -307,6 +310,7 @@
             });
         };
 
+        // Reset the form to the first step
         this.reset = function () {
             let fieldsets = document.querySelectorAll("#" + this.createNewAuction.id + " fieldset");
             fieldsets[0].hidden = false;
@@ -319,6 +323,11 @@
         }
     }
 
+    /**
+     * Show the list of open auctions created by the user
+     * @param _id_openAuction the id of the div containing the list of open auctions
+     * @param _id_openAuctionBody the id of the div containing the body of the open auction
+     * */
     function OpenAuctionList(_id_openAuction, _id_openAuctionBody) {
         this.openAuction = _id_openAuction;
         this.openAuctionBody = _id_openAuctionBody;
@@ -327,8 +336,8 @@
             ONautionDetails.reset();
             ONitemDetails.reset();
             ONofferDetails.reset();
-            document.getElementById("id_ONtextListItem").style.display = "none";
-            document.getElementById("id_ONtextListOffer").style.display = "none";
+            document.getElementById("id_ONtextListItem").style.display = "none";    // title List of Items
+            document.getElementById("id_ONtextListOffer").style.display = "none";   // title List of Offers
         }
 
         this.show = function () {
@@ -398,12 +407,11 @@
                     closeAuction.checkStatus(e.target.getAttribute("aucID"));
 
                     let currentONAuctionID = e.target.getAttribute("aucID");
-                    //adding Auction ID into Cookies
+                    // Adding Auction ID into Cookies and checking if it is already clicked
                     isAuctionClicked(currentONAuctionID);
                     if (!isAuctionClicked(currentONAuctionID)) {
                         recordClickedAuction(currentONAuctionID);
                     }
-
                 }, false);
                 anchor.href = "#";
                 row.appendChild(linkCell);
@@ -413,6 +421,12 @@
         }
     }
 
+    /**
+     * Alert the user if the auction can be closed
+     * @param _closeForm the id of the div containing the list of closed auctions
+     * @param _closeAuctionButton the id of the div containing the body of the closed auction
+     * @param _orchestrator the orchestrator
+     * */
     function CloseAuction(_closeForm, _closeAuctionButton, _orchestrator) {
         this.closeForm = _closeForm;
         this.closeAuctionButton = _closeAuctionButton;
@@ -446,6 +460,8 @@
                 });
         };
 
+        // If the auction can be closed, the user can click on the button to close it
+        // The auction is closed and the component is refreshed
         this.registerEvents = function (aucID) {
             this.closeAuctionButton.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -457,7 +473,12 @@
                             if (req.readyState === XMLHttpRequest.DONE) {
                                 let message = req.responseText;
                                 if (req.status === 200) {
-                                    self.orchestrator.refresh();
+                                    openAuctionList.show();
+                                    openAuctionList.reset();
+                                    availableItemList.show();
+                                    closedAuctionList.show();
+                                    closedAuctionList.reset();
+                                    // self.orchestrator.refresh();
                                     window.alert("Auction Closed Successfully!");
                                     setLastAction("closeauction");
                                 } else if (req.status === 403) {
@@ -476,6 +497,11 @@
     }
 
 
+    /**
+     * Show the list of closed auctions
+     * @param _id_closedAuction the id of the div containing the list of closed auctions
+     * @param _id_closedAuctionBody the id of the div containing the body of the closed auction
+     * */
     function ClosedAuctionList(_id_closedAuction, _id_closedAuctionBody) {
         this.closedAuction = _id_closedAuction;
         this.closedAuctionBody = _id_closedAuctionBody;
@@ -569,6 +595,13 @@
         }
     }
 
+    /**
+     * Show the details of a closed auction or a open auction
+     * @param _id_auctionDetailsContainer the id of the div containing the details of the auction
+     * @param _id_auctionDetailsBody the id of the div containing the body of the auction
+     * @param _id_textListItem the id of the div containing the details of the auction
+     * @param _id_textListOffer the id of the div containing the details of the auction
+     * */
     function AuctionDetails(_id_auctionDetailsContainer, _id_auctionDetailsBody, _id_textListItem, _id_textListOffer) {
         this.auctionDetailsContainer = _id_auctionDetailsContainer;
         this.auctionDetailsBody = _id_auctionDetailsBody;
@@ -624,6 +657,11 @@
         }
     }
 
+    /**
+     * Show the details of a closed auction or a open auction
+     * @param _id_itemDetailsContainer the id of the div containing the details of the auction
+     * @param _id_itemDetailsBody the id of the div containing the body of the auction
+     * */
     function ItemDetails(_id_itemDetailsContainer, _id_itemDetailsBody) {
         this.itemDetailsContainer = _id_itemDetailsContainer;
         this.itemDetailsBody = _id_itemDetailsBody;
@@ -679,6 +717,11 @@
         }
     }
 
+    /**
+     * Show the details of a closed auction or a open auction
+     * @param _id_offerDetailsContainer the id of the div containing the details of the auction
+     * @param _id_offerDetailsBody the id of the div containing the body of the auction
+     * */
     function OfferDetails(_id_offerDetailsContainer, _id_offerDetailsBody) {
         this.offerDetailsContainer = _id_offerDetailsContainer;
         this.offerDetailsBody = _id_offerDetailsBody;
@@ -725,6 +768,11 @@
         }
     }
 
+    /**
+     * Show the available item list to the user for the creation of a new auction
+     * @param _id_availableItemListContainer the id of the div containing the available item list
+     * @param _id_availableItemListBody the id of the div containing the body of the available item list
+     * */
     function AvailableItemList(_id_availableItemListContainer, _id_availableItemListBody) {
         this.availableItemListContainer = _id_availableItemListContainer;
         this.availableItemListBody = _id_availableItemListBody;
@@ -792,13 +840,17 @@
 
     //    ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ BUY PAGE ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
     //KeyAuctionList VIEW COMPONENT
+    /**
+     * Show the list of keyAuctions which contains the item that has the keyword (name or description)
+     * @param container the div containing the list of keyAuction
+     * @param listcontainer the div containing the body of the list of keyAuction
+     * */
     function KeyAuctionList(container, listcontainer) {
         this.listcontainer = container;
         this.listcontainerbody = listcontainer;
 
         this.show = function (keyword) {
             let self = this;
-
             let urlToCall = "GetKeyAuctionList?keyword=" + keyword;
             makeCall("GET", urlToCall, null, function (req) {
                 if (req.readyState === 4) {
@@ -820,10 +872,7 @@
         this.update = function (arrayAuctions) {
             let row, auctionIdCell, ownerCell, priceCell, minUpCell, endDateCell, statusCell,
                 linkCell, linktext, anchor;
-
             this.listcontainerbody.innerHTML = "";
-
-
             //build updated list of auctions
             let self = this;
             arrayAuctions.forEach(function (auction) {
@@ -897,6 +946,11 @@
     }
 
     //OffernList VIEW COMPONENT
+    /**
+     * Show the list of offers of the auction
+     * @param container the div containing the list of offers
+     * @param listcontainer the div containing the body of the list of offers
+     * */
     function OfferList(container, listcontainer) {
         this.listcontainer = container;
         this.listcontainerbody = listcontainer;
@@ -952,6 +1006,11 @@
     }
 
     //WonAuctionList VIEW COMPONENT
+    /**
+     * Show the list of won auctions of the user
+     * @param container the div containing the list of won auctions
+     * @param listcontainer the div containing the body of the list of won auctions
+     * */
     function WonAuctionList(container, listcontainer) {
         this.listcontainer = container;
         this.listcontainerbody = listcontainer;
@@ -1021,10 +1080,7 @@
 
                 self.listcontainerbody.appendChild(row);
             });
-
-
         };
-
 
         this.reset = function () {
             this.listcontainer.style.display = "none";
@@ -1032,9 +1088,15 @@
     }
 
     //Item Details Of Auction VIEW COMPONENT
+    /**
+     * Show the list of items of the auction
+     * @param container the div containing the list of items
+     * @param listcontainer the div containing the body of the list of items
+     * */
     function ItemDetailList(container, listcontainer) {
         this.listcontainer = container;
         this.listcontainerbody = listcontainer;
+        this.itemDetailAuc = document.getElementById("id_itemDetailAuc");
 
         this.show = function (aucID) {
             let self = this;
@@ -1059,6 +1121,8 @@
                 let itemImageCell;
 
                 this.listcontainerbody.innerHTML = "";
+                this.itemDetailAuc.textContent = "Auction ID: " + aucID;
+
                 arrayItems.forEach(function (item) {
                     row = self.listcontainerbody.insertRow();
                     itemIDCell = row.insertCell();
@@ -1079,10 +1143,7 @@
                     itemImageCell.appendChild(img);
 
                 });
-
             }
-
-
         }
         this.reset = function () {
             this.listcontainer.style.display = "none";
@@ -1091,17 +1152,17 @@
 
 
     //StillOpenAuctionList VIEW COMPONENT
+    /**
+     * Show the list of auction clicked by the user last time
+     * @param container the div containing the list of clicked auctions
+     * @param listcontainer the div containing the body of the list of clicked auctions
+     * */
     function StillOpenAuctionList(container, listcontainer) {
         let self = this;
         this.listcontainer = container;
         this.listcontainerbody = listcontainer;
         this.reset = function () {
             this.listcontainer.style.display = "none";
-        }
-
-        this.show = function () {
-            let self = this;
-            //sendClickedAuctionsToServlet();
         }
 
         this.update = function (stillOpenAucToShow) {
@@ -1127,9 +1188,6 @@
                 minUpCell = document.createElement("td");
                 minUpCell.textContent = auction.minUP + "€";
                 row.appendChild(minUpCell);
-                // endDateCell = document.createElement("td");
-                // endDateCell.textContent = auction.expiryDateTime;
-                // row.appendChild(endDateCell);
                 function formatDuration(duration) {
                     const seconds = Math.floor((duration / 1000) % 60);
                     const minutes = Math.floor((duration / (1000 * 60)) % 60);
@@ -1218,10 +1276,6 @@
     searchKeywordForm.addEventListener("submit", function (e) {
         e.preventDefault();
         let keyword = keywordInput.value;
-        if (keyword === "") {
-            alert("Insert a keyword!");
-            return;
-        }
         setLastAction('searchKeyword');
         keyAucList.show(keyword);
         offerList.reset();
@@ -1232,7 +1286,6 @@
     giveOfferForm.addEventListener("submit", function (e) {
         let form = e.target.closest("form");
         e.preventDefault();
-        console.log(currentAuctionID);
         if (form.checkValidity()) {
             let input = form.querySelector("input[type='number']").value;
             let url = "CreateOffer?auctionID=" + currentAuctionID + "&offer=" + input;
@@ -1247,12 +1300,10 @@
                         offerList.show(tempAucID);
                     } else if (req.status === 400) {
                         let errorMessage = req.responseText;
-                        // 显示错误消息给用户，例如在页面上显示一个错误提示框
-                        alert(errorMessage);
+                        window.alert(errorMessage);
                     } else {
                         let errorMessage = "What a miser! Give a little more!";
-                        // 显示通用错误消息给用户
-                        alert(errorMessage);
+                        window.alert(errorMessage);
                     }
                 }
             }, false);
@@ -1261,17 +1312,6 @@
         }
     }, false);
 
-
-    function determinePageToShow() {
-        let action = getCookie("LastAction_" + user);
-        if (action === 'createauction') {
-            return 'CREATEAUCTION';
-        } else {
-            return 'NOTCREATEAUCTION';
-        }
-
-
-    }
 
     function PageOrchestrator() {
         this.start = function () {
@@ -1369,9 +1409,9 @@
         this.refresh = function () {
             openAuctionList.show();
             openAuctionList.reset();
+            availableItemList.show();
             closedAuctionList.show();
             closedAuctionList.reset();
-            availableItemList.show();
             createNewAuction.reset();
             closeAuction.hidden();
             keyAucList.reset();

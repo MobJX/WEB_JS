@@ -39,11 +39,19 @@ public class GetAvailableItem extends HttpServlet {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 
-		
+		List<Item> useritems = new ArrayList<>();
 		List<Item> items = new ArrayList<Item>();
 		ItemDAO itemDAO = new ItemDAO(connection);
 		try {
 			items = itemDAO.findAll_Item_Not_In_Auctioned();
+			
+			for(Item item: items) {
+				if	(item.getCreatorID() == user.getId()) {
+					useritems.add(item);
+					System.out.println("USERITEM ADD: " + item.getItemName());
+				}
+			}
+			
 		} catch(SQLException e) {
 			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
@@ -53,7 +61,7 @@ public class GetAvailableItem extends HttpServlet {
 		
 
 		// Redirect to the Home page and add items to the parameters
-				String json = new Gson().toJson(items);
+				String json = new Gson().toJson(useritems);
 				System.out.println(json);
 				response.setContentType("application/json");
 				response.setCharacterEncoding("UTF-8");

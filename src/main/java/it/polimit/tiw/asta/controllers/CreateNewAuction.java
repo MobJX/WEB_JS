@@ -78,6 +78,7 @@ public class CreateNewAuction extends HttpServlet{
 		ItemDAO itemDAO = new ItemDAO(connection);
 		AuctionDAO auctionDAO = new AuctionDAO(connection);
 		List<Item> aucitems = new ArrayList<>();
+		List<Item> useritems = new ArrayList<>();
 		Auction auction = null;
 		int newAucID;
 		try {
@@ -98,7 +99,13 @@ public class CreateNewAuction extends HttpServlet{
 			
 			// return a list of item in this auction to NewAuction
 			aucitems = itemDAO.findAll_Item_OfAuction(auction.getAucID());
-			auction.setAucItems(aucitems);
+			
+			for(Item item: aucitems) {
+				if	(item.getCreatorID() == user.getId()) {
+					useritems.add(item);
+				}
+			}
+			auction.setAucItems(useritems);
 			
 			// update auc_item SQL
 			for (String itemId : selectedItems) {

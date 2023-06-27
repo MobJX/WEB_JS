@@ -340,6 +340,10 @@ th, td {
     margin-top: 10px;
 }
 
+#id_closedDetails{
+    margin-top: 30px;
+}
+
 /* ----------- LOGIN --------------------*/
 .boxed {
     border: 1px solid black;

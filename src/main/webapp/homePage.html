@@ -149,22 +149,20 @@
     <br><br>
     <p><b>My Closed Auctions </b></p>
     <div>
-        <fieldset>
-            <table id="id_myClosedAuctionsContainer" class="boxed">
-                <thead>
-                <tr>
-                    <th>Auction ID</th>
-                    <th>Starting Price</th>
-                    <th>Minimum Raise</th>
-                    <th>ExpiryDayTime</th>
-                    <th>Bidder</th>
-                    <th>Final Price</th>
-                </tr>
-                </thead>
-                <tbody id="id_myClosedAuctionsBody">
-                </tbody>
-            </table>
-        </fieldset>
+        <table id="id_myClosedAuctionsContainer" class="boxed">
+            <thead>
+            <tr>
+                <th>Auction ID</th>
+                <th>Starting Price</th>
+                <th>Minimum Raise</th>
+                <th>ExpiryDayTime</th>
+                <th>Bidder</th>
+                <th>Final Price</th>
+            </tr>
+            </thead>
+            <tbody id="id_myClosedAuctionsBody">
+            </tbody>
+        </table>
         <div id="id_closedDetails">
             <table id="id_OFFauctionDetailsContainer" class="boxed">
                 <thead>
@@ -295,7 +293,7 @@
 
     <!-- Items Detail COMPONENT -->
     <div id="id_itemlistContainer">
-        <p><b>Item Details of Auction </b></p>
+        <p><b>Item Details of Auction >> <span id="id_itemDetailAuc"></span></b></p>
         <table class="boxed">
             <thead>
             <tr>
