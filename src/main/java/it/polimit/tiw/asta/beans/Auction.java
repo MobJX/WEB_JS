@@ -138,14 +138,7 @@ public class Auction {
 			this.remaingTimes = remaingTimes;
 		}
 		
-		public String formatRemainingTimes() {
-	        long days = remaingTimes.toDays();
-	        long hours = remaingTimes.toHours() % 24;
-	        long minutes = remaingTimes.toMinutes() % 60;
-	        long seconds = remaingTimes.getSeconds() % 60;
-
-	        return String.format("%d Days %02d:%02d:%02d", days, hours, minutes, seconds);
-	    }
+		
 
 	
 }
