@@ -96,8 +96,9 @@ public class GetOpenAuction extends HttpServlet {
 		        LocalDateTime expiry1 = auc1.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 		        LocalDateTime expiry2 = auc2.getExpiryDateTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
 		        
-		        // 按照结束日期从大到小排序，将最远的日期放在头部
-		        return expiry2.compareTo(expiry1);
+		        // 按照结束日期从小到大排序，将最远的日期放在头部
+		        //Increase From Samll To Big
+		        return expiry1.compareTo(expiry2);
 		    }
 		});
 		
