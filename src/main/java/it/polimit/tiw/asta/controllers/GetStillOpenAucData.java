@@ -115,10 +115,7 @@ public class GetStillOpenAucData extends HttpServlet {
 				    }
 				});
 				
-//Only for Testing				
-//		for(Auction a : aucOpenList) {
-//			System.out.println("this is auctionID:"+a.getAucID()+"with End Date:"+a.getExpiryDateTime());
-//		}
+
 		
 		if(aucOpenList.size()==0) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
