@@ -91,6 +91,7 @@ public class ItemDAO {
 			pstatement.setBoolean(4, item.isSold());
 			pstatement.setString(5, item.getImagePath());
 			pstatement.setInt(6, item.getCreatorID());
+			System.out.println(item.getCreatorID()); //TODO delete
 			pstatement.executeUpdate();
 			try (ResultSet generatedKeys = pstatement.getGeneratedKeys()) {
 				if (generatedKeys.next()) {

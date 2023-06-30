@@ -479,6 +479,7 @@
                                     availableItemList.show();
                                     closedAuctionList.show();
                                     closedAuctionList.reset();
+                                    self.hidden();
                                     // self.orchestrator.refresh();
                                     window.alert("Auction Closed Successfully!");
                                     setLastAction("closeauction");

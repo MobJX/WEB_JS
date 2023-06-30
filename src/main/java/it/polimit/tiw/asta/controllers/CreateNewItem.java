@@ -92,6 +92,7 @@ public class CreateNewItem extends HttpServlet {
 		ItemDAO itemDAO = new ItemDAO(connection);
 		try {
 			int newItemID = itemDAO.createItem(item);
+			System.out.println("this is create item: "+newItemID);
 			item.setItemID(newItemID);
 			
 		} catch (SQLException e){
