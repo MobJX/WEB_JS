@@ -115,6 +115,7 @@ public class OfferDAO {
 					offer.setAucID(result.getInt("aucID"));
 					offer.setOfferPrice(result.getFloat("offerPrice"));
 					offer.setOfferDayTime(result.getTimestamp("offerDayTime"));
+					
 					//adding offer to list
 					offers.add(offer);
 					
