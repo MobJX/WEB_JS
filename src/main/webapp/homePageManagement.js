@@ -82,6 +82,12 @@
     }
 
     //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ COOKIES MANAGEMENT COMPONENT ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+    /**
+     * Used for setting the cookie with name cookieName cookieValue and daysToExpire
+     * @param cookieName
+     * @param cookieValue
+     * @param daysToExpire
+     */
     function setCookie(cookieName, cookieValue, daysToExpire) {
         const expirationDate = new Date();
         expirationDate.setDate(expirationDate.getDate() + daysToExpire);
@@ -89,6 +95,11 @@
         document.cookie = `${cookieName}=${cookieValue}; expires=${expirationUTCString}; path=/`;
     }
 
+    /**
+     * Used for getting the cookie with name cookieName
+     * @param cookieName
+     * @returns {null|string}
+     */
     function getCookie(cookieName) {
         const cookies = document.cookie.split(';');
         for (let i = 0; i < cookies.length; i++) {
@@ -101,26 +112,43 @@
     }
 
     // Set user's last action cookie
+    /**
+     * set the last action of user
+     * create a cookie with name LastAction_"username"
+     * @param action
+     */
     function setLastAction(action) {
         const lastActionCookieName = 'LastAction_' + user;
         setCookie(lastActionCookieName, action, 30);
     }
 
     // Get user's last action cookie
+    /**
+     * Used for getting the last action of user
+     * searching the cookie with name LastAction_"username"
+     * @returns {string}
+     */
     function getLastAction() {
         const lastActionCookieName = 'LastAction_' + user;
         return getCookie(lastActionCookieName);
     }
 
     // Recording the clicked auctions
+    /**
+     * Used for recording the clicked auction ID of user
+     * the format is clickedAuctions_"username" ...
+     * @param auctionId
+     */
     function recordClickedAuction(auctionId) {
         const clickedAuctions = getCookie('clickedAuctions_' + user);
         if (clickedAuctions) {
             // 如果已存在 clickedAuctions cookie，则将新的 Auction ID 添加到其中
+            // if already exists clickedAuctions cookie, then add the new Auction ID to it
             const updatedAuctions = clickedAuctions + ',' + auctionId;
             setCookie('clickedAuctions_' + user, updatedAuctions, 30);
         } else {
             // 如果 clickedAuctions cookie 不存在，则创建新的 cookie
+            // if clickedAuctions cookie does not exist, then create a new cookie
             setCookie('clickedAuctions_' + user, auctionId, 30);
         }
     }
