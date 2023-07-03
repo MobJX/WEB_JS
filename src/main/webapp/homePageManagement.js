@@ -1263,7 +1263,8 @@
                     e.preventDefault();
                     currentAuctionID = e.target.getAttribute("stillOpenAucID");
 
-                    //adding Auction ID into Cookies //
+                    //adding Auction ID into Cookies
+                    //avoid record the same auction ID clicked by the user
                     if (!isAuctionClicked(currentAuctionID)) {
                         recordClickedAuction(currentAuctionID);
                     }
