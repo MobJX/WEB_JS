@@ -81,7 +81,7 @@ public class CreateNewItem extends HttpServlet {
 			return;
 		}
 		
-		if (itemPrice == null || !isValidFloat(itemPrice)) {
+		if (itemPrice == null || !isValidFloat(itemPrice) || Float.parseFloat(itemPrice) <=0) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().println("Invalid itemPrice value");
 			return;
