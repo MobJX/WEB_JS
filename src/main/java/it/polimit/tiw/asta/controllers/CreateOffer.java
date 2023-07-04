@@ -42,7 +42,7 @@ public class CreateOffer extends HttpServlet{
 		 double minUp;
 		 Auction auction = null;
 		 AuctionDAO auctionDao = new AuctionDAO(connection);
-		 System.out.println("hello this is servlet 1 ");
+		 
 		 try {
 			auctionId = Integer.parseInt(request.getParameter("auctionID"));
 			
@@ -79,7 +79,7 @@ public class CreateOffer extends HttpServlet{
 	        
 	        
 	        minUp = auction.getMinUP();
-	        if(userBid<=currentMaxBid+minUp) {
+	        if(userBid<=currentMaxBid+minUp||userBid <= auction.getAucPrice()+minUp) {
 			 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			 response.getWriter().println("What a miser! Give a little more!");		
 			 return;
